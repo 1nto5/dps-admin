@@ -1,0 +1,742 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════════
+   CYBERPUNK TERMINAL THEME - DPS ADMIN
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Core terminal colors */
+  --terminal-bg: #0a0e14;
+  --terminal-bg-alt: #0d1117;
+  --terminal-bg-panel: #151b23;
+  --terminal-border: #1e2630;
+
+  /* Cyberpunk palette */
+  --terminal-cyan: #00fff2;
+  --terminal-pink: #ff2d6a;
+  --terminal-blue: #0066ff;
+  --terminal-purple: #bd00ff;
+
+  /* Status colors */
+  --terminal-green: #00ff88;
+  --terminal-amber: #ffb800;
+  --terminal-red: #ff3366;
+
+  /* Text hierarchy */
+  --terminal-text: #e0e6ed;
+  --terminal-text-bright: #ffffff;
+  --terminal-dim: #5c6773;
+  --terminal-muted: #3d4752;
+
+  /* Glow effects */
+  --glow-cyan: 0 0 10px rgba(0, 255, 242, 0.5), 0 0 20px rgba(0, 255, 242, 0.3);
+  --glow-pink: 0 0 10px rgba(255, 45, 106, 0.5), 0 0 20px rgba(255, 45, 106, 0.3);
+  --glow-text: 0 0 8px rgba(0, 255, 242, 0.4);
+
+  /* Animation durations */
+  --anim-fast: 100ms;
+  --anim-normal: 150ms;
+  --anim-slow: 200ms;
+}
+
+/* Base styles */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--terminal-bg);
+  color-scheme: dark;
+}
+
+body {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  background: var(--terminal-bg);
+  color: var(--terminal-text);
+  line-height: 1.6;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scanline overlay effect */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--terminal-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--terminal-border);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--terminal-dim);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   TYPOGRAPHY
+   ───────────────────────────────────────────────────────────────── */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  color: var(--terminal-text-bright);
+}
+
+a {
+  color: var(--terminal-cyan);
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+a:hover {
+  text-shadow: var(--glow-text);
+}
+
+code, pre, kbd {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+kbd {
+  background: var(--terminal-bg-alt);
+  border: 1px solid var(--terminal-border);
+  padding: 2px 6px;
+  font-size: 11px;
+  color: var(--terminal-dim);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   FORM ELEMENTS - TERMINAL STYLE
+   ───────────────────────────────────────────────────────────────── */
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+textarea,
+select {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  background: var(--terminal-bg);
+  border: 1px solid var(--terminal-border);
+  color: var(--terminal-text);
+  padding: 8px 12px;
+  border-radius: 0;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--terminal-cyan);
+  box-shadow: 0 0 0 1px var(--terminal-cyan), var(--glow-cyan);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--terminal-muted);
+}
+
+select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235c6773' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+/* Checkbox styling */
+input[type="checkbox"] {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--terminal-bg);
+  border: 1px solid var(--terminal-border);
+  cursor: pointer;
+  position: relative;
+}
+
+input[type="checkbox"]:checked {
+  background: var(--terminal-cyan);
+  border-color: var(--terminal-cyan);
+}
+
+input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--terminal-bg);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   BUTTONS - TERMINAL STYLE
+   ───────────────────────────────────────────────────────────────── */
+
+button,
+.btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 0;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Primary button - cyan outline */
+.btn-primary,
+button[type="submit"],
+a.bg-blue-600 {
+  background: transparent !important;
+  border: 1px solid var(--terminal-cyan) !important;
+  color: var(--terminal-cyan) !important;
+}
+
+.btn-primary:hover,
+button[type="submit"]:hover,
+a.bg-blue-600:hover {
+  background: var(--terminal-cyan) !important;
+  color: var(--terminal-bg) !important;
+  box-shadow: var(--glow-cyan);
+}
+
+/* Danger button - pink/red */
+.btn-danger {
+  background: transparent;
+  border: 1px solid var(--terminal-red);
+  color: var(--terminal-red);
+}
+
+.btn-danger:hover {
+  background: var(--terminal-red);
+  color: var(--terminal-bg);
+  box-shadow: var(--glow-pink);
+}
+
+/* Ghost button */
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--terminal-border);
+  color: var(--terminal-dim);
+}
+
+.btn-ghost:hover {
+  border-color: var(--terminal-text);
+  color: var(--terminal-text);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   TABLES - TERMINAL OUTPUT STYLE
+   ───────────────────────────────────────────────────────────────── */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+/* Prevent cell text from wrapping at narrow widths */
+td, th {
+  white-space: nowrap;
+}
+
+/* Allow specific columns to wrap if needed */
+td.wrap-text, th.wrap-text {
+  white-space: normal;
+  min-width: 100px;
+}
+
+thead {
+  background: var(--terminal-bg-alt) !important;
+}
+
+th {
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: var(--terminal-dim) !important;
+  padding: 12px 16px !important;
+  text-align: left;
+  border-bottom: 1px solid var(--terminal-border) !important;
+  background: transparent !important;
+}
+
+td {
+  padding: 12px 16px !important;
+  border-bottom: 1px solid var(--terminal-border) !important;
+  color: var(--terminal-text);
+}
+
+tr {
+  background: transparent !important;
+  transition: background 0.15s ease;
+}
+
+tbody tr:hover {
+  background: var(--terminal-bg-alt) !important;
+}
+
+/* Status colors in tables */
+.status-in_use, .text-green-600 { color: var(--terminal-green) !important; }
+.status-disposal, .text-red-600 { color: var(--terminal-red) !important; }
+.status-preparing, .text-yellow-600 { color: var(--terminal-amber) !important; }
+.status-to_collect, .text-blue-600:not(a) { color: var(--terminal-blue) !important; }
+
+/* Links in tables */
+td a {
+  color: var(--terminal-cyan);
+}
+
+td a:hover {
+  text-shadow: var(--glow-text);
+}
+
+/* Filter inputs in tables */
+thead tr:last-child th {
+  padding: 8px 16px !important;
+  background: var(--terminal-bg-panel) !important;
+}
+
+thead input {
+  width: 100%;
+  padding: 6px 8px !important;
+  font-size: 12px !important;
+  background: var(--terminal-bg) !important;
+  border: 1px solid var(--terminal-border) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   PANELS & CARDS
+   ───────────────────────────────────────────────────────────────── */
+
+.bg-white,
+.bg-gray-50 {
+  background: var(--terminal-bg-panel) !important;
+}
+
+.rounded-lg,
+.rounded-md {
+  border-radius: 0 !important;
+}
+
+.shadow {
+  box-shadow: none !important;
+  border: 1px solid var(--terminal-border);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   TEXT COLORS OVERRIDE
+   ───────────────────────────────────────────────────────────────── */
+
+.text-gray-800,
+.text-gray-700 {
+  color: var(--terminal-text-bright) !important;
+}
+
+.text-gray-600,
+.text-gray-500 {
+  color: var(--terminal-dim) !important;
+}
+
+.text-gray-400,
+.text-gray-300 {
+  color: var(--terminal-muted) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   UTILITY CLASSES
+   ───────────────────────────────────────────────────────────────── */
+
+.glow-cyan {
+  text-shadow: var(--glow-text);
+}
+
+.glow-pink {
+  text-shadow: 0 0 8px rgba(255, 45, 106, 0.4);
+}
+
+.border-glow {
+  box-shadow: var(--glow-cyan);
+}
+
+/* Blinking cursor animation */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: blink 1s infinite;
+}
+
+/* Terminal typing effect */
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* Pulse glow animation */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--terminal-cyan);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--terminal-cyan), 0 0 30px var(--terminal-cyan);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ASCII box border style */
+.terminal-box {
+  border: 1px solid var(--terminal-border);
+  position: relative;
+}
+
+.terminal-box::before {
+  content: '┌' attr(data-title) '┐';
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  background: var(--terminal-bg);
+  padding: 0 8px;
+  color: var(--terminal-cyan);
+  font-size: 12px;
+}
+
+/* Loading spinner characters */
+@keyframes terminal-spin {
+  0% { content: '⠋'; }
+  10% { content: '⠙'; }
+  20% { content: '⠹'; }
+  30% { content: '⠸'; }
+  40% { content: '⠼'; }
+  50% { content: '⠴'; }
+  60% { content: '⠦'; }
+  70% { content: '⠧'; }
+  80% { content: '⠇'; }
+  90% { content: '⠏'; }
+}
+
+.terminal-spinner::before {
+  content: '⠋';
+  animation: terminal-spin 0.8s steps(1) infinite;
+  color: var(--terminal-cyan);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   FORM COMPONENTS - TERMINAL STYLE
+   ───────────────────────────────────────────────────────────────── */
+
+/* Form page centering - centers forms within available space */
+.terminal-page.max-w-xl,
+.terminal-page.max-w-2xl,
+.terminal-page.max-w-3xl {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.form-container {
+  border: 1px solid var(--terminal-border);
+  background: var(--terminal-bg-alt);
+  padding: 24px;
+}
+
+@media (max-width: 639px) {
+  .form-container {
+    padding: 16px;
+  }
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  font-size: 12px;
+  color: var(--terminal-dim);
+  margin-bottom: 6px;
+  text-transform: lowercase;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--terminal-bg);
+  border: 1px solid var(--terminal-border);
+  color: var(--terminal-text);
+  font-size: 13px;
+}
+
+.form-input:focus {
+  border-color: var(--terminal-cyan);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--terminal-cyan);
+}
+
+.form-input::placeholder {
+  color: var(--terminal-muted);
+}
+
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--terminal-border);
+}
+
+@media (min-width: 640px) {
+  .form-actions {
+    flex-direction: row;
+  }
+}
+
+.btn-primary {
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid var(--terminal-cyan);
+  color: var(--terminal-cyan);
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--terminal-cyan);
+  color: var(--terminal-bg);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid var(--terminal-border);
+  color: var(--terminal-dim);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+
+.btn-secondary:hover {
+  border-color: var(--terminal-text);
+  color: var(--terminal-text);
+}
+
+.btn-primary kbd,
+.btn-secondary kbd {
+  font-size: 10px;
+  padding: 2px 6px;
+  background: var(--terminal-bg);
+  border: 1px solid var(--terminal-border);
+  color: var(--terminal-muted);
+}
+
+.error-box {
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border: 1px solid var(--terminal-red);
+  background: rgba(255, 51, 102, 0.1);
+  font-size: 13px;
+  color: var(--terminal-red);
+}
+
+.error-prefix {
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   FORM GRIDS - RESPONSIVE
+   ───────────────────────────────────────────────────────────────── */
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-grid-4 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 640px) {
+  .form-grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .form-grid-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .form-grid-4 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .form-grid-3 {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .form-grid-4 {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+/* Form group spacing */
+.form-grid-2 .form-group,
+.form-grid-3 .form-group,
+.form-grid-4 .form-group {
+  margin-bottom: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   RESPONSIVE UTILITIES
+   ───────────────────────────────────────────────────────────────── */
+
+.hide-mobile {
+  display: block;
+}
+
+.show-mobile {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .hide-mobile {
+    display: none !important;
+  }
+
+  .show-mobile {
+    display: block !important;
+  }
+
+  /* Hide keyboard shortcuts on mobile - they don't make sense on touch devices */
+  kbd {
+    display: none !important;
+  }
+
+  /* Hide header decorations on mobile to prevent line wrap */
+  .header-decoration {
+    display: none !important;
+  }
+
+  /* Ensure header title doesn't wrap */
+  .header-title {
+    white-space: nowrap;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   RESPONSIVE - BREAKPOINTS
+   ───────────────────────────────────────────────────────────────── */
+
+/* Phone (< 640px) */
+@media (max-width: 639px) {
+  body {
+    font-size: 13px;
+  }
+
+  /* Touch-friendly inputs */
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="number"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="url"],
+  textarea,
+  select {
+    min-height: 44px;
+    font-size: 16px; /* Prevents iOS zoom */
+    padding: 10px 12px;
+  }
+
+  button,
+  .btn,
+  .btn-primary,
+  .btn-secondary {
+    min-height: 44px;
+  }
+
+  th, td {
+    padding: 8px 12px !important;
+  }
+}
+
+/* Tablet (640px - 1023px) */
+@media (min-width: 640px) and (max-width: 1023px) {
+  body {
+    font-size: 14px;
+  }
+}
+
+/* Desktop (>= 1024px) */
+@media (min-width: 1024px) {
+  body {
+    font-size: 14px;
+  }
+}

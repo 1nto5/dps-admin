@@ -1,0 +1,99 @@
+<script lang="ts">
+	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
+	import type { PageData } from './$types';
+	import { registerShortcut, pushContext, popContext } from '$lib/shortcuts';
+	import { getBackInfo } from '$lib/stores/navigation';
+
+	let { data }: { data: PageData } = $props();
+
+	let name = $state('');
+	let formEl: HTMLFormElement;
+	const backInfo = getBackInfo('/users', 'Users');
+
+	onMount(() => {
+		pushContext('form');
+		const unsubs: (() => void)[] = [];
+		unsubs.push(registerShortcut({ key: 'meta+enter', action: () => formEl?.requestSubmit(), context: 'form', description: 'Save', allowInInput: true }));
+		unsubs.push(registerShortcut({ key: 'escape', action: () => goto(backInfo.href), context: 'form', description: 'Cancel', allowInInput: true }));
+		return () => { popContext('form'); unsubs.forEach(u => u()); };
+	});
+	let jobTitle = $state('');
+	let emailUsername = $state('');
+	let departmentId = $state<number | null>(null);
+	let error = $state('');
+	let loading = $state(false);
+
+	const emailDomain = 'dpsszczytno.pl';
+
+	async function handleSubmit() {
+		if (!name.trim()) { error = 'Name is required'; return; }
+		error = ''; loading = true;
+		const email = emailUsername.trim() ? `${emailUsername.trim()}@${emailDomain}` : null;
+		try {
+			const res = await fetch('/api/users', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name.trim(), jobTitle: jobTitle.trim() || null, email, departmentId }) });
+			if (res.ok) goto(backInfo.href);
+			else error = (await res.json()).error || 'Failed';
+		} catch { error = 'Connection error'; } finally { loading = false; }
+	}
+</script>
+
+<div class="terminal-page max-w-2xl">
+	<div class="page-header">
+		<div class="header-title">
+			<span class="header-decoration">───</span>
+			<span class="header-text">NEW USER</span>
+			<span class="header-decoration">────────────────────────────────────────────</span>
+		</div>
+	</div>
+
+	{#if error}<div class="error-box"><span class="error-prefix">[ERR]</span> {error}</div>{/if}
+
+	<div class="form-container">
+		<form bind:this={formEl} onsubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+			<div class="form-group">
+				<label class="form-label">name <span class="required">*</span></label>
+				<input bind:value={name} class="form-input" required autofocus />
+			</div>
+
+			<div class="form-group">
+				<label class="form-label">job title</label>
+				<input bind:value={jobTitle} class="form-input" />
+			</div>
+
+			<div class="form-group">
+				<label class="form-label">email</label>
+				<div class="email-input-group">
+					<input bind:value={emailUsername} class="form-input" placeholder="username" />
+					<span class="email-suffix">@{emailDomain}</span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="form-label">department</label>
+				<select bind:value={departmentId} class="form-input">
+					<option value={null}>-- Select department --</option>
+					{#each data.departments as dept}<option value={dept.id}>{dept.name}</option>{/each}
+				</select>
+			</div>
+
+			<div class="form-actions">
+				<button type="submit" disabled={loading} class="btn-primary">{loading ? 'Creating...' : 'Create'} <kbd>↵</kbd></button>
+				<a href={backInfo.href} class="btn-secondary">Cancel <kbd>Esc</kbd></a>
+			</div>
+		</form>
+	</div>
+</div>
+
+<style>
+	.terminal-page { max-width: 40rem; }
+	.page-header { margin-bottom: 24px; }
+	.header-title { font-size: 14px; letter-spacing: 2px; }
+	.header-decoration { color: var(--terminal-dim); }
+	.header-text { color: var(--terminal-cyan); margin: 0 8px; }
+	.required { color: var(--terminal-red); }
+
+	.email-input-group { display: flex; }
+	.email-input-group .form-input { flex: 1; border-right: none; }
+	.email-suffix { padding: 10px 12px; background: var(--terminal-bg-panel); border: 1px solid var(--terminal-border); border-left: none; color: var(--terminal-dim); font-size: 13px; white-space: nowrap; }
+</style>
