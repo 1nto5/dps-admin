@@ -22,6 +22,7 @@
 
 	// Billing month as primary state (YYYY-MM format)
 	let billingMonth = $state(data.entry.billingMonth);
+	let mobileBillingMonth = $state(data.entry.billingMonth); // Track mobile picker separately
 
 	// Derived values for desktop number inputs
 	let billingYear = $derived(parseInt(billingMonth.split('-')[0]));
@@ -42,6 +43,12 @@
 	function handleMonthNumChange(e: Event) {
 		const val = parseInt((e.target as HTMLInputElement).value);
 		updateBillingMonth(billingYear, val);
+	}
+
+	function handleMobileBillingMonthBlur() {
+		if (mobileBillingMonth) {
+			billingMonth = mobileBillingMonth;
+		}
 	}
 
 	let error = $state('');
@@ -147,8 +154,8 @@
 				</div>
 				<div class="form-group">
 					<label for="wt-billing-month" class="form-label">billing month</label>
-					<!-- Mobile: native month picker -->
-					<input type="month" bind:value={billingMonth} class="form-input billing-month-mobile" />
+					<!-- Mobile: native month picker (updates on blur for smoother scrolling) -->
+					<input type="month" bind:value={mobileBillingMonth} onblur={handleMobileBillingMonthBlur} class="form-input billing-month-mobile" />
 					<!-- Desktop: number inputs -->
 					<div class="billing-month-row billing-month-desktop">
 						<input id="wt-billing-month" type="number" value={billingMonthNum} onchange={handleMonthNumChange} min="1" max="12" class="form-input month-input" />
