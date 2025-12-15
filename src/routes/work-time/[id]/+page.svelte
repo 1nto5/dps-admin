@@ -6,6 +6,7 @@
 	import { getBackInfo } from '$lib/stores/navigation';
 	import { toastAndGoto } from '$lib/stores/toast';
 	import ConfirmModal from '$lib/components/ConfirmModal.svelte';
+	import { desktopAutofocus } from '$lib/actions/autofocus';
 
 	let { data }: { data: PageData } = $props();
 
@@ -142,8 +143,7 @@
 			<div class="form-grid-2">
 				<div class="form-group">
 					<label for="wt-date" class="form-label">date</label>
-					<!-- svelte-ignore a11y_autofocus -->
-					<input id="wt-date" type="date" bind:value={form.date} class="form-input" required autofocus />
+<input id="wt-date" type="date" bind:value={form.date} class="form-input" required use:desktopAutofocus />
 				</div>
 				<div class="form-group">
 					<label for="wt-billing-month" class="form-label">billing month</label>

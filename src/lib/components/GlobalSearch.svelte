@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import type { SearchResult } from '../../routes/api/search/+server';
+	import { desktopAutofocus } from '$lib/actions/autofocus';
 
 	type EntityCounts = {
 		computers: number;
@@ -107,8 +108,7 @@
 			<circle cx="11" cy="11" r="8" />
 			<path d="m21 21-4.3-4.3" />
 		</svg>
-		<!-- svelte-ignore a11y_autofocus -->
-		<input
+<input
 			type="text"
 			bind:value={query}
 			bind:this={inputRef}
@@ -117,7 +117,7 @@
 			placeholder="do what you want..."
 			spellcheck="false"
 			autocomplete="off"
-			autofocus
+			use:desktopAutofocus
 		/>
 		{#if loading}
 			<span class="spinner"></span>

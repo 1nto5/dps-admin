@@ -7,6 +7,7 @@
 	import { getBackInfo } from '$lib/stores/navigation';
 	import { toastAndGoto } from '$lib/stores/toast';
 	import MonthInput from '$lib/components/MonthInput.svelte';
+	import { desktopAutofocus } from '$lib/actions/autofocus';
 	let { data }: { data: PageData } = $props();
 
 	let formEl: HTMLFormElement;
@@ -51,8 +52,7 @@
 			<div class="form-grid-2">
 				<div class="form-group">
 					<label for="mon-manufacturer" class="form-label">manufacturer</label>
-					<!-- svelte-ignore a11y_autofocus -->
-					<input id="mon-manufacturer" bind:value={form.manufacturer} class="form-input" placeholder="e.g. Dell, LG, Samsung" autofocus />
+<input id="mon-manufacturer" bind:value={form.manufacturer} class="form-input" placeholder="e.g. Dell, LG, Samsung" use:desktopAutofocus />
 				</div>
 				<div class="form-group">
 					<label for="mon-model" class="form-label">model</label>
