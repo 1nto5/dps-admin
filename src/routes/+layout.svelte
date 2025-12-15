@@ -198,7 +198,7 @@
 										<span class="meta-label">filtered:</span>
 										<span class="meta-value">{sidebarEdit.filteredCount}</span>
 									</div>
-									<a href={sidebarEdit.addUrl} class="sub-add-btn">
+									<a href={sidebarEdit.addUrl} class="sub-add-btn hide-mobile">
 										<span class="action-icon">+</span>
 										<span>{sidebarEdit.addLabel}</span>
 										<kbd>⌥N</kbd>
