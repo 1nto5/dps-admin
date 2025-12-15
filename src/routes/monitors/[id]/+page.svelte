@@ -74,41 +74,41 @@
 		<form bind:this={formEl} onsubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
 			<div class="form-grid-2">
 				<div class="form-group">
-					<label for="mon-edit-mfr" class="form-label">Manufacturer</label>
+					<label for="mon-edit-mfr" class="form-label">manufacturer</label>
 					<!-- svelte-ignore a11y_autofocus -->
 					<input id="mon-edit-mfr" bind:value={form.manufacturer} class="form-input" placeholder="e.g. Dell, LG, Samsung" autofocus />
 				</div>
 				<div class="form-group">
-					<label for="mon-edit-model" class="form-label">Model</label>
+					<label for="mon-edit-model" class="form-label">model</label>
 					<input id="mon-edit-model" bind:value={form.model} class="form-input" placeholder="e.g. E2222H, 27UK850" />
 				</div>
 			</div>
 			<div class="form-grid-2">
 				<div class="form-group">
-					<label for="mon-edit-status" class="form-label">Status</label>
+					<label for="mon-edit-status" class="form-label">status</label>
 					<select id="mon-edit-status" bind:value={form.status} class="form-input">{#each statusValues as s}<option value={s}>{s}</option>{/each}</select>
 				</div>
 				<div class="form-group">
-					<label for="mon-edit-computer" class="form-label">Computer</label>
+					<label for="mon-edit-computer" class="form-label">computer</label>
 					<select id="mon-edit-computer" bind:value={form.computerId} class="form-input"><option value={null}>-- Not assigned --</option>{#each data.computers as computer}<option value={computer.id}>{computer.name}</option>{/each}</select>
 				</div>
 			</div>
 			<div class="form-grid-2">
 				<div class="form-group">
-					<label for="mon-edit-inv" class="form-label">Inventory Number</label>
+					<label for="mon-edit-inv" class="form-label">inventory number</label>
 					<input id="mon-edit-inv" bind:value={form.inventoryNumber} class="form-input" />
 				</div>
 				<div class="form-group">
-					<label for="mon-edit-serial" class="form-label">Serial Number</label>
+					<label for="mon-edit-serial" class="form-label">serial number</label>
 					<input id="mon-edit-serial" bind:value={form.serialNumber} class="form-input" />
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="mon-edit-purchase" class="form-label">Purchase Date</label>
+				<label for="mon-edit-purchase" class="form-label">purchase date</label>
 				<MonthInput id="mon-edit-purchase" bind:value={form.purchaseDate} class="form-input" />
 			</div>
 			<div class="form-group">
-				<label for="mon-edit-notes" class="form-label">Notes</label>
+				<label for="mon-edit-notes" class="form-label">notes</label>
 				<textarea id="mon-edit-notes" bind:value={form.notes} rows="2" class="form-input"></textarea>
 			</div>
 			<div class="form-actions-split">
@@ -133,21 +133,10 @@
 <style>
 	.terminal-page { max-width: 42rem; }
 	.page-header { margin-bottom: 24px; }
-	.header-title { font-size: 14px; letter-spacing: 2px; margin-bottom: 8px; }
+	.header-title { font-size: 14px; letter-spacing: 2px; }
 	.header-decoration { color: var(--terminal-dim); }
 	.header-text { color: var(--terminal-cyan); margin: 0 8px; }
 	.header-meta { font-size: 12px; }
 	.meta-label { color: var(--terminal-dim); }
 	.meta-value { color: var(--terminal-text-bright); margin-left: 4px; }
-	.error-box { padding: 12px 16px; margin-bottom: 16px; border: 1px solid var(--terminal-red); background: rgba(255, 51, 102, 0.1); font-size: 13px; color: var(--terminal-red); }
-	.error-prefix { font-weight: bold; margin-right: 8px; }
-	.form-container { border: 1px solid var(--terminal-border); background: var(--terminal-bg-alt); padding: 24px; }
-	.form-grid-2 { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 16px; }
-	@media (min-width: 640px) { .form-grid-2 { grid-template-columns: 1fr 1fr; } }
-	.form-group { margin-bottom: 16px; }
-	.form-grid-2 .form-group { margin-bottom: 0; }
-	.form-label { display: block; font-size: 12px; color: var(--terminal-dim); margin-bottom: 6px; text-transform: lowercase; }
-	.form-input { width: 100%; padding: 10px 12px; background: var(--terminal-bg); border: 1px solid var(--terminal-border); color: var(--terminal-text); font-size: 16px; }
-	.form-input:focus { border-color: var(--terminal-cyan); outline: none; box-shadow: 0 0 0 1px var(--terminal-cyan); }
-	.form-input::placeholder { color: var(--terminal-muted); }
 </style>

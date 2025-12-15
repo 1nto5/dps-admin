@@ -59,8 +59,9 @@
 	<div class="form-container">
 		<form bind:this={formEl} onsubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
 			<div class="form-group">
-				<label class="form-label">name <span class="required">*</span></label>
-				<input bind:value={name} class="form-input" required autofocus />
+				<label for="room-name" class="form-label">name <span class="required">*</span></label>
+				<!-- svelte-ignore a11y_autofocus -->
+				<input id="room-name" bind:value={name} class="form-input" required autofocus />
 			</div>
 
 			<div class="form-actions-split">
