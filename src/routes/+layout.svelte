@@ -136,9 +136,6 @@
 		<!-- Mobile Header -->
 		{#if isMobile}
 			<header class="mobile-header">
-				<button class="hamburger-btn" onclick={() => sidebarOpen = !sidebarOpen} aria-label="Toggle menu">
-					<span class="hamburger-icon">{sidebarOpen ? '✕' : '☰'}</span>
-				</button>
 				<a href="/" class="mobile-logo">
 					<span class="text-cyan">DPS</span><span class="text-pink">ADMIN</span>
 				</a>
@@ -156,6 +153,24 @@
 		{#if isMobile && sidebarOpen}
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<button class="sidebar-backdrop" onclick={() => sidebarOpen = false} transition:fade={{ duration: 150 }} aria-label="Close sidebar"></button>
+		{/if}
+
+		<!-- Mobile Bottom Bar (thumb-zone) -->
+		{#if isMobile}
+			<div class="mobile-bottom-bar">
+				<button
+					class="bottom-bar-btn"
+					onclick={() => sidebarOpen = !sidebarOpen}
+					aria-label="Toggle menu"
+				>
+					{sidebarOpen ? '✕' : '☰'}
+				</button>
+				{#if sidebarEdit}
+					<a href={sidebarEdit.addUrl} class="bottom-bar-btn bottom-bar-add">
+						+
+					</a>
+				{/if}
+			</div>
 		{/if}
 
 		<!-- Sidebar Terminal -->
@@ -268,33 +283,51 @@
 	.mobile-header {
 		display: flex;
 		align-items: center;
-		gap: 12px;
 		padding: 12px 16px;
 		background: var(--terminal-bg-alt);
 		border-bottom: 1px solid var(--terminal-border);
 		flex-shrink: 0;
 	}
 
-	.hamburger-btn {
-		width: 40px;
-		height: 40px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background: var(--terminal-bg);
-		border: 1px solid var(--terminal-border);
-		color: var(--terminal-cyan);
-		font-size: 18px;
-		transition: all 0.15s ease;
-	}
-
-	.hamburger-btn:hover {
-		border-color: var(--terminal-cyan);
-	}
-
 	.mobile-logo {
 		font-size: 14px;
 		font-weight: 500;
+		text-decoration: none;
+	}
+
+	/* Mobile Bottom Bar (thumb-zone) */
+	.mobile-bottom-bar {
+		position: fixed;
+		bottom: 20px;
+		right: 20px;
+		display: flex;
+		flex-direction: column-reverse;
+		gap: 12px;
+		z-index: 60;
+	}
+
+	.bottom-bar-btn {
+		width: 56px;
+		height: 56px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: var(--terminal-bg-alt);
+		border: 1px solid var(--terminal-border);
+		color: var(--terminal-cyan);
+		font-size: 24px;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+		transition: all 0.15s ease;
+	}
+
+	.bottom-bar-btn:active {
+		transform: scale(0.95);
+	}
+
+	.bottom-bar-add {
+		background: var(--terminal-cyan);
+		color: var(--terminal-bg);
+		border-color: var(--terminal-cyan);
 		text-decoration: none;
 	}
 

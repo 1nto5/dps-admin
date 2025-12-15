@@ -705,6 +705,26 @@ thead input {
   color: var(--terminal-bg);
 }
 
+/* Mobile thumb-zone: hide old add btn, add bottom padding for FAB */
+@media (max-width: 1023px) {
+  .mobile-add-btn {
+    display: none !important;
+  }
+
+  .terminal-main {
+    padding-bottom: 100px;
+  }
+}
+
+/* Disable hover effects on touch devices (no mouse/trackpad) */
+@media (hover: none) {
+  .card:hover,
+  .edit-link:hover {
+    border-color: var(--terminal-border) !important;
+    background: transparent !important;
+  }
+}
+
 /* ─────────────────────────────────────────────────────────────────
    RESPONSIVE UTILITIES
    ───────────────────────────────────────────────────────────────── */
