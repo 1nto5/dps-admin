@@ -60,50 +60,51 @@
 						<span>custom name</span>
 					</label>
 					{#if customName}
-						<input bind:value={nameNumber} placeholder="Full name" class="form-input" required />
+						<input id="new-prt-name" bind:value={nameNumber} placeholder="Full name" class="form-input" required />
 					{:else}
 						<div class="name-input-group">
 							<span class="name-prefix">{prefix}-DPS-</span>
-							<input bind:value={nameNumber} class="form-input" required autofocus />
+							<!-- svelte-ignore a11y_autofocus -->
+							<input id="new-prt-name" bind:value={nameNumber} class="form-input" required autofocus />
 						</div>
 					{/if}
 				</div>
 				<div class="form-group">
-					<label class="form-label">inventory number</label>
-					<input bind:value={form.inventoryNumber} class="form-input" />
+					<label for="new-prt-inv" class="form-label">inventory number</label>
+					<input id="new-prt-inv" bind:value={form.inventoryNumber} class="form-input" />
 				</div>
 			</div>
 
 			<div class="form-grid-2">
 				<div class="form-group">
-					<label class="form-label">status</label>
-					<select bind:value={form.status} class="form-input">{#each statusValues as s}<option value={s}>{s}</option>{/each}</select>
+					<label for="new-prt-status" class="form-label">status</label>
+					<select id="new-prt-status" bind:value={form.status} class="form-input">{#each statusValues as s}<option value={s}>{s}</option>{/each}</select>
 				</div>
 				<div class="form-group">
-					<label class="form-label">room</label>
-					<select bind:value={form.roomId} class="form-input"><option value={null}>-- Not assigned --</option>{#each data.rooms as room}<option value={room.id}>{room.name}</option>{/each}</select>
+					<label for="new-prt-room" class="form-label">room</label>
+					<select id="new-prt-room" bind:value={form.roomId} class="form-input"><option value={null}>-- Not assigned --</option>{#each data.rooms as room}<option value={room.id}>{room.name}</option>{/each}</select>
 				</div>
 			</div>
 
 			<div class="form-grid-3">
 				<div class="form-group">
-					<label class="form-label">manufacturer</label>
-					<input bind:value={form.manufacturer} class="form-input" />
+					<label for="new-prt-mfr" class="form-label">manufacturer</label>
+					<input id="new-prt-mfr" bind:value={form.manufacturer} class="form-input" />
 				</div>
 				<div class="form-group">
-					<label class="form-label">model</label>
-					<input bind:value={form.model} class="form-input" />
+					<label for="new-prt-model" class="form-label">model</label>
+					<input id="new-prt-model" bind:value={form.model} class="form-input" />
 				</div>
 				<div class="form-group">
-					<label class="form-label">serial number</label>
-					<input bind:value={form.serialNumber} class="form-input" />
+					<label for="new-prt-serial" class="form-label">serial number</label>
+					<input id="new-prt-serial" bind:value={form.serialNumber} class="form-input" />
 				</div>
 			</div>
 
 			<div class="form-grid-2">
 				<div class="form-group">
-					<label class="form-label">ip address</label>
-					<input bind:value={form.ipAddress} class="form-input font-mono" />
+					<label for="new-prt-ip" class="form-label">ip address</label>
+					<input id="new-prt-ip" bind:value={form.ipAddress} class="form-input font-mono" />
 				</div>
 				<div class="form-group checkbox-group">
 					<label class="form-label checkbox-label">
@@ -115,23 +116,23 @@
 
 			<div class="form-grid-2">
 				<div class="form-group">
-					<label class="form-label">computer</label>
-					<select bind:value={form.computerId} class="form-input"><option value={null}>-- Not assigned --</option>{#each data.computers as c}<option value={c.id}>{c.name}</option>{/each}</select>
+					<label for="new-prt-computer" class="form-label">computer</label>
+					<select id="new-prt-computer" bind:value={form.computerId} class="form-input"><option value={null}>-- Not assigned --</option>{#each data.computers as c}<option value={c.id}>{c.name}</option>{/each}</select>
 				</div>
 				<div class="form-group">
-					<label class="form-label">notebook</label>
-					<select bind:value={form.notebookId} class="form-input"><option value={null}>-- Not assigned --</option>{#each data.notebooks as nb}<option value={nb.id}>{nb.name}</option>{/each}</select>
+					<label for="new-prt-notebook" class="form-label">notebook</label>
+					<select id="new-prt-notebook" bind:value={form.notebookId} class="form-input"><option value={null}>-- Not assigned --</option>{#each data.notebooks as nb}<option value={nb.id}>{nb.name}</option>{/each}</select>
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="form-label">purchase date</label>
-				<MonthInput bind:value={form.purchaseDate} class="form-input" />
+				<label for="new-prt-purchase" class="form-label">purchase date</label>
+				<MonthInput id="new-prt-purchase" bind:value={form.purchaseDate} class="form-input" />
 			</div>
 
 			<div class="form-group">
-				<label class="form-label">notes</label>
-				<textarea bind:value={form.notes} rows="2" class="form-input"></textarea>
+				<label for="new-prt-notes" class="form-label">notes</label>
+				<textarea id="new-prt-notes" bind:value={form.notes} rows="2" class="form-input"></textarea>
 			</div>
 
 			<div class="form-actions">
@@ -154,4 +155,9 @@
 	.name-prefix { padding: 10px 12px; background: var(--terminal-bg-panel); border: 1px solid var(--terminal-border); border-right: none; color: var(--terminal-dim); font-size: 13px; white-space: nowrap; }
 	.name-input-group .form-input { border-left: none; }
 	.font-mono { font-family: monospace; }
+	@media (max-width: 400px) {
+		.name-input-group { flex-direction: column; }
+		.name-prefix { border-right: 1px solid var(--terminal-border); border-bottom: none; }
+		.name-input-group .form-input { border-left: 1px solid var(--terminal-border); }
+	}
 </style>

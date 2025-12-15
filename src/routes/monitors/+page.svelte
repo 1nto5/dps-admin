@@ -20,6 +20,7 @@
 	};
 
 	let filters = $state({ model: '', status: '', inventoryNumber: '', computer: '' });
+	let mobileSearch = $state('');
 	let filterRefs: HTMLInputElement[] = [];
 
 	function focusSearch() {
@@ -33,7 +34,7 @@
 	}
 
 	function filtersEmpty() {
-		return !filters.model && !filters.status && !filters.inventoryNumber && !filters.computer;
+		return !filters.model && !filters.status && !filters.inventoryNumber && !filters.computer && !mobileSearch;
 	}
 
 	function handleEscape() {
@@ -44,6 +45,7 @@
 			active.blur();
 		} else if (!filtersEmpty()) {
 			filters = { model: '', status: '', inventoryNumber: '', computer: '' };
+			mobileSearch = '';
 		} else {
 			goto(backInfo.href);
 		}
@@ -69,6 +71,14 @@
 		data.monitors
 			.filter((m) => $showDisposal || m.status !== 'disposal')
 			.filter((m) => {
+				// Mobile unified search
+				if (mobileSearch) {
+					const q = mobileSearch.toLowerCase();
+					const allFields = [m.manufacturer, m.model, m.status, m.inventoryNumber, m.computerName]
+						.filter(Boolean).join(' ').toLowerCase();
+					return allFields.includes(q);
+				}
+				// Desktop column filters
 				const modelMatch = [m.manufacturer, m.model].filter(Boolean).join(' ').toLowerCase().includes(filters.model.toLowerCase());
 				const statusMatch = m.status.toLowerCase().includes(filters.status.toLowerCase());
 				const invMatch = (m.inventoryNumber || '').toLowerCase().includes(filters.inventoryNumber.toLowerCase());
@@ -97,6 +107,7 @@
 <div class="terminal-page">
 	<div class="page-header-minimal">
 		<span class="header-text">MONITORS</span>
+		<a href="/monitors/new" class="mobile-add-btn show-mobile">+ Add</a>
 	</div>
 
 	{#if data.monitors.length === 0}
@@ -108,7 +119,7 @@
 	{:else}
 		<!-- Mobile Search -->
 		<div class="mobile-search">
-			<input type="text" bind:value={filters.model} bind:this={filterRefs[0]} placeholder="Search monitors..." onkeydown={handleFilterKeydown} class="search-input" />
+			<input type="text" bind:value={mobileSearch} placeholder="Search all fields..." onkeydown={handleFilterKeydown} class="search-input" />
 		</div>
 
 		<!-- Mobile Cards -->
@@ -180,9 +191,6 @@
 	.terminal-table { width: 100%; border-collapse: collapse; }
 	.header-row th { padding: 12px 16px; font-size: 11px; font-weight: 500; text-align: left; color: var(--terminal-dim); background: var(--terminal-bg-alt); border-bottom: 1px solid var(--terminal-border); letter-spacing: 0.5px; }
 	.filter-row th { padding: 8px 12px; background: var(--terminal-bg-panel); border-bottom: 1px solid var(--terminal-border); }
-	.filter-row input { width: 100%; padding: 6px 10px; font-size: 12px; background: var(--terminal-bg); border: 1px solid var(--terminal-border); color: var(--terminal-text); }
-	.filter-row input:focus { border-color: var(--terminal-cyan); outline: none; }
-	.filter-row input::placeholder { color: var(--terminal-muted); }
 	.data-row { transition: background 0.1s ease; }
 	.data-row:hover { background: var(--terminal-bg-alt); }
 	.data-row td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid var(--terminal-border); }
@@ -207,7 +215,7 @@
 	.desktop-table { display: none; }
 	@media (min-width: 768px) { .mobile-search, .mobile-cards { display: none; } .desktop-table { display: block; } }
 
-	.search-input { width: 100%; padding: 12px 16px; background: var(--terminal-bg); border: 1px solid var(--terminal-border); color: var(--terminal-text); font-size: 14px; }
+	.search-input { width: 100%; padding: 12px 16px; background: var(--terminal-bg); border: 1px solid var(--terminal-border); color: var(--terminal-text); font-size: 16px; }
 	.search-input:focus { border-color: var(--terminal-cyan); outline: none; }
 
 	.card { display: block; padding: 16px; background: var(--terminal-bg-alt); border: 1px solid var(--terminal-border); transition: all 0.15s ease; }

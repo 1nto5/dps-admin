@@ -21,8 +21,8 @@
 	let results = $state<SearchResult[]>([]);
 	let selectedIndex = $state(0);
 	let loading = $state(false);
-	let inputRef: HTMLInputElement;
-	let resultsRef: HTMLDivElement;
+	let inputRef = $state<HTMLInputElement | undefined>(undefined);
+	let resultsRef = $state<HTMLDivElement | undefined>(undefined);
 	let debounceTimer: ReturnType<typeof setTimeout>;
 
 	const typeConfig: Record<string, { label: string; color: string }> = {

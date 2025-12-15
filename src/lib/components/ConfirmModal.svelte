@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { fade } from 'svelte/transition';
-	import { scaleReveal } from '$lib/animations/transitions';
+	import { untrack } from 'svelte';
 	import { pushContext, popContext } from '$lib/shortcuts';
 
 	let {
@@ -14,16 +13,18 @@
 		title?: string;
 		message?: string;
 		loading?: boolean;
-		onConfirm: () => void;
+		onConfirm: () => void | Promise<void>;
 	} = $props();
 
+	// svelte-ignore non_reactive_update - bind:this refs don't need $state
 	let confirmBtn: HTMLButtonElement;
 
+	// Use untrack to prevent reactive loops when modifying context stack
 	$effect(() => {
 		if (show) {
-			pushContext('modal');
+			untrack(() => pushContext('modal'));
 			setTimeout(() => confirmBtn?.focus(), 0);
-			return () => popContext('modal');
+			return () => untrack(() => popContext('modal'));
 		}
 	});
 
@@ -40,7 +41,7 @@
 
 {#if show}
 	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-	<div class="modal-overlay" role="dialog" onkeydown={handleKeydown}>
+	<div class="modal-overlay" role="dialog" aria-modal="true" tabindex="-1" onkeydown={handleKeydown}>
 		<div class="modal-box">
 			<div class="modal-header">
 				<span class="warning-icon">⚠</span>

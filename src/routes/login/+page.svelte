@@ -185,6 +185,7 @@
 						<label for="password">
 							<span class="prompt">password:</span>
 						</label>
+						<!-- svelte-ignore a11y_autofocus -->
 						<input
 							type="password"
 							id="password"

@@ -65,26 +65,27 @@
 	<div class="form-container">
 		<form bind:this={formEl} onsubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
 			<div class="form-group">
-				<label class="form-label">name <span class="required">*</span></label>
-				<input bind:value={name} class="form-input" required autofocus />
+				<label for="user-name" class="form-label">name <span class="required">*</span></label>
+				<!-- svelte-ignore a11y_autofocus -->
+				<input id="user-name" bind:value={name} class="form-input" required autofocus />
 			</div>
 
 			<div class="form-group">
-				<label class="form-label">job title</label>
-				<input bind:value={jobTitle} class="form-input" />
+				<label for="user-job" class="form-label">job title</label>
+				<input id="user-job" bind:value={jobTitle} class="form-input" />
 			</div>
 
 			<div class="form-group">
-				<label class="form-label">email</label>
+				<label for="user-email" class="form-label">email</label>
 				<div class="email-input-group">
-					<input bind:value={emailUsername} class="form-input" placeholder="username" />
+					<input id="user-email" bind:value={emailUsername} class="form-input" placeholder="username" />
 					<span class="email-suffix">@{emailDomain}</span>
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="form-label">department</label>
-				<select bind:value={departmentId} class="form-input">
+				<label for="user-dept" class="form-label">department</label>
+				<select id="user-dept" bind:value={departmentId} class="form-input">
 					<option value={null}>-- Select department --</option>
 					{#each data.departments as dept}<option value={dept.id}>{dept.name}</option>{/each}
 				</select>
@@ -101,7 +102,7 @@
 	</div>
 </div>
 
-<ConfirmModal bind:show={showDelete} title="Delete User" message="Delete &quot;{data.user.name}&quot;?" {loading} onconfirm={handleDelete} />
+<ConfirmModal bind:show={showDelete} title="Delete User" message="Delete &quot;{data.user.name}&quot;?" {loading} onConfirm={handleDelete} />
 
 <style>
 	.terminal-page { max-width: 40rem; }

@@ -21,6 +21,7 @@
 	};
 
 	let filters = $state({ name: '', status: '', user: '', model: '', cpu: '', ram: '', room: '' });
+	let mobileSearch = $state('');
 	let filterRefs: HTMLInputElement[] = [];
 
 	function focusSearch() {
@@ -34,7 +35,7 @@
 	}
 
 	function filtersEmpty() {
-		return !filters.name && !filters.status && !filters.user && !filters.model && !filters.cpu && !filters.ram && !filters.room;
+		return !filters.name && !filters.status && !filters.user && !filters.model && !filters.cpu && !filters.ram && !filters.room && !mobileSearch;
 	}
 
 	function handleEscape() {
@@ -45,6 +46,7 @@
 			active.blur();
 		} else if (!filtersEmpty()) {
 			filters = { name: '', status: '', user: '', model: '', cpu: '', ram: '', room: '' };
+			mobileSearch = '';
 		} else {
 			goto(backInfo.href);
 		}
@@ -63,6 +65,14 @@
 		data.notebooks
 			.filter((n) => $showDisposal || n.status !== 'disposal')
 			.filter((n) => {
+				// Mobile unified search
+				if (mobileSearch) {
+					const q = mobileSearch.toLowerCase();
+					const allFields = [n.name, n.status, n.userName, n.manufacturer, n.model, n.cpu, n.ram, n.roomName]
+						.filter(Boolean).join(' ').toLowerCase();
+					return allFields.includes(q);
+				}
+				// Desktop column filters
 				const nameMatch = n.name.toLowerCase().includes(filters.name.toLowerCase());
 				const statusMatch = n.status.toLowerCase().includes(filters.status.toLowerCase());
 				const userMatch = (n.userName || '').toLowerCase().includes(filters.user.toLowerCase());
@@ -96,6 +106,7 @@
 <div class="terminal-page">
 	<div class="page-header-minimal">
 		<span class="header-text">NOTEBOOKS</span>
+		<a href="/notebooks/new" class="mobile-add-btn show-mobile">+ Add</a>
 	</div>
 
 	{#if data.notebooks.length === 0}
@@ -107,7 +118,7 @@
 	{:else}
 		<!-- Mobile Search -->
 		<div class="mobile-search">
-			<input type="text" bind:value={filters.name} bind:this={filterRefs[0]} placeholder="Search notebooks..." class="search-input" />
+			<input type="text" bind:value={mobileSearch} placeholder="Search all fields..." class="search-input" />
 		</div>
 
 		<!-- Mobile Cards -->
@@ -216,7 +227,7 @@
 	.desktop-table { display: none; }
 	@media (min-width: 768px) { .mobile-search, .mobile-cards { display: none; } .desktop-table { display: block; } }
 
-	.search-input { width: 100%; padding: 12px 16px; background: var(--terminal-bg); border: 1px solid var(--terminal-border); color: var(--terminal-text); font-size: 14px; }
+	.search-input { width: 100%; padding: 12px 16px; background: var(--terminal-bg); border: 1px solid var(--terminal-border); color: var(--terminal-text); font-size: 16px; }
 	.search-input:focus { border-color: var(--terminal-cyan); outline: none; }
 
 	.card { display: block; padding: 16px; background: var(--terminal-bg-alt); border: 1px solid var(--terminal-border); transition: all 0.15s ease; }

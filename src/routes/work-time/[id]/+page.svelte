@@ -115,7 +115,7 @@
 	title="Delete Entry"
 	message="Are you sure you want to delete this work entry? This action cannot be undone."
 	loading={deleting}
-	onconfirm={handleDelete}
+	onConfirm={handleDelete}
 />
 
 <div class="terminal-page max-w-2xl">
@@ -133,33 +133,34 @@
 		<form bind:this={formEl} onsubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
 			<div class="form-grid-5">
 				<div class="form-group">
-					<label class="form-label">date</label>
-					<input type="date" bind:value={form.date} class="form-input" required autofocus />
+					<label for="wt-date" class="form-label">date</label>
+					<!-- svelte-ignore a11y_autofocus -->
+					<input id="wt-date" type="date" bind:value={form.date} class="form-input" required autofocus />
 				</div>
 				<div class="form-group">
-					<label class="form-label">start time</label>
-					<input type="time" bind:value={form.startTime} class="form-input" required />
+					<label for="wt-start" class="form-label">start time</label>
+					<input id="wt-start" type="time" bind:value={form.startTime} class="form-input" required />
 				</div>
 				<div class="form-group">
-					<label class="form-label">end time</label>
-					<input type="time" bind:value={form.endTime} class="form-input" required />
+					<label for="wt-end" class="form-label">end time</label>
+					<input id="wt-end" type="time" bind:value={form.endTime} class="form-input" required />
 				</div>
 				<div class="form-group">
-					<label class="form-label">duration</label>
-					<div class="duration-display">{formatDuration(duration)}</div>
+					<span class="form-label">duration</span>
+					<div class="duration-display" aria-label="Calculated duration">{formatDuration(duration)}</div>
 				</div>
 				<div class="form-group">
-					<label class="form-label">billing month</label>
+					<label for="wt-billing-month" class="form-label">billing month</label>
 					<div class="billing-month-row">
-						<input type="number" bind:value={billingMonthNum} onblur={validateBillingMonth} min="1" max="12" class="form-input month-input" />
-						<input type="number" bind:value={billingYear} onblur={validateBillingYear} min="2020" max="2099" class="form-input year-input" />
+						<input id="wt-billing-month" type="number" bind:value={billingMonthNum} onblur={validateBillingMonth} min="1" max="12" class="form-input month-input" />
+						<input type="number" bind:value={billingYear} onblur={validateBillingYear} min="2020" max="2099" class="form-input year-input" aria-label="Billing year" />
 					</div>
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="form-label">scope of work (zakres prac)</label>
-				<textarea bind:value={form.scope} rows="4" class="form-input" placeholder="Describe the work performed..." required></textarea>
+				<label for="wt-scope" class="form-label">scope of work (zakres prac)</label>
+				<textarea id="wt-scope" bind:value={form.scope} rows="4" class="form-input" placeholder="Describe the work performed..." required></textarea>
 			</div>
 
 			<div class="form-actions">

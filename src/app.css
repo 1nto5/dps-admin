@@ -653,6 +653,39 @@ thead input {
   margin-bottom: 0;
 }
 
+/* Prevent grid children from overflowing on mobile */
+.form-grid-2 > *,
+.form-grid-3 > *,
+.form-grid-4 > * {
+  min-width: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   PAGE HEADER - MOBILE
+   ───────────────────────────────────────────────────────────────── */
+
+.page-header-minimal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-add-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--terminal-cyan);
+  color: var(--terminal-cyan);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.mobile-add-btn:hover {
+  background: var(--terminal-cyan);
+  color: var(--terminal-bg);
+}
+
 /* ─────────────────────────────────────────────────────────────────
    RESPONSIVE UTILITIES
    ───────────────────────────────────────────────────────────────── */

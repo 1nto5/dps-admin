@@ -11,9 +11,15 @@
 	let { data }: { data: PageData } = $props();
 	const backInfo = getBackInfo('/', 'Search');
 
-	let selectedYear = $state(parseInt(data.currentMonth.split('-')[0]));
-	let selectedMonthNum = $state(parseInt(data.currentMonth.split('-')[1]));
+	let selectedYear = $state(0);
+	let selectedMonthNum = $state(0);
 	let selectedMonth = $derived(`${selectedYear}-${String(selectedMonthNum).padStart(2, '0')}`);
+
+	// Sync with data when it changes (e.g., navigation)
+	$effect(() => {
+		selectedYear = parseInt(data.currentMonth.split('-')[0]);
+		selectedMonthNum = parseInt(data.currentMonth.split('-')[1]);
+	});
 	let monthInput: HTMLInputElement;
 	let exporting = $state(false);
 	let sending = $state(false);
@@ -138,19 +144,20 @@
 </script>
 
 <Toast bind:show={toast.show} message={toast.message} type={toast.type} />
-<ConfirmModal bind:show={showSendConfirm} title="Send Email" message="Send work time summary for {selectedMonth}?" loading={sending} onconfirm={handleSend} />
+<ConfirmModal bind:show={showSendConfirm} title="Send Email" message="Send work time summary for {selectedMonth}?" loading={sending} onConfirm={handleSend} />
 
 <div class="terminal-page">
 	<div class="page-header-minimal">
 		<span class="header-text">WORK TIME</span>
+		<a href="/work-time/new" class="mobile-add-btn show-mobile">+ Add</a>
 	</div>
 
 	<!-- Controls -->
 	<div class="controls">
 		<div class="month-selector">
-			<label class="control-label">Month:</label>
-			<input bind:this={monthInput} type="number" bind:value={selectedMonthNum} onchange={handleMonthChange} onblur={validateMonth} min="1" max="12" class="month-input filter-month" />
-			<input type="number" bind:value={selectedYear} onchange={handleMonthChange} onblur={validateYear} min="2020" max="2099" class="month-input filter-year" />
+			<label for="month-input" class="control-label">Month:</label>
+			<input id="month-input" bind:this={monthInput} type="number" bind:value={selectedMonthNum} onchange={handleMonthChange} onblur={validateMonth} min="1" max="12" class="month-input filter-month" />
+			<input type="number" bind:value={selectedYear} onchange={handleMonthChange} onblur={validateYear} min="2020" max="2099" class="month-input filter-year" aria-label="Year" />
 		</div>
 		<div class="total-display">
 			<span class="control-label">Total:</span>

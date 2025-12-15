@@ -88,84 +88,85 @@
 						<span>custom name</span>
 					</label>
 					{#if customName}
-						<input bind:value={form.nameNumber} placeholder="Full name" class="form-input" required />
+						<input id="nb-name" bind:value={form.nameNumber} placeholder="Full name" class="form-input" required />
 					{:else}
 						<div class="name-input-group">
 							<span class="name-prefix">NB-DPS-</span>
-							<input bind:value={form.nameNumber} class="form-input" required autofocus />
+							<!-- svelte-ignore a11y_autofocus -->
+							<input id="nb-name" bind:value={form.nameNumber} class="form-input" required autofocus />
 						</div>
 					{/if}
 				</div>
 				<div class="form-group">
-					<label class="form-label">inventory number</label>
-					<input bind:value={form.inventoryNumber} class="form-input" />
+					<label for="nb-inv" class="form-label">inventory number</label>
+					<input id="nb-inv" bind:value={form.inventoryNumber} class="form-input" />
 				</div>
 			</div>
 
 			<div class="form-grid-3">
 				<div class="form-group">
-					<label class="form-label">status</label>
-					<select bind:value={form.status} class="form-input">{#each statusValues as s}<option value={s}>{s}</option>{/each}</select>
+					<label for="nb-status" class="form-label">status</label>
+					<select id="nb-status" bind:value={form.status} class="form-input">{#each statusValues as s}<option value={s}>{s}</option>{/each}</select>
 				</div>
 				<div class="form-group">
-					<label class="form-label">room</label>
-					<select bind:value={form.roomId} class="form-input"><option value={null}>-- Not assigned --</option>{#each data.rooms as room}<option value={room.id}>{room.name}</option>{/each}</select>
+					<label for="nb-room" class="form-label">room</label>
+					<select id="nb-room" bind:value={form.roomId} class="form-input"><option value={null}>-- Not assigned --</option>{#each data.rooms as room}<option value={room.id}>{room.name}</option>{/each}</select>
 				</div>
 				<div class="form-group">
-					<label class="form-label">user</label>
-					<select bind:value={form.userId} class="form-input"><option value={null}>-- Not assigned --</option>{#each data.users as user}<option value={user.id}>{user.name}</option>{/each}</select>
-				</div>
-			</div>
-
-			<div class="form-grid-3">
-				<div class="form-group">
-					<label class="form-label">manufacturer</label>
-					<input bind:value={form.manufacturer} class="form-input" />
-				</div>
-				<div class="form-group">
-					<label class="form-label">model</label>
-					<input bind:value={form.model} class="form-input" />
-				</div>
-				<div class="form-group">
-					<label class="form-label">serial number</label>
-					<input bind:value={form.serialNumber} class="form-input" />
+					<label for="nb-user" class="form-label">user</label>
+					<select id="nb-user" bind:value={form.userId} class="form-input"><option value={null}>-- Not assigned --</option>{#each data.users as user}<option value={user.id}>{user.name}</option>{/each}</select>
 				</div>
 			</div>
 
 			<div class="form-grid-3">
 				<div class="form-group">
-					<label class="form-label">cpu</label>
-					<input bind:value={form.cpu} class="form-input" />
+					<label for="nb-mfr" class="form-label">manufacturer</label>
+					<input id="nb-mfr" bind:value={form.manufacturer} class="form-input" />
 				</div>
 				<div class="form-group">
-					<label class="form-label">ram</label>
-					<input bind:value={form.ram} class="form-input" />
+					<label for="nb-model" class="form-label">model</label>
+					<input id="nb-model" bind:value={form.model} class="form-input" />
 				</div>
 				<div class="form-group">
-					<label class="form-label">storage</label>
-					<input bind:value={form.storage} class="form-input" />
+					<label for="nb-serial" class="form-label">serial number</label>
+					<input id="nb-serial" bind:value={form.serialNumber} class="form-input" />
+				</div>
+			</div>
+
+			<div class="form-grid-3">
+				<div class="form-group">
+					<label for="nb-cpu" class="form-label">cpu</label>
+					<input id="nb-cpu" bind:value={form.cpu} class="form-input" />
+				</div>
+				<div class="form-group">
+					<label for="nb-ram" class="form-label">ram</label>
+					<input id="nb-ram" bind:value={form.ram} class="form-input" />
+				</div>
+				<div class="form-group">
+					<label for="nb-storage" class="form-label">storage</label>
+					<input id="nb-storage" bind:value={form.storage} class="form-input" />
 				</div>
 			</div>
 
 			<div class="form-grid-2">
 				<div class="form-group">
-					<label class="form-label">windows</label>
-					<input bind:value={form.windows} class="form-input" />
+					<label for="nb-windows" class="form-label">windows</label>
+					<input id="nb-windows" bind:value={form.windows} class="form-input" />
 				</div>
 				<div class="form-group">
-					<label class="form-label">office</label>
-					<input bind:value={form.office} class="form-input" />
+					<label for="nb-office" class="form-label">office</label>
+					<input id="nb-office" bind:value={form.office} class="form-input" />
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="form-label">purchase date</label>
-				<MonthInput bind:value={form.purchaseDate} class="form-input" />
+				<label for="nb-purchase" class="form-label">purchase date</label>
+				<MonthInput id="nb-purchase" bind:value={form.purchaseDate} class="form-input" />
 			</div>
 
 			<div class="form-group">
-				<label class="form-label">notes</label>
-				<textarea bind:value={form.notes} rows="3" class="form-input"></textarea>
+				<label for="nb-notes" class="form-label">notes</label>
+				<textarea id="nb-notes" bind:value={form.notes} rows="3" class="form-input"></textarea>
 			</div>
 
 			<div class="form-actions-split">
@@ -179,7 +180,7 @@
 	</div>
 </div>
 
-<ConfirmModal bind:show={showDelete} title="Delete Notebook" message="Delete &quot;{data.notebook.name}&quot;?" {loading} onconfirm={handleDelete} />
+<ConfirmModal bind:show={showDelete} title="Delete Notebook" message="Delete &quot;{data.notebook.name}&quot;?" {loading} onConfirm={handleDelete} />
 
 <style>
 	.terminal-page { max-width: 48rem; }
@@ -191,6 +192,11 @@
 	.name-input-group { display: flex; }
 	.name-prefix { padding: 10px 12px; background: var(--terminal-bg-panel); border: 1px solid var(--terminal-border); border-right: none; color: var(--terminal-dim); font-size: 13px; white-space: nowrap; }
 	.name-input-group .form-input { border-left: none; }
+	@media (max-width: 400px) {
+		.name-input-group { flex-direction: column; }
+		.name-prefix { border-right: 1px solid var(--terminal-border); border-bottom: none; }
+		.name-input-group .form-input { border-left: 1px solid var(--terminal-border); }
+	}
 	.form-actions-split { display: flex; flex-direction: column; gap: 16px; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--terminal-border); }
 	.form-actions-left { display: flex; flex-direction: column; gap: 12px; }
 	@media (min-width: 640px) { .form-actions-split { flex-direction: row; justify-content: space-between; align-items: center; } .form-actions-left { flex-direction: row; } }

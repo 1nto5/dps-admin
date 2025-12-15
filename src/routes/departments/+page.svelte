@@ -12,6 +12,7 @@
 	const backInfo = getBackInfo('/', 'Search');
 
 	let filters = $state({ name: '' });
+	let mobileSearch = $state('');
 	let filterRefs: HTMLInputElement[] = [];
 
 	function focusSearch() {
@@ -25,7 +26,7 @@
 	}
 
 	function filtersEmpty() {
-		return !filters.name;
+		return !filters.name && !mobileSearch;
 	}
 
 	function handleEscape() {
@@ -36,6 +37,7 @@
 			active.blur();
 		} else if (!filtersEmpty()) {
 			filters = { name: '' };
+			mobileSearch = '';
 		} else {
 			goto(backInfo.href);
 		}
@@ -58,7 +60,13 @@
 	});
 
 	let filteredDepartments = $derived(
-		data.departments.filter((d) => d.name.toLowerCase().includes(filters.name.toLowerCase()))
+		data.departments.filter((d) => {
+			// Mobile unified search (same as name filter for departments)
+			if (mobileSearch) {
+				return d.name.toLowerCase().includes(mobileSearch.toLowerCase());
+			}
+			return d.name.toLowerCase().includes(filters.name.toLowerCase());
+		})
 	);
 
 	$effect(() => {
@@ -74,6 +82,7 @@
 <div class="terminal-page">
 	<div class="page-header-minimal">
 		<span class="header-text">DEPARTMENTS</span>
+		<a href="/departments/new" class="mobile-add-btn show-mobile">+ Add</a>
 	</div>
 
 	{#if data.departments.length === 0}
@@ -85,7 +94,7 @@
 	{:else}
 		<!-- Mobile Search -->
 		<div class="mobile-search">
-			<input type="text" bind:value={filters.name} bind:this={filterRefs[0]} placeholder="Search departments..." onkeydown={handleFilterKeydown} class="search-input" />
+			<input type="text" bind:value={mobileSearch} placeholder="Search departments..." onkeydown={handleFilterKeydown} class="search-input" />
 		</div>
 
 		<!-- Mobile Cards -->
@@ -162,7 +171,7 @@
 	.desktop-table { display: none; }
 	@media (min-width: 768px) { .mobile-search, .mobile-cards { display: none; } .desktop-table { display: block; } }
 
-	.search-input { width: 100%; padding: 12px 16px; background: var(--terminal-bg); border: 1px solid var(--terminal-border); color: var(--terminal-text); font-size: 14px; }
+	.search-input { width: 100%; padding: 12px 16px; background: var(--terminal-bg); border: 1px solid var(--terminal-border); color: var(--terminal-text); font-size: 16px; }
 	.search-input:focus { border-color: var(--terminal-cyan); outline: none; }
 
 	.card { display: block; padding: 14px 16px; background: var(--terminal-bg-alt); border: 1px solid var(--terminal-border); transition: all 0.15s ease; }

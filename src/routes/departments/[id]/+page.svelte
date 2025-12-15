@@ -73,7 +73,7 @@
 	</div>
 </div>
 
-<ConfirmModal bind:show={showDelete} title="Delete Department" message="Delete &quot;{data.department.name}&quot;?" {loading} onconfirm={handleDelete} />
+<ConfirmModal bind:show={showDelete} title="Delete Department" message="Delete &quot;{data.department.name}&quot;?" {loading} onConfirm={handleDelete} />
 
 <style>
 	.terminal-page { max-width: 32rem; }

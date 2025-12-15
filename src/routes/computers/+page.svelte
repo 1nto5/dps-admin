@@ -21,6 +21,7 @@
 	};
 
 	let filters = $state({ name: '', status: '', model: '', cpu: '', ram: '', room: '', user: '' });
+	let mobileSearch = $state('');
 	let filterRefs: HTMLInputElement[] = [];
 
 	function focusSearch() {
@@ -35,7 +36,7 @@
 	}
 
 	function filtersEmpty() {
-		return !filters.name && !filters.status && !filters.model && !filters.cpu && !filters.ram && !filters.room && !filters.user;
+		return !filters.name && !filters.status && !filters.model && !filters.cpu && !filters.ram && !filters.room && !filters.user && !mobileSearch;
 	}
 
 	function handleEscape() {
@@ -46,6 +47,7 @@
 			active.blur();
 		} else if (!filtersEmpty()) {
 			filters = { name: '', status: '', model: '', cpu: '', ram: '', room: '', user: '' };
+			mobileSearch = '';
 		} else {
 			goto(backInfo.href);
 		}
@@ -73,6 +75,14 @@
 		data.computers
 			.filter((c) => $showDisposal || c.status !== 'disposal')
 			.filter((c) => {
+				// Mobile unified search - matches any field
+				if (mobileSearch) {
+					const q = mobileSearch.toLowerCase();
+					const allFields = [c.name, c.status, c.userName, c.manufacturer, c.model, c.cpu, c.ram, c.roomName]
+						.filter(Boolean).join(' ').toLowerCase();
+					return allFields.includes(q);
+				}
+				// Desktop column filters
 				const nameMatch = c.name.toLowerCase().includes(filters.name.toLowerCase());
 				const statusMatch = c.status.toLowerCase().includes(filters.status.toLowerCase());
 				const modelMatch = [c.manufacturer, c.model].filter(Boolean).join(' ').toLowerCase().includes(filters.model.toLowerCase());
@@ -107,6 +117,7 @@
 <div class="terminal-page">
 	<div class="page-header-minimal">
 		<span class="header-text">COMPUTERS</span>
+		<a href="/computers/new" class="mobile-add-btn show-mobile">+ Add</a>
 	</div>
 
 	{#if data.computers.length === 0}
@@ -118,7 +129,7 @@
 	{:else}
 		<!-- Mobile Search -->
 		<div class="mobile-search">
-			<input type="text" bind:value={filters.name} bind:this={filterRefs[0]} placeholder="Search computers..." onkeydown={handleFilterKeydown} class="search-input" />
+			<input type="text" bind:value={mobileSearch} placeholder="Search all fields..." onkeydown={handleFilterKeydown} class="search-input" />
 		</div>
 
 		<!-- Mobile Cards -->
@@ -401,7 +412,7 @@
 		background: var(--terminal-bg);
 		border: 1px solid var(--terminal-border);
 		color: var(--terminal-text);
-		font-size: 14px;
+		font-size: 16px; /* Prevents iOS Safari zoom on focus */
 	}
 
 	.search-input:focus {

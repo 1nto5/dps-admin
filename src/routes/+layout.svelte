@@ -139,9 +139,9 @@
 				<button class="hamburger-btn" onclick={() => sidebarOpen = !sidebarOpen} aria-label="Toggle menu">
 					<span class="hamburger-icon">{sidebarOpen ? '✕' : '☰'}</span>
 				</button>
-				<span class="mobile-logo">
+				<a href="/" class="mobile-logo">
 					<span class="text-cyan">DPS</span><span class="text-pink">ADMIN</span>
-				</span>
+				</a>
 			</header>
 		{/if}
 
@@ -154,7 +154,8 @@
 
 		<!-- Backdrop -->
 		{#if isMobile && sidebarOpen}
-			<div class="sidebar-backdrop" onclick={() => sidebarOpen = false} transition:fade={{ duration: 150 }}></div>
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<button class="sidebar-backdrop" onclick={() => sidebarOpen = false} transition:fade={{ duration: 150 }} aria-label="Close sidebar"></button>
 		{/if}
 
 		<!-- Sidebar Terminal -->
@@ -228,11 +229,13 @@
 
 			<!-- Resize handle (desktop only) -->
 			{#if !isMobile}
+				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 				<div
 					class="resize-handle"
 					onmousedown={startResize}
 					role="separator"
 					aria-label="Resize sidebar"
+					tabindex="-1"
 				></div>
 			{/if}
 		</aside>
@@ -292,6 +295,7 @@
 	.mobile-logo {
 		font-size: 14px;
 		font-weight: 500;
+		text-decoration: none;
 	}
 
 	/* Backdrop */
@@ -300,6 +304,8 @@
 		inset: 0;
 		background: rgba(0, 0, 0, 0.6);
 		z-index: 40;
+		border: none;
+		cursor: default;
 	}
 
 	/* Sidebar */
@@ -595,11 +601,8 @@
 	.text-cyan { color: var(--terminal-cyan); }
 	.text-pink { color: var(--terminal-pink); }
 	.text-green { color: var(--terminal-green); }
-	.text-amber { color: var(--terminal-amber); }
 	.text-red { color: var(--terminal-red); }
-	.text-white { color: var(--terminal-text-bright); }
 	.text-dim { color: var(--terminal-dim); }
-	.text-muted { color: var(--terminal-muted); }
 
 	/* Responsive */
 	@media (max-width: 1023px) {

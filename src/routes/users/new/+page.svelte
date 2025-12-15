@@ -52,26 +52,27 @@
 	<div class="form-container">
 		<form bind:this={formEl} onsubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
 			<div class="form-group">
-				<label class="form-label">name <span class="required">*</span></label>
-				<input bind:value={name} class="form-input" required autofocus />
+				<label for="new-user-name" class="form-label">name <span class="required">*</span></label>
+				<!-- svelte-ignore a11y_autofocus -->
+				<input id="new-user-name" bind:value={name} class="form-input" required autofocus />
 			</div>
 
 			<div class="form-group">
-				<label class="form-label">job title</label>
-				<input bind:value={jobTitle} class="form-input" />
+				<label for="new-user-job" class="form-label">job title</label>
+				<input id="new-user-job" bind:value={jobTitle} class="form-input" />
 			</div>
 
 			<div class="form-group">
-				<label class="form-label">email</label>
+				<label for="new-user-email" class="form-label">email</label>
 				<div class="email-input-group">
-					<input bind:value={emailUsername} class="form-input" placeholder="username" />
+					<input id="new-user-email" bind:value={emailUsername} class="form-input" placeholder="username" />
 					<span class="email-suffix">@{emailDomain}</span>
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="form-label">department</label>
-				<select bind:value={departmentId} class="form-input">
+				<label for="new-user-dept" class="form-label">department</label>
+				<select id="new-user-dept" bind:value={departmentId} class="form-input">
 					<option value={null}>-- Select department --</option>
 					{#each data.departments as dept}<option value={dept.id}>{dept.name}</option>{/each}
 				</select>

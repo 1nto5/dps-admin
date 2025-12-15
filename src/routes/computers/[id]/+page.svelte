@@ -97,37 +97,38 @@
 						<span>custom name</span>
 					</label>
 					{#if customName}
-						<input bind:value={form.nameNumber} placeholder="Full name" class="form-input" required />
+						<input id="comp-name" bind:value={form.nameNumber} placeholder="Full name" class="form-input" required />
 					{:else}
 						<div class="name-input-group">
 							<span class="name-prefix">WS-DPS-</span>
-							<input bind:value={form.nameNumber} class="form-input" required autofocus />
+							<!-- svelte-ignore a11y_autofocus -->
+							<input id="comp-name" bind:value={form.nameNumber} class="form-input" required autofocus />
 						</div>
 					{/if}
 				</div>
 				<div class="form-group">
-					<label class="form-label">inventory number</label>
-					<input bind:value={form.inventoryNumber} class="form-input" />
+					<label for="comp-inv" class="form-label">inventory number</label>
+					<input id="comp-inv" bind:value={form.inventoryNumber} class="form-input" />
 				</div>
 			</div>
 
 			<div class="form-grid-3">
 				<div class="form-group">
-					<label class="form-label">status</label>
-					<select bind:value={form.status} class="form-input">
+					<label for="comp-status" class="form-label">status</label>
+					<select id="comp-status" bind:value={form.status} class="form-input">
 						{#each statusValues as s}<option value={s}>{s}</option>{/each}
 					</select>
 				</div>
 				<div class="form-group">
-					<label class="form-label">room</label>
-					<select bind:value={form.roomId} class="form-input">
+					<label for="comp-room" class="form-label">room</label>
+					<select id="comp-room" bind:value={form.roomId} class="form-input">
 						<option value={null}>-- Not assigned --</option>
 						{#each data.rooms as room}<option value={room.id}>{room.name}</option>{/each}
 					</select>
 				</div>
 				<div class="form-group">
-					<label class="form-label">user</label>
-					<select bind:value={form.userId} class="form-input">
+					<label for="comp-user" class="form-label">user</label>
+					<select id="comp-user" bind:value={form.userId} class="form-input">
 						<option value={null}>-- Not assigned --</option>
 						{#each data.users as user}<option value={user.id}>{user.name}</option>{/each}
 					</select>
@@ -136,58 +137,58 @@
 
 			<div class="form-grid-3">
 				<div class="form-group">
-					<label class="form-label">manufacturer</label>
-					<input bind:value={form.manufacturer} class="form-input" />
+					<label for="comp-mfr" class="form-label">manufacturer</label>
+					<input id="comp-mfr" bind:value={form.manufacturer} class="form-input" />
 				</div>
 				<div class="form-group">
-					<label class="form-label">model</label>
-					<input bind:value={form.model} class="form-input" />
+					<label for="comp-model" class="form-label">model</label>
+					<input id="comp-model" bind:value={form.model} class="form-input" />
 				</div>
 				<div class="form-group">
-					<label class="form-label">serial number</label>
-					<input bind:value={form.serialNumber} class="form-input" />
+					<label for="comp-serial" class="form-label">serial number</label>
+					<input id="comp-serial" bind:value={form.serialNumber} class="form-input" />
 				</div>
 			</div>
 
 			<div class="form-grid-3">
 				<div class="form-group">
-					<label class="form-label">cpu</label>
-					<input bind:value={form.cpu} class="form-input" />
+					<label for="comp-cpu" class="form-label">cpu</label>
+					<input id="comp-cpu" bind:value={form.cpu} class="form-input" />
 				</div>
 				<div class="form-group">
-					<label class="form-label">ram</label>
-					<input bind:value={form.ram} class="form-input" />
+					<label for="comp-ram" class="form-label">ram</label>
+					<input id="comp-ram" bind:value={form.ram} class="form-input" />
 				</div>
 				<div class="form-group">
-					<label class="form-label">storage</label>
-					<input bind:value={form.storage} class="form-input" />
+					<label for="comp-storage" class="form-label">storage</label>
+					<input id="comp-storage" bind:value={form.storage} class="form-input" />
 				</div>
 			</div>
 
 			<div class="form-grid-2">
 				<div class="form-group">
-					<label class="form-label">windows</label>
-					<input bind:value={form.windows} class="form-input" />
+					<label for="comp-windows" class="form-label">windows</label>
+					<input id="comp-windows" bind:value={form.windows} class="form-input" />
 				</div>
 				<div class="form-group">
-					<label class="form-label">office</label>
-					<input bind:value={form.office} class="form-input" />
+					<label for="comp-office" class="form-label">office</label>
+					<input id="comp-office" bind:value={form.office} class="form-input" />
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="form-label">purchase date</label>
-				<MonthInput bind:value={form.purchaseDate} class="form-input" />
+				<label for="comp-purchase" class="form-label">purchase date</label>
+				<MonthInput id="comp-purchase" bind:value={form.purchaseDate} class="form-input" />
 			</div>
 
 			<div class="form-group">
-				<label class="form-label">notes</label>
-				<textarea bind:value={form.notes} rows="3" class="form-input"></textarea>
+				<label for="comp-notes" class="form-label">notes</label>
+				<textarea id="comp-notes" bind:value={form.notes} rows="3" class="form-input"></textarea>
 			</div>
 
 			{#if data.monitors.length > 0}
 			<div class="assigned-section">
-				<label class="form-label">assigned monitors</label>
+				<span class="form-label">assigned monitors</span>
 				<div class="assigned-items">
 					{#each data.monitors as m}
 						<a href="/monitors/{m.id}" class="assigned-item">{m.name}</a>
@@ -216,7 +217,7 @@
 	title="Delete Computer"
 	message="Delete &quot;{data.computer.name}&quot;?"
 	{loading}
-	onconfirm={handleDelete}
+	onConfirm={handleDelete}
 />
 
 <style>
@@ -250,6 +251,19 @@
 
 	.name-input-group .form-input {
 		border-left: none;
+	}
+
+	@media (max-width: 400px) {
+		.name-input-group {
+			flex-direction: column;
+		}
+		.name-prefix {
+			border-right: 1px solid var(--terminal-border);
+			border-bottom: none;
+		}
+		.name-input-group .form-input {
+			border-left: 1px solid var(--terminal-border);
+		}
 	}
 
 	.assigned-section {

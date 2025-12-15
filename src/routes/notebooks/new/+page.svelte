@@ -73,84 +73,85 @@
 						<span>custom name</span>
 					</label>
 					{#if customName}
-						<input bind:value={nameNumber} placeholder="Full name" class="form-input" required />
+						<input id="new-nb-name" bind:value={nameNumber} placeholder="Full name" class="form-input" required />
 					{:else}
 						<div class="name-input-group">
 							<span class="name-prefix">NB-DPS-</span>
-							<input bind:value={nameNumber} class="form-input" required autofocus />
+							<!-- svelte-ignore a11y_autofocus -->
+							<input id="new-nb-name" bind:value={nameNumber} class="form-input" required autofocus />
 						</div>
 					{/if}
 				</div>
 				<div class="form-group">
-					<label class="form-label">inventory number</label>
-					<input bind:value={form.inventoryNumber} class="form-input" />
+					<label for="new-nb-inv" class="form-label">inventory number</label>
+					<input id="new-nb-inv" bind:value={form.inventoryNumber} class="form-input" />
 				</div>
 			</div>
 
 			<div class="form-grid-3">
 				<div class="form-group">
-					<label class="form-label">status</label>
-					<select bind:value={form.status} class="form-input">{#each statusValues as s}<option value={s}>{s}</option>{/each}</select>
+					<label for="new-nb-status" class="form-label">status</label>
+					<select id="new-nb-status" bind:value={form.status} class="form-input">{#each statusValues as s}<option value={s}>{s}</option>{/each}</select>
 				</div>
 				<div class="form-group">
-					<label class="form-label">room</label>
-					<select bind:value={form.roomId} class="form-input"><option value={null}>-- Not assigned --</option>{#each data.rooms as room}<option value={room.id}>{room.name}</option>{/each}</select>
+					<label for="new-nb-room" class="form-label">room</label>
+					<select id="new-nb-room" bind:value={form.roomId} class="form-input"><option value={null}>-- Not assigned --</option>{#each data.rooms as room}<option value={room.id}>{room.name}</option>{/each}</select>
 				</div>
 				<div class="form-group">
-					<label class="form-label">user</label>
-					<select bind:value={form.userId} class="form-input"><option value={null}>-- Not assigned --</option>{#each data.users as user}<option value={user.id}>{user.name}</option>{/each}</select>
-				</div>
-			</div>
-
-			<div class="form-grid-3">
-				<div class="form-group">
-					<label class="form-label">manufacturer</label>
-					<input bind:value={form.manufacturer} class="form-input" />
-				</div>
-				<div class="form-group">
-					<label class="form-label">model</label>
-					<input bind:value={form.model} class="form-input" />
-				</div>
-				<div class="form-group">
-					<label class="form-label">serial number</label>
-					<input bind:value={form.serialNumber} class="form-input" />
+					<label for="new-nb-user" class="form-label">user</label>
+					<select id="new-nb-user" bind:value={form.userId} class="form-input"><option value={null}>-- Not assigned --</option>{#each data.users as user}<option value={user.id}>{user.name}</option>{/each}</select>
 				</div>
 			</div>
 
 			<div class="form-grid-3">
 				<div class="form-group">
-					<label class="form-label">cpu</label>
-					<input bind:value={form.cpu} class="form-input" />
+					<label for="new-nb-mfr" class="form-label">manufacturer</label>
+					<input id="new-nb-mfr" bind:value={form.manufacturer} class="form-input" />
 				</div>
 				<div class="form-group">
-					<label class="form-label">ram</label>
-					<input bind:value={form.ram} class="form-input" />
+					<label for="new-nb-model" class="form-label">model</label>
+					<input id="new-nb-model" bind:value={form.model} class="form-input" />
 				</div>
 				<div class="form-group">
-					<label class="form-label">storage</label>
-					<input bind:value={form.storage} class="form-input" />
+					<label for="new-nb-serial" class="form-label">serial number</label>
+					<input id="new-nb-serial" bind:value={form.serialNumber} class="form-input" />
+				</div>
+			</div>
+
+			<div class="form-grid-3">
+				<div class="form-group">
+					<label for="new-nb-cpu" class="form-label">cpu</label>
+					<input id="new-nb-cpu" bind:value={form.cpu} class="form-input" />
+				</div>
+				<div class="form-group">
+					<label for="new-nb-ram" class="form-label">ram</label>
+					<input id="new-nb-ram" bind:value={form.ram} class="form-input" />
+				</div>
+				<div class="form-group">
+					<label for="new-nb-storage" class="form-label">storage</label>
+					<input id="new-nb-storage" bind:value={form.storage} class="form-input" />
 				</div>
 			</div>
 
 			<div class="form-grid-2">
 				<div class="form-group">
-					<label class="form-label">windows</label>
-					<input bind:value={form.windows} class="form-input" />
+					<label for="new-nb-windows" class="form-label">windows</label>
+					<input id="new-nb-windows" bind:value={form.windows} class="form-input" />
 				</div>
 				<div class="form-group">
-					<label class="form-label">office</label>
-					<input bind:value={form.office} class="form-input" />
+					<label for="new-nb-office" class="form-label">office</label>
+					<input id="new-nb-office" bind:value={form.office} class="form-input" />
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="form-label">purchase date</label>
-				<MonthInput bind:value={form.purchaseDate} class="form-input" />
+				<label for="new-nb-purchase" class="form-label">purchase date</label>
+				<MonthInput id="new-nb-purchase" bind:value={form.purchaseDate} class="form-input" />
 			</div>
 
 			<div class="form-group">
-				<label class="form-label">notes</label>
-				<textarea bind:value={form.notes} rows="3" class="form-input"></textarea>
+				<label for="new-nb-notes" class="form-label">notes</label>
+				<textarea id="new-nb-notes" bind:value={form.notes} rows="3" class="form-input"></textarea>
 			</div>
 
 			<div class="form-actions">
@@ -171,4 +172,9 @@
 	.name-input-group { display: flex; }
 	.name-prefix { padding: 10px 12px; background: var(--terminal-bg-panel); border: 1px solid var(--terminal-border); border-right: none; color: var(--terminal-dim); font-size: 13px; white-space: nowrap; }
 	.name-input-group .form-input { border-left: none; }
+	@media (max-width: 400px) {
+		.name-input-group { flex-direction: column; }
+		.name-prefix { border-right: 1px solid var(--terminal-border); border-bottom: none; }
+		.name-input-group .form-input { border-left: 1px solid var(--terminal-border); }
+	}
 </style>

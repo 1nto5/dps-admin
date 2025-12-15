@@ -73,41 +73,42 @@
 		<form bind:this={formEl} onsubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
 			<div class="form-grid-2">
 				<div class="form-group">
-					<label class="form-label">Manufacturer</label>
-					<input bind:value={form.manufacturer} class="form-input" placeholder="e.g. Dell, LG, Samsung" autofocus />
+					<label for="mon-edit-mfr" class="form-label">Manufacturer</label>
+					<!-- svelte-ignore a11y_autofocus -->
+					<input id="mon-edit-mfr" bind:value={form.manufacturer} class="form-input" placeholder="e.g. Dell, LG, Samsung" autofocus />
 				</div>
 				<div class="form-group">
-					<label class="form-label">Model</label>
-					<input bind:value={form.model} class="form-input" placeholder="e.g. E2222H, 27UK850" />
+					<label for="mon-edit-model" class="form-label">Model</label>
+					<input id="mon-edit-model" bind:value={form.model} class="form-input" placeholder="e.g. E2222H, 27UK850" />
 				</div>
 			</div>
 			<div class="form-grid-2">
 				<div class="form-group">
-					<label class="form-label">Status</label>
-					<select bind:value={form.status} class="form-input">{#each statusValues as s}<option value={s}>{s}</option>{/each}</select>
+					<label for="mon-edit-status" class="form-label">Status</label>
+					<select id="mon-edit-status" bind:value={form.status} class="form-input">{#each statusValues as s}<option value={s}>{s}</option>{/each}</select>
 				</div>
 				<div class="form-group">
-					<label class="form-label">Computer</label>
-					<select bind:value={form.computerId} class="form-input"><option value={null}>-- Not assigned --</option>{#each data.computers as computer}<option value={computer.id}>{computer.name}</option>{/each}</select>
+					<label for="mon-edit-computer" class="form-label">Computer</label>
+					<select id="mon-edit-computer" bind:value={form.computerId} class="form-input"><option value={null}>-- Not assigned --</option>{#each data.computers as computer}<option value={computer.id}>{computer.name}</option>{/each}</select>
 				</div>
 			</div>
 			<div class="form-grid-2">
 				<div class="form-group">
-					<label class="form-label">Inventory Number</label>
-					<input bind:value={form.inventoryNumber} class="form-input" />
+					<label for="mon-edit-inv" class="form-label">Inventory Number</label>
+					<input id="mon-edit-inv" bind:value={form.inventoryNumber} class="form-input" />
 				</div>
 				<div class="form-group">
-					<label class="form-label">Serial Number</label>
-					<input bind:value={form.serialNumber} class="form-input" />
+					<label for="mon-edit-serial" class="form-label">Serial Number</label>
+					<input id="mon-edit-serial" bind:value={form.serialNumber} class="form-input" />
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="form-label">Purchase Date</label>
-				<MonthInput bind:value={form.purchaseDate} class="form-input" />
+				<label for="mon-edit-purchase" class="form-label">Purchase Date</label>
+				<MonthInput id="mon-edit-purchase" bind:value={form.purchaseDate} class="form-input" />
 			</div>
 			<div class="form-group">
-				<label class="form-label">Notes</label>
-				<textarea bind:value={form.notes} rows="2" class="form-input"></textarea>
+				<label for="mon-edit-notes" class="form-label">Notes</label>
+				<textarea id="mon-edit-notes" bind:value={form.notes} rows="2" class="form-input"></textarea>
 			</div>
 			<div class="form-actions">
 				<div class="actions-left">
