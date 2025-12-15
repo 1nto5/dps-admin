@@ -140,6 +140,9 @@ input[type="number"],
 input[type="search"],
 input[type="tel"],
 input[type="url"],
+input[type="date"],
+input[type="time"],
+input[type="month"],
 textarea,
 select {
   font-family: 'JetBrains Mono', monospace;
@@ -852,6 +855,9 @@ thead input {
   input[type="search"],
   input[type="tel"],
   input[type="url"],
+  input[type="date"],
+  input[type="time"],
+  input[type="month"],
   textarea,
   select {
     font-size: 16px !important; /* Prevents iOS zoom - !important overrides local styles */
