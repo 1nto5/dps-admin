@@ -218,8 +218,17 @@
 	.form-grid-5 input[type="date"],
 	.form-grid-5 input[type="time"],
 	.form-grid-5 input[type="month"] {
+		width: 100%;
 		max-width: 100%;
 		box-sizing: border-box;
+	}
+
+	/* Force all form inputs to respect container width on mobile */
+	@media (max-width: 1023px) {
+		.form-grid-5 .form-input {
+			width: 100% !important;
+			max-width: 100% !important;
+		}
 	}
 
 	.duration-display {
