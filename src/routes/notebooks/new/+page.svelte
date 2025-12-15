@@ -5,6 +5,7 @@
 	import { statusValues } from '$lib/db/schema';
 	import { registerShortcut, pushContext, popContext } from '$lib/shortcuts';
 	import { getBackInfo } from '$lib/stores/navigation';
+	import { toastAndGoto } from '$lib/stores/toast';
 	import MonthInput from '$lib/components/MonthInput.svelte';
 
 	let { data }: { data: PageData } = $props();
@@ -47,7 +48,7 @@
 		const payload = { ...form, name: customName ? nameNumber.trim() : `NB-DPS-${nameNumber.trim()}` };
 		try {
 			const res = await fetch('/api/notebooks', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-			if (res.ok) goto(backInfo.href);
+			if (res.ok) await toastAndGoto('Notebook created', backInfo.href);
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Connection error'; } finally { loading = false; }
 	}

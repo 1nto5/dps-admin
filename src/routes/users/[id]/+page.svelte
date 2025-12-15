@@ -4,6 +4,7 @@
 	import type { PageData } from './$types';
 	import { registerShortcut, pushContext, popContext } from '$lib/shortcuts';
 	import { getBackInfo } from '$lib/stores/navigation';
+	import { toastAndGoto } from '$lib/stores/toast';
 	import ConfirmModal from '$lib/components/ConfirmModal.svelte';
 
 	let { data }: { data: PageData } = $props();
@@ -36,7 +37,7 @@
 		const email = emailUsername.trim() ? `${emailUsername.trim()}@${emailDomain}` : null;
 		try {
 			const res = await fetch(`/api/users/${data.user.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name.trim(), jobTitle: jobTitle.trim() || null, email, departmentId }) });
-			if (res.ok) goto(backInfo.href);
+			if (res.ok) await toastAndGoto('User saved', backInfo.href);
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Connection error'; } finally { loading = false; }
 	}
@@ -45,7 +46,7 @@
 		loading = true;
 		try {
 			const res = await fetch(`/api/users/${data.user.id}`, { method: 'DELETE' });
-			if (res.ok) goto(backInfo.href);
+			if (res.ok) await toastAndGoto('User deleted', backInfo.href);
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Connection error'; } finally { loading = false; showDelete = false; }
 	}

@@ -7,12 +7,14 @@
 		message = '',
 		type = 'info' as ToastType,
 		show = $bindable(false),
-		duration = 3000
+		duration = 3000,
+		onclose = () => {}
 	}: {
 		message: string;
 		type?: ToastType;
 		show: boolean;
 		duration?: number;
+		onclose?: () => void;
 	} = $props();
 
 	const colors: Record<ToastType, string> = {
@@ -36,6 +38,7 @@
 			clearTimeout(timeoutId);
 			timeoutId = setTimeout(() => {
 				show = false;
+				onclose();
 			}, duration);
 		}
 		return () => clearTimeout(timeoutId);
@@ -52,7 +55,7 @@
 	>
 		<span class="toast-prefix">[{prefixes[type]}]</span>
 		<span class="toast-message">{message}</span>
-		<button class="toast-close" onclick={() => (show = false)}>×</button>
+		<button class="toast-close" onclick={() => { show = false; onclose(); }}>×</button>
 	</div>
 {/if}
 

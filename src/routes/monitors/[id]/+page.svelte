@@ -5,6 +5,7 @@
 	import { statusValues } from '$lib/db/schema';
 	import { registerShortcut, pushContext, popContext } from '$lib/shortcuts';
 	import { getBackInfo } from '$lib/stores/navigation';
+	import { toastAndGoto } from '$lib/stores/toast';
 	import ConfirmModal from '$lib/components/ConfirmModal.svelte';
 	import MonthInput from '$lib/components/MonthInput.svelte';
 	let { data }: { data: PageData } = $props();
@@ -42,7 +43,7 @@
 		const payload = { ...form, name };
 		try {
 			const res = await fetch(`/api/monitors/${data.monitor.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-			if (res.ok) goto(backInfo.href); else error = (await res.json()).error || 'Failed';
+			if (res.ok) await toastAndGoto('Monitor saved', backInfo.href); else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Error'; } finally { loading = false; }
 	}
 
@@ -50,7 +51,7 @@
 		loading = true;
 		try {
 			const res = await fetch(`/api/monitors/${data.monitor.id}`, { method: 'DELETE' });
-			if (res.ok) goto(backInfo.href); else error = 'Failed';
+			if (res.ok) await toastAndGoto('Monitor deleted', backInfo.href); else error = 'Failed';
 		} catch { error = 'Error'; } finally { loading = false; showDelete = false; }
 	}
 </script>

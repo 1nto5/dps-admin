@@ -5,6 +5,7 @@
 	import { statusValues } from '$lib/db/schema';
 	import { registerShortcut, pushContext, popContext } from '$lib/shortcuts';
 	import { getBackInfo } from '$lib/stores/navigation';
+	import { toastAndGoto } from '$lib/stores/toast';
 	import MonthInput from '$lib/components/MonthInput.svelte';
 	import ConfirmModal from '$lib/components/ConfirmModal.svelte';
 
@@ -62,7 +63,7 @@
 				method: 'PUT', headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(payload)
 			});
-			if (res.ok) goto(backInfo.href);
+			if (res.ok) await toastAndGoto('Computer saved', backInfo.href);
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Error'; } finally { loading = false; }
 	}
@@ -71,7 +72,7 @@
 		loading = true;
 		try {
 			const res = await fetch(`/api/computers/${data.computer.id}`, { method: 'DELETE' });
-			if (res.ok) goto(backInfo.href);
+			if (res.ok) await toastAndGoto('Computer deleted', backInfo.href);
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Error'; } finally { loading = false; showDelete = false; }
 	}

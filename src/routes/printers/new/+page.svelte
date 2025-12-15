@@ -5,6 +5,7 @@
 	import { statusValues } from '$lib/db/schema';
 	import { registerShortcut, pushContext, popContext } from '$lib/shortcuts';
 	import { getBackInfo } from '$lib/stores/navigation';
+	import { toastAndGoto } from '$lib/stores/toast';
 	import MonthInput from '$lib/components/MonthInput.svelte';
 
 	let { data }: { data: PageData } = $props();
@@ -34,7 +35,7 @@
 		const payload = { ...form, name: customName ? nameNumber.trim() : `${prefix}-DPS-${nameNumber.trim()}`, isNetwork: form.isNetwork ? 1 : 0 };
 		try {
 			const res = await fetch('/api/printers', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-			if (res.ok) goto(backInfo.href);
+			if (res.ok) await toastAndGoto('Printer created', backInfo.href);
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Error'; } finally { loading = false; }
 	}

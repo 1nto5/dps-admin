@@ -3,6 +3,8 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { registerShortcut, pushContext, popContext } from '$lib/shortcuts';
+	import { terminalFade } from '$lib/animations/transitions';
+	import { getStaggerDelay } from '$lib/animations';
 	import { setSidebarEdit, clearSidebarEdit } from '$lib/stores/sidebar.svelte';
 	import { getBackInfo } from '$lib/stores/navigation';
 	import Toast from '$lib/components/Toast.svelte';
@@ -193,8 +195,8 @@
 	{:else}
 		<!-- Mobile Cards -->
 		<div class="mobile-cards">
-			{#each data.entries as entry}
-				<a href="/work-time/{entry.id}" class="card">
+			{#each data.entries as entry, i (entry.id)}
+				<a href="/work-time/{entry.id}" class="card" in:terminalFade={{ delay: getStaggerDelay(i) }}>
 					<div class="card-header">
 						<span class="card-name">{formatDate(entry.date)}</span>
 						<span class="card-hours">{formatDuration(entry.duration)}</span>
@@ -222,8 +224,8 @@
 						</tr>
 					</thead>
 					<tbody>
-						{#each data.entries as entry}
-							<tr class="data-row">
+						{#each data.entries as entry, i (entry.id)}
+							<tr class="data-row" in:terminalFade={{ delay: getStaggerDelay(i) }}>
 								<td class="col-name">{formatDate(entry.date)}</td>
 								<td>{entry.startTime}</td>
 								<td>{entry.endTime}</td>

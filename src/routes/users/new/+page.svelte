@@ -4,6 +4,7 @@
 	import type { PageData } from './$types';
 	import { registerShortcut, pushContext, popContext } from '$lib/shortcuts';
 	import { getBackInfo } from '$lib/stores/navigation';
+	import { toastAndGoto } from '$lib/stores/toast';
 
 	let { data }: { data: PageData } = $props();
 
@@ -32,7 +33,7 @@
 		const email = emailUsername.trim() ? `${emailUsername.trim()}@${emailDomain}` : null;
 		try {
 			const res = await fetch('/api/users', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name.trim(), jobTitle: jobTitle.trim() || null, email, departmentId }) });
-			if (res.ok) goto(backInfo.href);
+			if (res.ok) await toastAndGoto('User created', backInfo.href);
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Connection error'; } finally { loading = false; }
 	}

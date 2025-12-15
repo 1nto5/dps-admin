@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { registerShortcut, pushContext, popContext } from '$lib/shortcuts';
 	import { getBackInfo } from '$lib/stores/navigation';
+	import { toastAndGoto } from '$lib/stores/toast';
 
 	let name = $state('');
 	let formEl: HTMLFormElement;
@@ -23,7 +24,7 @@
 		error = ''; loading = true;
 		try {
 			const res = await fetch('/api/departments', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name.trim() }) });
-			if (res.ok) goto(backInfo.href);
+			if (res.ok) await toastAndGoto('Department created', backInfo.href);
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Connection error'; } finally { loading = false; }
 	}

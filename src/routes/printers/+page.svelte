@@ -135,8 +135,8 @@
 
 		<!-- Mobile Cards -->
 		<div class="mobile-cards">
-			{#each filteredPrinters as item}
-				<a href="/printers/{item.id}" class="card">
+			{#each filteredPrinters as item, i (item.id)}
+				<a href="/printers/{item.id}" class="card" in:terminalFade={{ delay: getStaggerDelay(i) }}>
 					<div class="card-header">
 						<span class="card-name">{item.name}</span>
 						<span class="status-badge {statusColors[item.status] || ''}">{item.status}</span>
@@ -178,8 +178,8 @@
 						</tr>
 					</thead>
 					<tbody>
-						{#each filteredPrinters as item}
-							<tr class="data-row">
+						{#each filteredPrinters as item, i (item.id)}
+							<tr class="data-row" in:terminalFade={{ delay: getStaggerDelay(i) }}>
 								<td class="col-name">{item.name}</td>
 								<td><span class="status-badge {statusColors[item.status] || ''}">{item.status}</span></td>
 								<td class="col-dim">{item.computerName || item.notebookName || '—'}</td>

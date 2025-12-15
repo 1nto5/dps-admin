@@ -1,11 +1,13 @@
 <script lang="ts">
 	import '../app.css';
 	import { page } from '$app/stores';
-	import { goto, beforeNavigate, afterNavigate } from '$app/navigation';
+	import { goto, beforeNavigate, afterNavigate, onNavigate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { showDisposal, sidebarWidth, sidebarCollapsed } from '$lib/stores/settings';
 	import { setPreviousPath } from '$lib/stores/navigation';
+	import { toast, flushToast, clearToast } from '$lib/stores/toast';
+	import Toast from '$lib/components/Toast.svelte';
 	import { GlobalListener, registerShortcut } from '$lib/shortcuts';
 	import { getSidebarEdit } from '$lib/stores/sidebar.svelte';
 
@@ -14,6 +16,17 @@
 		if (from?.url.pathname) {
 			setPreviousPath(from.url.pathname);
 		}
+	});
+
+	// View Transitions API for smooth page transitions
+	onNavigate((navigation) => {
+		if (!document.startViewTransition) return;
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
 	});
 
 	let { children } = $props();
@@ -55,9 +68,10 @@
 		sidebarCollapsed.update((v) => !v);
 	}
 
-	// Close sidebar on navigation (mobile)
+	// Close sidebar on navigation (mobile) + flush pending toasts
 	afterNavigate(() => {
 		if (isMobile) sidebarOpen = false;
+		flushToast();
 	});
 
 	const navItems = [
@@ -196,7 +210,7 @@
 			<nav class="nav-section">
 				<ul class="nav-list">
 					{#each navItems as item}
-						<li>
+						<li class:hide-home={item.href === '/'}>
 							<a
 								href={item.href}
 								class="nav-item"
@@ -264,6 +278,16 @@
 				{@render children()}
 			</div>
 		</main>
+
+		<!-- Global Toast -->
+		{#if $toast && !$toast.pending}
+			<Toast
+				message={$toast.message}
+				type={$toast.type}
+				show={true}
+				onclose={clearToast}
+			/>
+		{/if}
 	</div>
 {/if}
 
@@ -691,6 +715,27 @@
 			margin-top: 0;
 			margin-bottom: 8px;
 		}
+
+		/* Hide Home link on mobile (special button exists) */
+		.hide-home {
+			display: none;
+		}
+
+		/* Reverse nav order on mobile - frequently used at bottom (thumb zone) */
+		.nav-list {
+			display: flex;
+			flex-direction: column-reverse;
+		}
+
+		/* Enlarge nav items for touch */
+		.nav-item {
+			padding: 14px 16px;
+			font-size: 14px;
+		}
+
+		.prompt {
+			width: 16px;
+		}
 	}
 
 	@media (max-width: 640px) {
@@ -700,6 +745,40 @@
 
 		.shortcut {
 			display: none;
+		}
+	}
+
+	/* View Transitions API */
+	@keyframes fade-in {
+		from { opacity: 0; }
+	}
+
+	@keyframes fade-out {
+		to { opacity: 0; }
+	}
+
+	@keyframes slide-from-right {
+		from { transform: translateX(20px); }
+	}
+
+	@keyframes slide-to-left {
+		to { transform: translateX(-20px); }
+	}
+
+	:root::view-transition-old(root) {
+		animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+		           150ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
+	}
+
+	:root::view-transition-new(root) {
+		animation: 150ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
+		           150ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		:root::view-transition-old(root),
+		:root::view-transition-new(root) {
+			animation: none;
 		}
 	}
 </style>

@@ -54,8 +54,8 @@
 		</div>
 	{:else}
 		<div class="log-container">
-			{#each data.logs as log}
-				<div class="log-entry">
+			{#each data.logs as log, i (log.id)}
+				<div class="log-entry" in:terminalFade={{ delay: getStaggerDelay(i) }}>
 					<div class="log-header">
 						<div class="log-info">
 							<span class="log-entity">{log.entityType}</span>

@@ -4,6 +4,7 @@
 	import type { PageData } from './$types';
 	import { registerShortcut, pushContext, popContext } from '$lib/shortcuts';
 	import { getBackInfo } from '$lib/stores/navigation';
+	import { toastAndGoto } from '$lib/stores/toast';
 	import ConfirmModal from '$lib/components/ConfirmModal.svelte';
 
 	let { data }: { data: PageData } = $props();
@@ -29,7 +30,7 @@
 		error = ''; loading = true;
 		try {
 			const res = await fetch(`/api/rooms/${data.room.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name.trim() }) });
-			if (res.ok) goto(backInfo.href);
+			if (res.ok) await toastAndGoto('Room saved', backInfo.href);
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Connection error'; } finally { loading = false; }
 	}
@@ -38,7 +39,7 @@
 		loading = true;
 		try {
 			const res = await fetch(`/api/rooms/${data.room.id}`, { method: 'DELETE' });
-			if (res.ok) goto(backInfo.href);
+			if (res.ok) await toastAndGoto('Room deleted', backInfo.href);
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Connection error'; } finally { loading = false; showDelete = false; }
 	}

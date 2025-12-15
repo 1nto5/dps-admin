@@ -130,8 +130,8 @@
 
 		<!-- Mobile Cards -->
 		<div class="mobile-cards">
-			{#each filteredMonitors as item}
-				<a href="/monitors/{item.id}" class="card">
+			{#each filteredMonitors as item, i (item.id)}
+				<a href="/monitors/{item.id}" class="card" in:terminalFade={{ delay: getStaggerDelay(i) }}>
 					<div class="card-header">
 						<span class="card-name">{[item.manufacturer, item.model].filter(Boolean).join(' ') || 'Unknown'}</span>
 						<span class="status-badge {statusColors[item.status] || ''}">{item.status}</span>
@@ -165,8 +165,8 @@
 						</tr>
 					</thead>
 					<tbody>
-						{#each filteredMonitors as item}
-							<tr class="data-row">
+						{#each filteredMonitors as item, i (item.id)}
+							<tr class="data-row" in:terminalFade={{ delay: getStaggerDelay(i) }}>
 								<td class="col-name">{[item.manufacturer, item.model].filter(Boolean).join(' ') || '—'}</td>
 								<td><span class="status-badge {statusColors[item.status] || ''}">{item.status}</span></td>
 								<td class="col-dim">{item.inventoryNumber || '—'}</td>

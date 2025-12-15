@@ -129,8 +129,8 @@
 
 		<!-- Mobile Cards -->
 		<div class="mobile-cards">
-			{#each filteredNotebooks as nb}
-				<a href="/notebooks/{nb.id}" class="card">
+			{#each filteredNotebooks as nb, i (nb.id)}
+				<a href="/notebooks/{nb.id}" class="card" in:terminalFade={{ delay: getStaggerDelay(i) }}>
 					<div class="card-header">
 						<span class="card-name">{nb.name}</span>
 						<span class="status-badge {statusColors[nb.status] || ''}">{nb.status}</span>
@@ -171,8 +171,8 @@
 						</tr>
 					</thead>
 					<tbody>
-						{#each filteredNotebooks as nb}
-							<tr class="data-row">
+						{#each filteredNotebooks as nb, i (nb.id)}
+							<tr class="data-row" in:terminalFade={{ delay: getStaggerDelay(i) }}>
 								<td class="col-name">{nb.name}</td>
 								<td><span class="status-badge {statusColors[nb.status] || ''}">{nb.status}</span></td>
 								<td class="col-dim">{nb.userName || '—'}</td>

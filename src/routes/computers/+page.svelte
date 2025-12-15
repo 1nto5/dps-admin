@@ -140,8 +140,8 @@
 
 		<!-- Mobile Cards -->
 		<div class="mobile-cards">
-			{#each filteredComputers as comp}
-				<a href="/computers/{comp.id}" class="card">
+			{#each filteredComputers as comp, i (comp.id)}
+				<a href="/computers/{comp.id}" class="card" in:terminalFade={{ delay: getStaggerDelay(i) }}>
 					<div class="card-header">
 						<span class="card-name">{comp.name}</span>
 						<span class="status-badge {statusColors[comp.status] || ''}">{comp.status}</span>
@@ -182,8 +182,8 @@
 						</tr>
 					</thead>
 					<tbody>
-						{#each filteredComputers as comp}
-							<tr class="data-row">
+						{#each filteredComputers as comp, i (comp.id)}
+							<tr class="data-row" in:terminalFade={{ delay: getStaggerDelay(i) }}>
 								<td class="col-name">{comp.name}</td>
 								<td>
 									<span class="status-badge {statusColors[comp.status] || ''}">{comp.status}</span>

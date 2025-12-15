@@ -104,8 +104,8 @@
 
 		<!-- Mobile Cards -->
 		<div class="mobile-cards">
-			{#each filteredRooms as room}
-				<a href="/rooms/{room.id}" class="card">
+			{#each filteredRooms as room, i (room.id)}
+				<a href="/rooms/{room.id}" class="card" in:terminalFade={{ delay: getStaggerDelay(i) }}>
 					<span class="card-name">{room.name}</span>
 				</a>
 			{/each}
@@ -126,8 +126,8 @@
 						</tr>
 					</thead>
 					<tbody>
-						{#each filteredRooms as room}
-							<tr class="data-row">
+						{#each filteredRooms as room, i (room.id)}
+							<tr class="data-row" in:terminalFade={{ delay: getStaggerDelay(i) }}>
 								<td class="col-name">{room.name}</td>
 								<td class="col-actions"><a href="/rooms/{room.id}" class="edit-link">Edit</a></td>
 							</tr>

@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { registerShortcut, pushContext, popContext } from '$lib/shortcuts';
 	import { getBackInfo } from '$lib/stores/navigation';
+	import { toastAndGoto } from '$lib/stores/toast';
 
 	let formEl: HTMLFormElement;
 	const backInfo = getBackInfo('/work-time', 'Work Time');
@@ -83,7 +84,7 @@
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ ...form, billingMonth })
 			});
-			if (res.ok) goto(backInfo.href);
+			if (res.ok) await toastAndGoto('Entry created', backInfo.href);
 			else error = (await res.json()).error || 'Failed';
 		} catch {
 			error = 'Connection error';
@@ -177,6 +178,19 @@
 		.form-grid-5 {
 			grid-template-columns: 1fr;
 		}
+	}
+
+	/* Prevent grid children from overflowing on mobile */
+	.form-grid-5 > * {
+		min-width: 0;
+	}
+
+	/* Ensure native date/time inputs don't overflow */
+	.form-grid-5 input[type="date"],
+	.form-grid-5 input[type="time"],
+	.form-grid-5 input[type="month"] {
+		max-width: 100%;
+		box-sizing: border-box;
 	}
 
 	.duration-display {
