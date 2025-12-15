@@ -504,7 +504,7 @@ thead input {
   background: var(--terminal-bg);
   border: 1px solid var(--terminal-border);
   color: var(--terminal-text);
-  font-size: 13px;
+  font-size: 16px; /* Prevents iOS Safari zoom on focus */
 }
 
 .form-input:focus {
@@ -732,8 +732,10 @@ thead input {
   body {
     font-size: 13px;
   }
+}
 
-  /* Touch-friendly inputs */
+/* Touch-friendly inputs - covers all iOS devices including iPad */
+@media (max-width: 1023px) {
   input[type="text"],
   input[type="password"],
   input[type="email"],
@@ -743,9 +745,7 @@ thead input {
   input[type="url"],
   textarea,
   select {
-    min-height: 44px;
-    font-size: 16px; /* Prevents iOS zoom */
-    padding: 10px 12px;
+    font-size: 16px !important; /* Prevents iOS zoom - !important overrides local styles */
   }
 
   button,

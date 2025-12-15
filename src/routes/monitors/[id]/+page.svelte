@@ -145,7 +145,7 @@
 	.form-group { margin-bottom: 16px; }
 	.form-grid-2 .form-group { margin-bottom: 0; }
 	.form-label { display: block; font-size: 12px; color: var(--terminal-dim); margin-bottom: 6px; text-transform: lowercase; }
-	.form-input { width: 100%; padding: 10px 12px; background: var(--terminal-bg); border: 1px solid var(--terminal-border); color: var(--terminal-text); font-size: 13px; }
+	.form-input { width: 100%; padding: 10px 12px; background: var(--terminal-bg); border: 1px solid var(--terminal-border); color: var(--terminal-text); font-size: 16px; }
 	.form-input:focus { border-color: var(--terminal-cyan); outline: none; box-shadow: 0 0 0 1px var(--terminal-cyan); }
 	.form-input::placeholder { color: var(--terminal-muted); }
 	.form-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--terminal-border); }
