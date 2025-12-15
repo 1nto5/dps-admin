@@ -4,6 +4,7 @@
 	import { registerShortcut, pushContext, popContext } from '$lib/shortcuts';
 	import { getBackInfo } from '$lib/stores/navigation';
 	import { toastAndGoto } from '$lib/stores/toast';
+	import { desktopAutofocus } from '$lib/actions/autofocus';
 
 	let formEl: HTMLFormElement;
 	const backInfo = getBackInfo('/work-time', 'Work Time');
@@ -118,8 +119,7 @@
 			<div class="form-grid-2">
 				<div class="form-group">
 					<label for="entry-date" class="form-label">date</label>
-					<!-- svelte-ignore a11y_autofocus -->
-					<input id="entry-date" type="date" bind:value={form.date} class="form-input" required autofocus />
+<input id="entry-date" type="date" bind:value={form.date} class="form-input" required use:desktopAutofocus />
 				</div>
 				<div class="form-group">
 					<label for="billing-month" class="form-label">billing month</label>

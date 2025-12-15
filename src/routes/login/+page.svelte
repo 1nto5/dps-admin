@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
+	import { desktopAutofocus } from '$lib/actions/autofocus';
 
 	let { data }: { data: PageData } = $props();
 
@@ -185,14 +186,13 @@
 						<label for="password">
 							<span class="prompt">password:</span>
 						</label>
-						<!-- svelte-ignore a11y_autofocus -->
-						<input
+<input
 							type="password"
 							id="password"
 							bind:value={password}
 							class="terminal-input"
 							required
-							autofocus
+							use:desktopAutofocus
 						/>
 					</div>
 

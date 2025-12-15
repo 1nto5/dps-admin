@@ -7,6 +7,7 @@
 	import { getBackInfo } from '$lib/stores/navigation';
 	import { toastAndGoto } from '$lib/stores/toast';
 	import MonthInput from '$lib/components/MonthInput.svelte';
+	import { desktopAutofocus } from '$lib/actions/autofocus';
 
 	let { data }: { data: PageData } = $props();
 
@@ -65,8 +66,7 @@
 					{:else}
 						<div class="name-input-group">
 							<span class="name-prefix">{prefix}-DPS-</span>
-							<!-- svelte-ignore a11y_autofocus -->
-							<input id="new-prt-name" bind:value={nameNumber} class="form-input" required autofocus />
+<input id="new-prt-name" bind:value={nameNumber} class="form-input" required use:desktopAutofocus />
 						</div>
 					{/if}
 				</div>

@@ -8,6 +8,7 @@
 	import { toastAndGoto } from '$lib/stores/toast';
 	import MonthInput from '$lib/components/MonthInput.svelte';
 	import ConfirmModal from '$lib/components/ConfirmModal.svelte';
+	import { desktopAutofocus } from '$lib/actions/autofocus';
 
 	let { data }: { data: PageData } = $props();
 
@@ -93,8 +94,7 @@
 					{:else}
 						<div class="name-input-group">
 							<span class="name-prefix">{prefix}-DPS-</span>
-							<!-- svelte-ignore a11y_autofocus -->
-							<input id="prt-name" bind:value={form.nameNumber} class="form-input" required autofocus />
+<input id="prt-name" bind:value={form.nameNumber} class="form-input" required use:desktopAutofocus />
 						</div>
 					{/if}
 				</div>
