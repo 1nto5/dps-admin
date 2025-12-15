@@ -163,11 +163,13 @@
 				<textarea id="wt-scope" bind:value={form.scope} rows="4" class="form-input" placeholder="Describe the work performed..." required></textarea>
 			</div>
 
-			<div class="form-actions">
-				<button type="submit" disabled={loading} class="btn-primary">
-					{loading ? 'Saving...' : 'Save'} <kbd>⌘↵</kbd>
-				</button>
-				<a href={backInfo.href} class="btn-secondary">Cancel <kbd>Esc</kbd></a>
+			<div class="form-actions-split">
+				<div class="form-actions-left">
+					<button type="submit" disabled={loading} class="btn-primary">
+						{loading ? 'Saving...' : 'Save'} <kbd>⌘↵</kbd>
+					</button>
+					<a href={backInfo.href} class="btn-secondary">Cancel <kbd>Esc</kbd></a>
+				</div>
 				<button type="button" onclick={() => showDelete = true} class="btn-danger">
 					Delete <kbd>⌥⌫</kbd>
 				</button>

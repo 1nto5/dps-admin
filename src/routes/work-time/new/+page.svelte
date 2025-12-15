@@ -165,13 +165,13 @@
 
 	@media (max-width: 768px) {
 		.form-grid-5 {
-			grid-template-columns: repeat(3, 1fr);
+			grid-template-columns: 1fr 1fr;
 		}
 	}
 
-	@media (max-width: 480px) {
+	@media (max-width: 400px) {
 		.form-grid-5 {
-			grid-template-columns: repeat(2, 1fr);
+			grid-template-columns: 1fr;
 		}
 	}
 
@@ -194,6 +194,6 @@
 		gap: 4px;
 	}
 
-	.month-input { width: 70px; text-align: center; }
-	.year-input { width: 90px; text-align: center; }
+	.month-input { flex: 1; min-width: 60px; text-align: center; }
+	.year-input { flex: 1; min-width: 70px; text-align: center; }
 </style>

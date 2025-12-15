@@ -133,14 +133,14 @@
 	{@render children()}
 {:else}
 	<div class="terminal-container" class:resizing={isResizing}>
-		<!-- Mobile Header -->
-		{#if isMobile}
+		<!-- Mobile Header - disabled to save space, logo accessible via search icon -->
+		<!-- {#if isMobile}
 			<header class="mobile-header">
 				<a href="/" class="mobile-logo">
 					<span class="text-cyan">DPS</span><span class="text-pink">ADMIN</span>
 				</a>
 			</header>
-		{/if}
+		{/if} -->
 
 		<!-- Expand button (when collapsed, desktop only) -->
 		{#if !isMobile && $sidebarCollapsed}
@@ -158,18 +158,23 @@
 		<!-- Mobile Bottom Bar (thumb-zone) -->
 		{#if isMobile}
 			<div class="mobile-bottom-bar">
-				<button
-					class="bottom-bar-btn"
-					onclick={() => sidebarOpen = !sidebarOpen}
-					aria-label="Toggle menu"
-				>
-					{sidebarOpen ? '✕' : '☰'}
-				</button>
 				{#if sidebarEdit}
 					<a href={sidebarEdit.addUrl} class="bottom-bar-btn bottom-bar-add">
 						+
 					</a>
 				{/if}
+				<div class="bottom-bar-row">
+					<a href="/" class="bottom-bar-btn bottom-bar-search" aria-label="Search / Home">
+						⌕
+					</a>
+					<button
+						class="bottom-bar-btn"
+						onclick={() => sidebarOpen = !sidebarOpen}
+						aria-label="Toggle menu"
+					>
+						{sidebarOpen ? '✕' : '☰'}
+					</button>
+				</div>
 			</div>
 		{/if}
 
@@ -302,8 +307,14 @@
 		right: 20px;
 		display: flex;
 		flex-direction: column-reverse;
+		align-items: flex-end;
 		gap: 12px;
 		z-index: 60;
+	}
+
+	.bottom-bar-row {
+		display: flex;
+		gap: 12px;
 	}
 
 	.bottom-bar-btn {
@@ -318,6 +329,7 @@
 		font-size: 24px;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 		transition: all 0.15s ease;
+		text-decoration: none;
 	}
 
 	.bottom-bar-btn:active {
@@ -328,7 +340,10 @@
 		background: var(--terminal-cyan);
 		color: var(--terminal-bg);
 		border-color: var(--terminal-cyan);
-		text-decoration: none;
+	}
+
+	.bottom-bar-search {
+		font-size: 28px;
 	}
 
 	/* Backdrop */
@@ -368,15 +383,18 @@
 		cursor: col-resize;
 	}
 
-	/* Mobile sidebar - overlay */
+	/* Mobile sidebar - overlay from RIGHT */
 	.terminal-sidebar.mobile {
 		position: fixed;
-		left: 0;
+		right: 0;
+		left: auto;
 		top: 0;
 		height: 100vh;
 		z-index: 50;
-		transform: translateX(-100%);
+		transform: translateX(100%);
 		transition: transform 0.25s ease;
+		border-right: none;
+		border-left: 1px solid var(--terminal-border);
 	}
 
 	.terminal-sidebar.mobile.open {
@@ -641,6 +659,19 @@
 	@media (max-width: 1023px) {
 		.main-content {
 			padding: 20px;
+		}
+
+		/* Mobile sidebar: reorder content for thumb access */
+		.sidebar-footer {
+			order: -1;
+			border-top: none;
+			border-bottom: 1px solid var(--terminal-border);
+		}
+
+		.nav-section {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-end;
 		}
 	}
 

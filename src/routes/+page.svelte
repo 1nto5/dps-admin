@@ -6,7 +6,12 @@
 </script>
 
 <div class="home-terminal">
-	<!-- ASCII Art Header -->
+	<!-- Global Search (first on mobile) -->
+	<div class="search-section">
+		<GlobalSearch counts={data.counts} />
+	</div>
+
+	<!-- ASCII Art Header (hidden on mobile to save space) -->
 	<div class="ascii-header">
 		<pre class="ascii-art">
 ╔═══════════════════════════════════════════════════════════════════╗
@@ -21,11 +26,6 @@
 			<span class="text-dim">IT Management System</span>
 			<span class="text-cyan">v153.2.3</span>
 		</div>
-	</div>
-
-	<!-- Global Search -->
-	<div class="search-section">
-		<GlobalSearch counts={data.counts} />
 	</div>
 </div>
 
@@ -75,6 +75,16 @@
 	@media (max-width: 768px) {
 		.ascii-art {
 			font-size: 6px;
+		}
+	}
+
+	@media (max-width: 1023px) {
+		.ascii-header {
+			display: none;
+		}
+
+		.search-section {
+			margin-bottom: 24px;
 		}
 	}
 </style>

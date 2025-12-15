@@ -114,10 +114,4 @@
 	.email-input-group { display: flex; }
 	.email-input-group .form-input { flex: 1; border-right: none; }
 	.email-suffix { padding: 10px 12px; background: var(--terminal-bg-panel); border: 1px solid var(--terminal-border); border-left: none; color: var(--terminal-dim); font-size: 13px; white-space: nowrap; }
-	.form-actions-split { display: flex; flex-direction: column; gap: 16px; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--terminal-border); }
-	.form-actions-left { display: flex; flex-direction: column; gap: 12px; }
-	@media (min-width: 640px) { .form-actions-split { flex-direction: row; justify-content: space-between; align-items: center; } .form-actions-left { flex-direction: row; } }
-	.btn-danger { padding: 10px 20px; background: transparent; border: 1px solid var(--terminal-red); color: var(--terminal-red); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.15s ease; }
-	.btn-danger:hover { background: var(--terminal-red); color: var(--terminal-bg); }
-	.btn-danger kbd { font-size: 10px; padding: 2px 6px; background: var(--terminal-bg); border: 1px solid var(--terminal-border); color: var(--terminal-muted); }
 </style>

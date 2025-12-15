@@ -110,8 +110,8 @@
 				<label for="mon-edit-notes" class="form-label">Notes</label>
 				<textarea id="mon-edit-notes" bind:value={form.notes} rows="2" class="form-input"></textarea>
 			</div>
-			<div class="form-actions">
-				<div class="actions-left">
+			<div class="form-actions-split">
+				<div class="form-actions-left">
 					<button type="submit" disabled={loading} class="btn-primary">{loading ? 'Saving...' : 'Save'} <kbd>⌘↵</kbd></button>
 					<a href={backInfo.href} class="btn-secondary">Cancel <kbd>Esc</kbd></a>
 				</div>
@@ -148,14 +148,4 @@
 	.form-input { width: 100%; padding: 10px 12px; background: var(--terminal-bg); border: 1px solid var(--terminal-border); color: var(--terminal-text); font-size: 16px; }
 	.form-input:focus { border-color: var(--terminal-cyan); outline: none; box-shadow: 0 0 0 1px var(--terminal-cyan); }
 	.form-input::placeholder { color: var(--terminal-muted); }
-	.form-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--terminal-border); }
-	.actions-left { display: flex; gap: 12px; }
-	.btn-primary { padding: 10px 20px; background: transparent; border: 1px solid var(--terminal-cyan); color: var(--terminal-cyan); font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.15s ease; }
-	.btn-primary:hover:not(:disabled) { background: var(--terminal-cyan); color: var(--terminal-bg); }
-	.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-	.btn-secondary { padding: 10px 20px; background: transparent; border: 1px solid var(--terminal-border); color: var(--terminal-dim); font-size: 13px; display: flex; align-items: center; gap: 8px; transition: all 0.15s ease; }
-	.btn-secondary:hover { border-color: var(--terminal-text); color: var(--terminal-text); }
-	.btn-danger { padding: 10px 20px; background: transparent; border: 1px solid var(--terminal-red); color: var(--terminal-red); font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.15s ease; }
-	.btn-danger:hover { background: var(--terminal-red); color: var(--terminal-bg); }
-	.btn-primary kbd, .btn-secondary kbd, .btn-danger kbd { font-size: 10px; padding: 2px 6px; background: var(--terminal-bg); border: 1px solid var(--terminal-border); color: var(--terminal-muted); }
 </style>
