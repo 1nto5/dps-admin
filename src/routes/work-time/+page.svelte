@@ -19,8 +19,10 @@
 	$effect(() => {
 		selectedYear = parseInt(data.currentMonth.split('-')[0]);
 		selectedMonthNum = parseInt(data.currentMonth.split('-')[1]);
+		mobileMonthValue = data.currentMonth;
 	});
 	let monthInput: HTMLInputElement;
+	let mobileMonthValue = $state(''); // Track mobile picker value separately
 	let exporting = $state(false);
 	let sending = $state(false);
 	let toast = $state({ show: false, message: '', type: 'success' as 'success' | 'error' });
@@ -102,6 +104,13 @@
 		goto(`/work-time?month=${selectedMonth}`);
 	}
 
+	function handleMobileMonthBlur() {
+		// Only navigate if value changed (user confirmed selection)
+		if (mobileMonthValue && mobileMonthValue !== data.currentMonth) {
+			goto(`/work-time?month=${mobileMonthValue}`);
+		}
+	}
+
 	function handleFilterKeydown(e: KeyboardEvent) {
 		if (e.key === 'Enter' && data.entries.length > 0) {
 			e.preventDefault();
@@ -162,7 +171,7 @@
 		<div class="month-selector">
 			<label for="month-input" class="control-label">Month:</label>
 			<!-- Mobile: native month picker -->
-			<input type="month" value={selectedMonth} onchange={(e) => goto(`/work-time?month=${e.currentTarget.value}`)} class="month-input filter-month-mobile" />
+			<input type="month" bind:value={mobileMonthValue} onblur={handleMobileMonthBlur} class="month-input filter-month-mobile" />
 			<!-- Desktop: number inputs -->
 			<div class="filter-month-desktop">
 				<input id="month-input" bind:this={monthInput} type="number" bind:value={selectedMonthNum} onchange={handleMonthChange} onblur={validateMonth} min="1" max="12" class="month-input filter-month" />
