@@ -156,6 +156,31 @@ select {
   transition: all 0.15s ease;
 }
 
+/* Native date/time/month inputs - ensure proper width and styling */
+input[type="date"],
+input[type="time"],
+input[type="month"] {
+  max-width: 100%;
+  min-width: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Style the native calendar/time picker icons */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator,
+input[type="month"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover,
+input[type="time"]::-webkit-calendar-picker-indicator:hover,
+input[type="month"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 0.8;
+}
+
 input:focus,
 textarea:focus,
 select:focus {
@@ -481,6 +506,7 @@ thead input {
   border: 1px solid var(--terminal-border);
   background: var(--terminal-bg-alt);
   padding: 24px;
+  overflow: hidden;
 }
 
 @media (max-width: 639px) {
@@ -503,11 +529,14 @@ thead input {
 
 .form-input {
   width: 100%;
+  min-width: 0; /* Prevents overflow in flex/grid containers */
+  max-width: 100%;
   padding: 10px 12px;
   background: var(--terminal-bg);
   border: 1px solid var(--terminal-border);
   color: var(--terminal-text);
   font-size: 16px; /* Prevents iOS Safari zoom on focus */
+  box-sizing: border-box;
 }
 
 .form-input:focus {
