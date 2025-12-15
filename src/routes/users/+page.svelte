@@ -89,6 +89,14 @@
 			filteredCount: filteredUsers.length
 		});
 	});
+
+	function getCopyUrl(user: typeof data.users[0]): string {
+		const params = new URLSearchParams();
+		if (user.jobTitle) params.set('jobTitle', user.jobTitle);
+		if (user.email) params.set('email', user.email);
+		if (user.departmentId) params.set('departmentId', String(user.departmentId));
+		return `/users/new?${params.toString()}`;
+	}
 </script>
 
 <div class="terminal-page">
@@ -118,16 +126,22 @@
 		<!-- Mobile Cards -->
 		<div class="mobile-cards">
 			{#each filteredUsers as user, i (user.id)}
-				<a href="/users/{user.id}" class="card">
-					<div class="card-header">
-						<span class="card-name">{user.name}</span>
+				<div class="card">
+					<a href="/users/{user.id}" class="card-content">
+						<div class="card-header">
+							<span class="card-name">{user.name}</span>
+						</div>
+						<div class="card-body">
+							{#if user.jobTitle}<div class="card-row"><span class="card-label">Job:</span> {user.jobTitle}</div>{/if}
+							{#if user.email}<div class="card-row"><span class="card-label">Email:</span> <span class="email-text">{user.email}</span></div>{/if}
+							{#if user.departmentName}<div class="card-row"><span class="card-label">Dept:</span> {user.departmentName}</div>{/if}
+						</div>
+					</a>
+					<div class="card-actions">
+						<a href={getCopyUrl(user)} class="card-action-btn">Copy</a>
+						<a href="/users/{user.id}" class="card-action-btn">Edit</a>
 					</div>
-					<div class="card-body">
-						{#if user.jobTitle}<div class="card-row"><span class="card-label">Job:</span> {user.jobTitle}</div>{/if}
-						{#if user.email}<div class="card-row"><span class="card-label">Email:</span> <span class="email-text">{user.email}</span></div>{/if}
-						{#if user.departmentName}<div class="card-row"><span class="card-label">Dept:</span> {user.departmentName}</div>{/if}
-					</div>
-				</a>
+				</div>
 			{/each}
 		</div>
 
@@ -158,7 +172,10 @@
 								<td class="col-dim">{user.jobTitle || '—'}</td>
 								<td class="col-email">{user.email || '—'}</td>
 								<td class="col-dim">{user.departmentName || '—'}</td>
-								<td class="col-actions"><a href="/users/{user.id}" class="edit-link">Edit</a></td>
+								<td class="col-actions">
+									<a href={getCopyUrl(user)} class="copy-link">Copy</a>
+									<a href="/users/{user.id}" class="edit-link">Edit</a>
+								</td>
 							</tr>
 						{/each}
 					</tbody>
@@ -193,9 +210,10 @@
 	.col-name { color: var(--terminal-text-bright); font-weight: 500; }
 	.col-dim { color: var(--terminal-dim); }
 	.col-email { color: var(--terminal-cyan); font-size: 12px; }
-	.col-actions { text-align: right; width: 80px; }
-	.edit-link { color: var(--terminal-cyan); font-size: 12px; padding: 4px 10px; border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
-	.edit-link:hover { border-color: var(--terminal-cyan); background: rgba(0, 255, 242, 0.1); }
+	.col-actions { text-align: right; width: 120px; }
+	.copy-link, .edit-link { color: var(--terminal-cyan); font-size: 12px; padding: 4px 10px; border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
+	.copy-link { margin-right: 6px; }
+	.copy-link:hover, .edit-link:hover { border-color: var(--terminal-cyan); background: rgba(0, 255, 242, 0.1); }
 	.table-footer { padding: 12px 16px; border: 1px solid var(--terminal-border); border-top: none; background: var(--terminal-bg-alt); }
 	.footer-hint { font-size: 11px; color: var(--terminal-muted); }
 	.footer-hint kbd { background: var(--terminal-bg); border: 1px solid var(--terminal-border); padding: 2px 6px; font-size: 10px; margin-right: 4px; color: var(--terminal-cyan); }
@@ -210,12 +228,16 @@
 	.search-input { width: 100%; padding: 12px 16px; background: var(--terminal-bg); border: 1px solid var(--terminal-border); color: var(--terminal-text); font-size: 16px; }
 	.search-input:focus { border-color: var(--terminal-cyan); outline: none; }
 
-	.card { display: block; padding: 16px; background: var(--terminal-bg-alt); border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
+	.card { display: block; background: var(--terminal-bg-alt); border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
 	.card:hover { border-color: var(--terminal-cyan); }
+	.card-content { display: block; padding: 16px; padding-bottom: 12px; }
 	.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 	.card-name { font-weight: 500; color: var(--terminal-text-bright); font-size: 14px; }
 	.card-body { display: flex; flex-direction: column; gap: 6px; }
 	.card-row { font-size: 12px; color: var(--terminal-dim); }
 	.card-label { color: var(--terminal-muted); }
 	.email-text { color: var(--terminal-cyan); }
+	.card-actions { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--terminal-border); }
+	.card-action-btn { flex: 1; text-align: center; padding: 8px; font-size: 12px; color: var(--terminal-cyan); border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
+	.card-action-btn:hover { border-color: var(--terminal-cyan); background: rgba(0, 255, 242, 0.1); }
 </style>

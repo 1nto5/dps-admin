@@ -99,6 +99,24 @@
 			filteredCount: filteredNotebooks.length
 		});
 	});
+
+	function getCopyUrl(nb: typeof data.notebooks[0]): string {
+		const params = new URLSearchParams();
+		if (nb.status) params.set('status', nb.status);
+		if (nb.inventoryNumber) params.set('inventoryNumber', nb.inventoryNumber);
+		if (nb.manufacturer) params.set('manufacturer', nb.manufacturer);
+		if (nb.model) params.set('model', nb.model);
+		if (nb.cpu) params.set('cpu', nb.cpu);
+		if (nb.ram) params.set('ram', nb.ram);
+		if (nb.storage) params.set('storage', nb.storage);
+		if (nb.windows) params.set('windows', nb.windows);
+		if (nb.office) params.set('office', nb.office);
+		if (nb.notes) params.set('notes', nb.notes);
+		if (nb.purchaseDate) params.set('purchaseDate', nb.purchaseDate);
+		if (nb.roomId) params.set('roomId', String(nb.roomId));
+		if (nb.userId) params.set('userId', String(nb.userId));
+		return `/notebooks/new?${params.toString()}`;
+	}
 </script>
 
 <div class="terminal-page">
@@ -128,17 +146,23 @@
 		<!-- Mobile Cards -->
 		<div class="mobile-cards">
 			{#each filteredNotebooks as nb, i (nb.id)}
-				<a href="/notebooks/{nb.id}" class="card">
-					<div class="card-header">
-						<span class="card-name">{nb.name}</span>
-						<span class="status-badge {statusColors[nb.status] || ''}">{nb.status}</span>
+				<div class="card">
+					<a href="/notebooks/{nb.id}" class="card-content">
+						<div class="card-header">
+							<span class="card-name">{nb.name}</span>
+							<span class="status-badge {statusColors[nb.status] || ''}">{nb.status}</span>
+						</div>
+						<div class="card-body">
+							{#if nb.userName}<div class="card-row"><span class="card-label">User:</span> {nb.userName}</div>{/if}
+							{#if nb.manufacturer || nb.model}<div class="card-row"><span class="card-label">Model:</span> {[nb.manufacturer, nb.model].filter(Boolean).join(' ')}</div>{/if}
+							{#if nb.roomName}<div class="card-row"><span class="card-label">Room:</span> {nb.roomName}</div>{/if}
+						</div>
+					</a>
+					<div class="card-actions">
+						<a href={getCopyUrl(nb)} class="card-action-btn">Copy</a>
+						<a href="/notebooks/{nb.id}" class="card-action-btn">Edit</a>
 					</div>
-					<div class="card-body">
-						{#if nb.userName}<div class="card-row"><span class="card-label">User:</span> {nb.userName}</div>{/if}
-						{#if nb.manufacturer || nb.model}<div class="card-row"><span class="card-label">Model:</span> {[nb.manufacturer, nb.model].filter(Boolean).join(' ')}</div>{/if}
-						{#if nb.roomName}<div class="card-row"><span class="card-label">Room:</span> {nb.roomName}</div>{/if}
-					</div>
-				</a>
+				</div>
 			{/each}
 		</div>
 
@@ -178,7 +202,10 @@
 								<td class="col-dim">{nb.cpu || '—'}</td>
 								<td class="col-dim">{nb.ram || '—'}</td>
 								<td class="col-dim">{nb.roomName || '—'}</td>
-								<td class="col-actions"><a href="/notebooks/{nb.id}" class="edit-link">Edit</a></td>
+								<td class="col-actions">
+									<a href={getCopyUrl(nb)} class="copy-link">Copy</a>
+									<a href="/notebooks/{nb.id}" class="edit-link">Edit</a>
+								</td>
 							</tr>
 						{/each}
 					</tbody>
@@ -212,14 +239,15 @@
 	.data-row td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid var(--terminal-border); }
 	.col-name { color: var(--terminal-text-bright); font-weight: 500; }
 	.col-dim { color: var(--terminal-dim); }
-	.col-actions { text-align: right; width: 80px; }
+	.col-actions { text-align: right; width: 120px; }
 	.status-badge { font-size: 11px; padding: 3px 8px; border: 1px solid; text-transform: uppercase; letter-spacing: 0.5px; }
 	.status-active { color: var(--terminal-green); border-color: var(--terminal-green); background: rgba(0, 255, 136, 0.1); }
 	.status-disposal { color: var(--terminal-red); border-color: var(--terminal-red); background: rgba(255, 51, 102, 0.1); }
 	.status-preparing { color: var(--terminal-amber); border-color: var(--terminal-amber); background: rgba(255, 184, 0, 0.1); }
 	.status-collect { color: var(--terminal-blue); border-color: var(--terminal-blue); background: rgba(0, 102, 255, 0.1); }
-	.edit-link { color: var(--terminal-cyan); font-size: 12px; padding: 4px 10px; border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
-	.edit-link:hover { border-color: var(--terminal-cyan); background: rgba(0, 255, 242, 0.1); }
+	.copy-link, .edit-link { color: var(--terminal-cyan); font-size: 12px; padding: 4px 10px; border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
+	.copy-link { margin-right: 6px; }
+	.copy-link:hover, .edit-link:hover { border-color: var(--terminal-cyan); background: rgba(0, 255, 242, 0.1); }
 	.table-footer { padding: 12px 16px; border: 1px solid var(--terminal-border); border-top: none; background: var(--terminal-bg-alt); }
 	.footer-hint { font-size: 11px; color: var(--terminal-muted); }
 	.footer-hint kbd { background: var(--terminal-bg); border: 1px solid var(--terminal-border); padding: 2px 6px; font-size: 10px; margin-right: 4px; color: var(--terminal-cyan); }
@@ -234,11 +262,15 @@
 	.search-input { width: 100%; padding: 12px 16px; background: var(--terminal-bg); border: 1px solid var(--terminal-border); color: var(--terminal-text); font-size: 16px; }
 	.search-input:focus { border-color: var(--terminal-cyan); outline: none; }
 
-	.card { display: block; padding: 16px; background: var(--terminal-bg-alt); border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
+	.card { display: block; background: var(--terminal-bg-alt); border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
 	.card:hover { border-color: var(--terminal-cyan); }
+	.card-content { display: block; padding: 16px; padding-bottom: 12px; }
 	.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 	.card-name { font-weight: 500; color: var(--terminal-text-bright); font-size: 14px; }
 	.card-body { display: flex; flex-direction: column; gap: 6px; }
 	.card-row { font-size: 12px; color: var(--terminal-dim); }
 	.card-label { color: var(--terminal-muted); }
+	.card-actions { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--terminal-border); }
+	.card-action-btn { flex: 1; text-align: center; padding: 8px; font-size: 12px; color: var(--terminal-cyan); border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
+	.card-action-btn:hover { border-color: var(--terminal-cyan); background: rgba(0, 255, 242, 0.1); }
 </style>

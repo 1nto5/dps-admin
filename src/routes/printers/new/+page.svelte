@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import { statusValues } from '$lib/db/schema';
@@ -10,6 +11,15 @@
 	import { desktopAutofocus } from '$lib/actions/autofocus';
 
 	let { data }: { data: PageData } = $props();
+
+	// Check URL params for copy data
+	const urlParams = $page.url.searchParams;
+	const isCopy = urlParams.has('status') || urlParams.has('manufacturer') || urlParams.has('model');
+	const copyStatus = urlParams.get('status') as 'in_use' | 'disposal' | 'preparing' | 'to_collect' | null;
+	const copyRoomId = urlParams.get('roomId');
+	const copyComputerId = urlParams.get('computerId');
+	const copyNotebookId = urlParams.get('notebookId');
+	const copyIsNetwork = urlParams.get('isNetwork') === '1';
 
 	let nameNumber = $state('');
 	let customName = $state(false);
@@ -24,7 +34,20 @@
 		return () => { popContext('form'); unsubs.forEach(u => u()); };
 	});
 
-	let form = $state({ status: 'preparing' as const, inventoryNumber: '', manufacturer: '', model: '', serialNumber: '', ipAddress: '', isNetwork: false, notes: '', purchaseDate: '', roomId: null as number | null, computerId: null as number | null, notebookId: null as number | null });
+	let form = $state({
+		status: copyStatus || 'preparing' as const,
+		inventoryNumber: urlParams.get('inventoryNumber') || '',
+		manufacturer: urlParams.get('manufacturer') || '',
+		model: urlParams.get('model') || '',
+		serialNumber: '',
+		ipAddress: urlParams.get('ipAddress') || '',
+		isNetwork: copyIsNetwork,
+		notes: urlParams.get('notes') || '',
+		purchaseDate: urlParams.get('purchaseDate') || '',
+		roomId: copyRoomId ? parseInt(copyRoomId) : null as number | null,
+		computerId: copyComputerId ? parseInt(copyComputerId) : null as number | null,
+		notebookId: copyNotebookId ? parseInt(copyNotebookId) : null as number | null
+	});
 	let error = $state('');
 	let loading = $state(false);
 
@@ -46,7 +69,7 @@
 	<div class="page-header">
 		<div class="header-title">
 			<span class="header-decoration">───</span>
-			<span class="header-text">NEW PRINTER</span>
+			<span class="header-text">{isCopy ? 'COPY PRINTER' : 'NEW PRINTER'}</span>
 			<span class="header-decoration">─────────────────────────────────────────</span>
 		</div>
 	</div>

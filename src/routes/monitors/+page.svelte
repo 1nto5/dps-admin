@@ -100,6 +100,18 @@
 			filteredCount: filteredMonitors.length
 		});
 	});
+
+	function getCopyUrl(item: typeof data.monitors[0]): string {
+		const params = new URLSearchParams();
+		if (item.status) params.set('status', item.status);
+		if (item.inventoryNumber) params.set('inventoryNumber', item.inventoryNumber);
+		if (item.manufacturer) params.set('manufacturer', item.manufacturer);
+		if (item.model) params.set('model', item.model);
+		if (item.notes) params.set('notes', item.notes);
+		if (item.purchaseDate) params.set('purchaseDate', item.purchaseDate);
+		if (item.computerId) params.set('computerId', String(item.computerId));
+		return `/monitors/new?${params.toString()}`;
+	}
 </script>
 
 <div class="terminal-page">
@@ -129,16 +141,22 @@
 		<!-- Mobile Cards -->
 		<div class="mobile-cards">
 			{#each filteredMonitors as item, i (item.id)}
-				<a href="/monitors/{item.id}" class="card">
-					<div class="card-header">
-						<span class="card-name">{[item.manufacturer, item.model].filter(Boolean).join(' ') || 'Unknown'}</span>
-						<span class="status-badge {statusColors[item.status] || ''}">{item.status}</span>
+				<div class="card">
+					<a href="/monitors/{item.id}" class="card-content">
+						<div class="card-header">
+							<span class="card-name">{[item.manufacturer, item.model].filter(Boolean).join(' ') || 'Unknown'}</span>
+							<span class="status-badge {statusColors[item.status] || ''}">{item.status}</span>
+						</div>
+						<div class="card-body">
+							{#if item.inventoryNumber}<div class="card-row"><span class="card-label">Inv#:</span> {item.inventoryNumber}</div>{/if}
+							{#if item.computerName}<div class="card-row"><span class="card-label">Computer:</span> {item.computerName}</div>{/if}
+						</div>
+					</a>
+					<div class="card-actions">
+						<a href={getCopyUrl(item)} class="card-action-btn">Copy</a>
+						<a href="/monitors/{item.id}" class="card-action-btn">Edit</a>
 					</div>
-					<div class="card-body">
-						{#if item.inventoryNumber}<div class="card-row"><span class="card-label">Inv#:</span> {item.inventoryNumber}</div>{/if}
-						{#if item.computerName}<div class="card-row"><span class="card-label">Computer:</span> {item.computerName}</div>{/if}
-					</div>
-				</a>
+				</div>
 			{/each}
 		</div>
 
@@ -169,7 +187,10 @@
 								<td><span class="status-badge {statusColors[item.status] || ''}">{item.status}</span></td>
 								<td class="col-dim">{item.inventoryNumber || '—'}</td>
 								<td class="col-dim">{item.computerName || '—'}</td>
-								<td class="col-actions"><a href="/monitors/{item.id}" class="edit-link">Edit</a></td>
+								<td class="col-actions">
+									<a href={getCopyUrl(item)} class="copy-link">Copy</a>
+									<a href="/monitors/{item.id}" class="edit-link">Edit</a>
+								</td>
 							</tr>
 						{/each}
 					</tbody>
@@ -200,14 +221,15 @@
 	.data-row td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid var(--terminal-border); }
 	.col-name { color: var(--terminal-text-bright); font-weight: 500; }
 	.col-dim { color: var(--terminal-dim); }
-	.col-actions { text-align: right; width: 80px; }
+	.col-actions { text-align: right; width: 120px; }
 	.status-badge { font-size: 11px; padding: 3px 8px; border: 1px solid; text-transform: uppercase; letter-spacing: 0.5px; }
 	.status-active { color: var(--terminal-green); border-color: var(--terminal-green); background: rgba(0, 255, 136, 0.1); }
 	.status-disposal { color: var(--terminal-red); border-color: var(--terminal-red); background: rgba(255, 51, 102, 0.1); }
 	.status-preparing { color: var(--terminal-amber); border-color: var(--terminal-amber); background: rgba(255, 184, 0, 0.1); }
 	.status-collect { color: var(--terminal-blue); border-color: var(--terminal-blue); background: rgba(0, 102, 255, 0.1); }
-	.edit-link { color: var(--terminal-cyan); font-size: 12px; padding: 4px 10px; border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
-	.edit-link:hover { border-color: var(--terminal-cyan); background: rgba(0, 255, 242, 0.1); }
+	.copy-link, .edit-link { color: var(--terminal-cyan); font-size: 12px; padding: 4px 10px; border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
+	.copy-link { margin-right: 6px; }
+	.copy-link:hover, .edit-link:hover { border-color: var(--terminal-cyan); background: rgba(0, 255, 242, 0.1); }
 	.table-footer { padding: 12px 16px; border: 1px solid var(--terminal-border); border-top: none; background: var(--terminal-bg-alt); }
 	.footer-hint { font-size: 11px; color: var(--terminal-muted); }
 	.footer-hint kbd { background: var(--terminal-bg); border: 1px solid var(--terminal-border); padding: 2px 6px; font-size: 10px; margin-right: 4px; color: var(--terminal-cyan); }
@@ -222,11 +244,15 @@
 	.search-input { width: 100%; padding: 12px 16px; background: var(--terminal-bg); border: 1px solid var(--terminal-border); color: var(--terminal-text); font-size: 16px; }
 	.search-input:focus { border-color: var(--terminal-cyan); outline: none; }
 
-	.card { display: block; padding: 16px; background: var(--terminal-bg-alt); border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
+	.card { display: block; background: var(--terminal-bg-alt); border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
 	.card:hover { border-color: var(--terminal-cyan); }
+	.card-content { display: block; padding: 16px; padding-bottom: 12px; }
 	.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 	.card-name { font-weight: 500; color: var(--terminal-text-bright); font-size: 14px; }
 	.card-body { display: flex; flex-direction: column; gap: 6px; }
 	.card-row { font-size: 12px; color: var(--terminal-dim); }
 	.card-label { color: var(--terminal-muted); }
+	.card-actions { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--terminal-border); }
+	.card-action-btn { flex: 1; text-align: center; padding: 8px; font-size: 12px; color: var(--terminal-cyan); border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
+	.card-action-btn:hover { border-color: var(--terminal-cyan); background: rgba(0, 255, 242, 0.1); }
 </style>

@@ -110,6 +110,24 @@
 			filteredCount: filteredComputers.length
 		});
 	});
+
+	function getCopyUrl(comp: typeof data.computers[0]): string {
+		const params = new URLSearchParams();
+		if (comp.status) params.set('status', comp.status);
+		if (comp.inventoryNumber) params.set('inventoryNumber', comp.inventoryNumber);
+		if (comp.manufacturer) params.set('manufacturer', comp.manufacturer);
+		if (comp.model) params.set('model', comp.model);
+		if (comp.cpu) params.set('cpu', comp.cpu);
+		if (comp.ram) params.set('ram', comp.ram);
+		if (comp.storage) params.set('storage', comp.storage);
+		if (comp.windows) params.set('windows', comp.windows);
+		if (comp.office) params.set('office', comp.office);
+		if (comp.notes) params.set('notes', comp.notes);
+		if (comp.purchaseDate) params.set('purchaseDate', comp.purchaseDate);
+		if (comp.roomId) params.set('roomId', String(comp.roomId));
+		if (comp.userId) params.set('userId', String(comp.userId));
+		return `/computers/new?${params.toString()}`;
+	}
 </script>
 
 <div class="terminal-page">
@@ -139,17 +157,23 @@
 		<!-- Mobile Cards -->
 		<div class="mobile-cards">
 			{#each filteredComputers as comp, i (comp.id)}
-				<a href="/computers/{comp.id}" class="card" >
-					<div class="card-header">
-						<span class="card-name">{comp.name}</span>
-						<span class="status-badge {statusColors[comp.status] || ''}">{comp.status}</span>
+				<div class="card">
+					<a href="/computers/{comp.id}" class="card-content">
+						<div class="card-header">
+							<span class="card-name">{comp.name}</span>
+							<span class="status-badge {statusColors[comp.status] || ''}">{comp.status}</span>
+						</div>
+						<div class="card-body">
+							{#if comp.userName}<div class="card-row"><span class="card-label">User:</span> {comp.userName}</div>{/if}
+							{#if comp.manufacturer || comp.model}<div class="card-row"><span class="card-label">Model:</span> {[comp.manufacturer, comp.model].filter(Boolean).join(' ')}</div>{/if}
+							{#if comp.roomName}<div class="card-row"><span class="card-label">Room:</span> {comp.roomName}</div>{/if}
+						</div>
+					</a>
+					<div class="card-actions">
+						<a href={getCopyUrl(comp)} class="card-action-btn">Copy</a>
+						<a href="/computers/{comp.id}" class="card-action-btn">Edit</a>
 					</div>
-					<div class="card-body">
-						{#if comp.userName}<div class="card-row"><span class="card-label">User:</span> {comp.userName}</div>{/if}
-						{#if comp.manufacturer || comp.model}<div class="card-row"><span class="card-label">Model:</span> {[comp.manufacturer, comp.model].filter(Boolean).join(' ')}</div>{/if}
-						{#if comp.roomName}<div class="card-row"><span class="card-label">Room:</span> {comp.roomName}</div>{/if}
-					</div>
-				</a>
+				</div>
 			{/each}
 		</div>
 
@@ -192,6 +216,7 @@
 								<td class="col-dim">{comp.ram || '—'}</td>
 								<td class="col-dim">{comp.roomName || '—'}</td>
 								<td class="col-actions">
+									<a href={getCopyUrl(comp)} class="copy-link">Copy</a>
 									<a href="/computers/{comp.id}" class="edit-link">Edit</a>
 								</td>
 							</tr>
@@ -321,7 +346,7 @@
 
 	.col-actions {
 		text-align: right;
-		width: 80px;
+		width: 120px;
 	}
 
 	/* Status badges */
@@ -357,7 +382,8 @@
 		background: rgba(0, 102, 255, 0.1);
 	}
 
-	/* Edit link */
+	/* Edit/Copy links */
+	.copy-link,
 	.edit-link {
 		color: var(--terminal-cyan);
 		font-size: 12px;
@@ -366,6 +392,9 @@
 		transition: all 0.15s ease;
 	}
 
+	.copy-link { margin-right: 6px; }
+
+	.copy-link:hover,
 	.edit-link:hover {
 		border-color: var(--terminal-cyan);
 		background: rgba(0, 255, 242, 0.1);
@@ -427,7 +456,6 @@
 	/* Mobile cards */
 	.card {
 		display: block;
-		padding: 16px;
 		background: var(--terminal-bg-alt);
 		border: 1px solid var(--terminal-border);
 		transition: all 0.15s ease;
@@ -435,6 +463,12 @@
 
 	.card:hover {
 		border-color: var(--terminal-cyan);
+	}
+
+	.card-content {
+		display: block;
+		padding: 16px;
+		padding-bottom: 12px;
 	}
 
 	.card-header {
@@ -463,5 +497,27 @@
 
 	.card-label {
 		color: var(--terminal-muted);
+	}
+
+	.card-actions {
+		display: flex;
+		gap: 8px;
+		padding: 12px 16px;
+		border-top: 1px solid var(--terminal-border);
+	}
+
+	.card-action-btn {
+		flex: 1;
+		text-align: center;
+		padding: 8px;
+		font-size: 12px;
+		color: var(--terminal-cyan);
+		border: 1px solid var(--terminal-border);
+		transition: all 0.15s ease;
+	}
+
+	.card-action-btn:hover {
+		border-color: var(--terminal-cyan);
+		background: rgba(0, 255, 242, 0.1);
 	}
 </style>
