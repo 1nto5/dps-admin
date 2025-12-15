@@ -2,8 +2,6 @@
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
 	import { pushContext, popContext } from '$lib/shortcuts';
-	import { terminalFade } from '$lib/animations/transitions';
-	import { getStaggerDelay } from '$lib/animations';
 
 	let { data }: { data: PageData } = $props();
 
@@ -55,7 +53,7 @@
 	{:else}
 		<div class="log-container">
 			{#each data.logs as log, i (log.id)}
-				<div class="log-entry" in:terminalFade={{ delay: getStaggerDelay(i) }}>
+				<div class="log-entry">
 					<div class="log-header">
 						<div class="log-info">
 							<span class="log-entity">{log.entityType}</span>

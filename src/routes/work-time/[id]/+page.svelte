@@ -139,12 +139,25 @@
 
 	<div class="form-container">
 		<form bind:this={formEl} onsubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
-			<div class="form-grid-5">
+			<div class="form-grid-2">
 				<div class="form-group">
 					<label for="wt-date" class="form-label">date</label>
 					<!-- svelte-ignore a11y_autofocus -->
 					<input id="wt-date" type="date" bind:value={form.date} class="form-input" required autofocus />
 				</div>
+				<div class="form-group">
+					<label for="wt-billing-month" class="form-label">billing month</label>
+					<!-- Mobile: native month picker -->
+					<input type="month" bind:value={billingMonth} class="form-input billing-month-mobile" />
+					<!-- Desktop: number inputs -->
+					<div class="billing-month-row billing-month-desktop">
+						<input id="wt-billing-month" type="number" value={billingMonthNum} onchange={handleMonthNumChange} min="1" max="12" class="form-input month-input" />
+						<input type="number" value={billingYear} onchange={handleYearChange} min="2020" max="2099" class="form-input year-input" aria-label="Billing year" />
+					</div>
+				</div>
+			</div>
+
+			<div class="form-grid-3">
 				<div class="form-group">
 					<label for="wt-start" class="form-label">start time</label>
 					<input id="wt-start" type="time" bind:value={form.startTime} step="900" class="form-input" required />
@@ -156,16 +169,6 @@
 				<div class="form-group">
 					<span class="form-label">duration</span>
 					<div class="duration-display" aria-label="Calculated duration">{formatDuration(duration)}</div>
-				</div>
-				<div class="form-group">
-					<label for="wt-billing-month" class="form-label">billing month</label>
-					<!-- Mobile: native month picker -->
-					<input type="month" bind:value={billingMonth} class="form-input billing-month-mobile" />
-					<!-- Desktop: number inputs -->
-					<div class="billing-month-row billing-month-desktop">
-						<input id="wt-billing-month" type="number" value={billingMonthNum} onchange={handleMonthNumChange} min="1" max="12" class="form-input month-input" />
-						<input type="number" value={billingYear} onchange={handleYearChange} min="2020" max="2099" class="form-input year-input" aria-label="Billing year" />
-					</div>
 				</div>
 			</div>
 
@@ -196,41 +199,6 @@
 	.header-decoration { color: var(--terminal-dim); }
 	.header-text { color: var(--terminal-cyan); margin: 0 8px; }
 
-	.form-grid-5 {
-		display: grid;
-		grid-template-columns: repeat(5, 1fr);
-		gap: 16px;
-		margin-bottom: 20px;
-	}
-
-	@media (max-width: 1023px) {
-		.form-grid-5 {
-			grid-template-columns: 1fr;
-		}
-	}
-
-	/* Prevent grid children from overflowing on mobile */
-	.form-grid-5 > * {
-		min-width: 0;
-	}
-
-	/* Ensure native date/time inputs don't overflow */
-	.form-grid-5 input[type="date"],
-	.form-grid-5 input[type="time"],
-	.form-grid-5 input[type="month"] {
-		width: 100%;
-		max-width: 100%;
-		box-sizing: border-box;
-	}
-
-	/* Force all form inputs to respect container width on mobile */
-	@media (max-width: 1023px) {
-		.form-grid-5 .form-input {
-			width: 100% !important;
-			max-width: 100% !important;
-		}
-	}
-
 	.duration-display {
 		padding: 10px 8px;
 		background: var(--terminal-bg-panel);
@@ -250,8 +218,8 @@
 		gap: 4px;
 	}
 
-	.month-input { width: 70px; text-align: center; }
-	.year-input { width: 90px; text-align: center; }
+	.month-input { flex: 1; min-width: 60px; text-align: center; }
+	.year-input { flex: 1; min-width: 70px; text-align: center; }
 
 	/* Mobile: show month picker, hide number inputs */
 	.billing-month-mobile { display: block; }

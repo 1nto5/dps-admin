@@ -4,8 +4,6 @@
 	import { goto } from '$app/navigation';
 	import { showDisposal } from '$lib/stores/settings';
 	import { registerShortcut, pushContext, popContext } from '$lib/shortcuts';
-	import { terminalFade } from '$lib/animations/transitions';
-	import { getStaggerDelay } from '$lib/animations';
 	import AutocompleteInput from '$lib/components/AutocompleteInput.svelte';
 	import { setSidebarEdit, clearSidebarEdit } from '$lib/stores/sidebar.svelte';
 	import { getBackInfo } from '$lib/stores/navigation';
@@ -131,7 +129,7 @@
 		<!-- Mobile Cards -->
 		<div class="mobile-cards">
 			{#each filteredMonitors as item, i (item.id)}
-				<a href="/monitors/{item.id}" class="card" in:terminalFade={{ delay: getStaggerDelay(i) }}>
+				<a href="/monitors/{item.id}" class="card">
 					<div class="card-header">
 						<span class="card-name">{[item.manufacturer, item.model].filter(Boolean).join(' ') || 'Unknown'}</span>
 						<span class="status-badge {statusColors[item.status] || ''}">{item.status}</span>
@@ -166,7 +164,7 @@
 					</thead>
 					<tbody>
 						{#each filteredMonitors as item, i (item.id)}
-							<tr class="data-row" in:terminalFade={{ delay: getStaggerDelay(i) }}>
+							<tr class="data-row">
 								<td class="col-name">{[item.manufacturer, item.model].filter(Boolean).join(' ') || '—'}</td>
 								<td><span class="status-badge {statusColors[item.status] || ''}">{item.status}</span></td>
 								<td class="col-dim">{item.inventoryNumber || '—'}</td>

@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import { glitchIn } from '$lib/animations/transitions';
-	import { getStaggerDelay } from '$lib/animations';
 	import type { SearchResult } from '../../routes/api/search/+server';
 
 	type EntityCounts = {
