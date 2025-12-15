@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { scaleReveal } from '$lib/animations/transitions';
 	import { pushContext, popContext } from '$lib/shortcuts';
 
 	let {
@@ -55,7 +54,7 @@
 {#if show}
 	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<div class="modal-overlay" role="dialog" aria-modal="true" tabindex="-1" onkeydown={handleKeydown} transition:fade={{ duration: 150 }}>
-		<div class="modal-box" in:scaleReveal>
+		<div class="modal-box">
 			<div class="modal-header">
 				<span class="send-icon">✉</span>
 				<span class="header-text">{title.toUpperCase()}</span>

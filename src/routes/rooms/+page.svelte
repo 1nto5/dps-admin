@@ -3,8 +3,6 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { registerShortcut, pushContext, popContext } from '$lib/shortcuts';
-	import { terminalFade } from '$lib/animations/transitions';
-	import { getStaggerDelay } from '$lib/animations';
 	import { setSidebarEdit, clearSidebarEdit } from '$lib/stores/sidebar.svelte';
 	import { getBackInfo } from '$lib/stores/navigation';
 
@@ -105,7 +103,7 @@
 		<!-- Mobile Cards -->
 		<div class="mobile-cards">
 			{#each filteredRooms as room, i (room.id)}
-				<a href="/rooms/{room.id}" class="card" in:terminalFade={{ delay: getStaggerDelay(i) }}>
+				<a href="/rooms/{room.id}" class="card">
 					<span class="card-name">{room.name}</span>
 				</a>
 			{/each}
@@ -127,7 +125,7 @@
 					</thead>
 					<tbody>
 						{#each filteredRooms as room, i (room.id)}
-							<tr class="data-row" in:terminalFade={{ delay: getStaggerDelay(i) }}>
+							<tr class="data-row">
 								<td class="col-name">{room.name}</td>
 								<td class="col-actions"><a href="/rooms/{room.id}" class="edit-link">Edit</a></td>
 							</tr>
