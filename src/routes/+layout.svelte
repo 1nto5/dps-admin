@@ -7,6 +7,7 @@
 	import { showDisposal, sidebarWidth, sidebarCollapsed } from '$lib/stores/settings';
 	import { setPreviousPath } from '$lib/stores/navigation';
 	import { GlobalListener, registerShortcut } from '$lib/shortcuts';
+	import { getSidebarEdit } from '$lib/stores/sidebar.svelte';
 
 	// Track navigation for smart "back" behavior - save current path BEFORE navigating away
 	beforeNavigate(({ from }) => {
@@ -25,6 +26,9 @@
 	let isResizing = $state(false);
 	const MIN_WIDTH = 200;
 	const MAX_WIDTH = 400;
+
+	// Sidebar edit section (from resource pages)
+	let sidebarEdit = $derived(getSidebarEdit());
 
 	function checkMobile() {
 		isMobile = window.innerWidth < 1024;
@@ -58,14 +62,15 @@
 
 	const navItems = [
 		{ href: '/', label: 'Home', shortcut: '1' },
-		{ href: '/computers', label: 'Computers', shortcut: '2' },
-		{ href: '/notebooks', label: 'Notebooks', shortcut: '3' },
-		{ href: '/monitors', label: 'Monitors', shortcut: '4' },
-		{ href: '/printers', label: 'Printers', shortcut: '5' },
-		{ href: '/users', label: 'Users', shortcut: '6' },
-		{ href: '/departments', label: 'Departments', shortcut: '7' },
-		{ href: '/rooms', label: 'Rooms', shortcut: '8' },
-		{ href: '/history', label: 'History', shortcut: '9' }
+		{ href: '/work-time', label: 'Work Time', shortcut: '2' },
+		{ href: '/computers', label: 'Computers', shortcut: '3' },
+		{ href: '/notebooks', label: 'Notebooks', shortcut: '4' },
+		{ href: '/monitors', label: 'Monitors', shortcut: '5' },
+		{ href: '/printers', label: 'Printers', shortcut: '6' },
+		{ href: '/users', label: 'Users', shortcut: '7' },
+		{ href: '/departments', label: 'Departments', shortcut: '8' },
+		{ href: '/rooms', label: 'Rooms', shortcut: '9' },
+		{ href: '/history', label: 'History', shortcut: '' }
 	];
 
 	async function logout() {
@@ -180,8 +185,25 @@
 							>
 								<span class="prompt">{isActive(item.href) ? '>' : ' '}</span>
 								<span class="nav-label">{item.label}</span>
-								<kbd class="shortcut">⌥{item.shortcut}</kbd>
+								{#if item.shortcut}<kbd class="shortcut">⌥{item.shortcut}</kbd>{/if}
 							</a>
+							<!-- Edit sub-section (under active nav item) -->
+							{#if isActive(item.href) && sidebarEdit}
+								<div class="nav-sub-section">
+									<div class="sub-counts">
+										<span class="meta-label">total:</span>
+										<span class="meta-value">{sidebarEdit.totalCount}</span>
+										<span class="meta-divider">|</span>
+										<span class="meta-label">filtered:</span>
+										<span class="meta-value">{sidebarEdit.filteredCount}</span>
+									</div>
+									<a href={sidebarEdit.addUrl} class="sub-add-btn">
+										<span class="action-icon">+</span>
+										<span>{sidebarEdit.addLabel}</span>
+										<kbd>⌥N</kbd>
+									</a>
+								</div>
+							{/if}
 						</li>
 					{/each}
 				</ul>
@@ -462,6 +484,71 @@
 		background: var(--terminal-bg);
 		border: 1px solid var(--terminal-border);
 		color: var(--terminal-muted);
+	}
+
+	/* Nav Sub-Section (under active item) */
+	.nav-sub-section {
+		margin-left: 20px;
+		padding: 8px 12px;
+		border-left: 1px solid var(--terminal-border);
+	}
+
+	.sub-counts {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		margin-bottom: 8px;
+		font-size: 11px;
+	}
+
+	.sub-counts .meta-label {
+		color: var(--terminal-dim);
+	}
+
+	.sub-counts .meta-value {
+		color: var(--terminal-cyan);
+		font-weight: 500;
+	}
+
+	.sub-counts .meta-divider {
+		color: var(--terminal-border);
+	}
+
+	.sub-add-btn {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		width: 100%;
+		padding: 8px 10px;
+		font-size: 12px;
+		border: 1px solid var(--terminal-cyan);
+		color: var(--terminal-cyan);
+		background: transparent;
+		transition: all 0.15s ease;
+	}
+
+	.sub-add-btn:hover {
+		background: var(--terminal-cyan);
+		color: var(--terminal-bg);
+		box-shadow: 0 0 12px rgba(0, 255, 242, 0.3);
+	}
+
+	.sub-add-btn .action-icon {
+		font-weight: bold;
+	}
+
+	.sub-add-btn kbd {
+		margin-left: auto;
+		font-size: 9px;
+		padding: 2px 5px;
+		background: var(--terminal-bg);
+		border: 1px solid var(--terminal-border);
+		color: var(--terminal-muted);
+	}
+
+	.sub-add-btn:hover kbd {
+		background: var(--terminal-bg-alt);
+		border-color: var(--terminal-cyan);
 	}
 
 	/* Footer */

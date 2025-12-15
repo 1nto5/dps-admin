@@ -15,6 +15,34 @@
       "when": 1765621600000,
       "tag": "0001_split_manufacturer_model",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1765621700000,
+      "tag": "0002_add_assignment_fields",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1765621800000,
+      "tag": "0003_add_billing_month",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1765621900000,
+      "tag": "0004_drop_assignments",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1765622000000,
+      "tag": "0005_add_departments_rooms_workentries",
+      "breakpoints": true
     }
   ]
 }

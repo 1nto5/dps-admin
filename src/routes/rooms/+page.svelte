@@ -5,8 +5,11 @@
 	import { registerShortcut, pushContext, popContext } from '$lib/shortcuts';
 	import { terminalFade } from '$lib/animations/transitions';
 	import { getStaggerDelay } from '$lib/animations';
+	import { setSidebarEdit, clearSidebarEdit } from '$lib/stores/sidebar.svelte';
+	import { getBackInfo } from '$lib/stores/navigation';
 
 	let { data }: { data: PageData } = $props();
+	const backInfo = getBackInfo('/', 'Search');
 
 	let filters = $state({ name: '' });
 	let filterRefs: HTMLInputElement[] = [];
@@ -26,11 +29,15 @@
 	}
 
 	function handleEscape() {
-		if (filtersEmpty()) {
-			goto('/');
-		} else {
+		const active = document.activeElement as HTMLElement;
+		const isInputFocused = active?.tagName === 'INPUT' || active?.tagName === 'TEXTAREA';
+
+		if (isInputFocused) {
+			active.blur();
+		} else if (!filtersEmpty()) {
 			filters = { name: '' };
-			(document.activeElement as HTMLElement)?.blur();
+		} else {
+			goto(backInfo.href);
 		}
 	}
 
@@ -47,34 +54,26 @@
 		unsubs.push(registerShortcut({ key: 'alt+n', action: () => goto('/rooms/new'), context: 'list', description: 'Add new room' }));
 		unsubs.push(registerShortcut({ key: '/', action: focusSearch, context: 'list', description: 'Focus search' }));
 		unsubs.push(registerShortcut({ key: 'escape', action: handleEscape, context: 'list', description: 'Clear filters / Go to search', allowInInput: true }));
-		return () => { popContext('list'); unsubs.forEach(u => u()); };
+		return () => { popContext('list'); unsubs.forEach(u => u()); clearSidebarEdit(); };
 	});
 
 	let filteredRooms = $derived(
 		data.rooms.filter((r) => r.name.toLowerCase().includes(filters.name.toLowerCase()))
 	);
+
+	$effect(() => {
+		setSidebarEdit({
+			addUrl: '/rooms/new',
+			addLabel: 'Add Room',
+			totalCount: data.rooms.length,
+			filteredCount: filteredRooms.length
+		});
+	});
 </script>
 
 <div class="terminal-page">
-	<div class="page-header">
-		<div class="header-title">
-			<span class="header-decoration">───</span>
-			<span class="header-text">ROOMS</span>
-			<span class="header-decoration">───────────────────────────────────────────────────</span>
-		</div>
-		<div class="header-meta">
-			<span class="meta-item"><span class="meta-label">total:</span><span class="meta-value">{data.rooms.length}</span></span>
-			<span class="meta-divider">│</span>
-			<span class="meta-item"><span class="meta-label">filtered:</span><span class="meta-value">{filteredRooms.length}</span></span>
-		</div>
-	</div>
-
-	<div class="page-actions">
-		<a href="/rooms/new" class="action-btn action-primary">
-			<span class="action-icon">+</span>
-			<span>Add Room</span>
-			<kbd>⌥N</kbd>
-		</a>
+	<div class="page-header-minimal">
+		<span class="header-text">ROOMS</span>
 	</div>
 
 	{#if data.rooms.length === 0}
@@ -131,20 +130,8 @@
 
 <style>
 	.terminal-page { max-width: 100%; }
-	.page-header { margin-bottom: 24px; }
-	.header-title { font-size: 14px; letter-spacing: 2px; margin-bottom: 8px; }
-	.header-decoration { color: var(--terminal-dim); }
-	.header-text { color: var(--terminal-cyan); margin: 0 8px; }
-	.header-meta { font-size: 12px; display: flex; gap: 12px; }
-	.meta-label { color: var(--terminal-dim); }
-	.meta-value { color: var(--terminal-text-bright); margin-left: 4px; }
-	.meta-divider { color: var(--terminal-muted); }
-	.page-actions { margin-bottom: 24px; }
-	.action-btn { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; font-size: 13px; border: 1px solid var(--terminal-border); background: transparent; transition: all 0.15s ease; }
-	.action-primary { border-color: var(--terminal-cyan); color: var(--terminal-cyan); }
-	.action-primary:hover { background: var(--terminal-cyan); color: var(--terminal-bg); box-shadow: 0 0 15px rgba(0, 255, 242, 0.3); }
-	.action-icon { font-weight: bold; }
-	.action-btn kbd { font-size: 10px; padding: 2px 6px; background: var(--terminal-bg); border: 1px solid var(--terminal-border); color: var(--terminal-muted); }
+	.page-header-minimal { margin-bottom: 20px; }
+	.header-text { color: var(--terminal-cyan); font-size: 12px; letter-spacing: 2px; }
 	.empty-state { padding: 64px 32px; text-align: center; border: 1px solid var(--terminal-border); background: var(--terminal-bg-alt); }
 	.empty-icon { font-size: 48px; color: var(--terminal-muted); margin-bottom: 16px; }
 	.empty-text { font-size: 14px; color: var(--terminal-dim); margin-bottom: 8px; }

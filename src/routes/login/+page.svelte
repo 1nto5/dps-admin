@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
+	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
@@ -13,7 +13,7 @@
 	let bootLines = $state<string[]>([]);
 
 	const bootSequence = [
-		'[    0.000000] DPS Admin System v2.0.0',
+		'[    0.000000] DPS Admin System v152.12.44',
 		'[    0.001234] Initializing kernel...',
 		'[    0.012345] Loading device drivers...',
 		'[    0.023456] Mounting filesystems...',
@@ -129,7 +129,7 @@
 
 			<div class="login-subtitle">
 				<span class="text-dim">IT Management</span>
-				<span class="text-cyan">v2.0.0</span>
+				<span class="text-cyan">v152.2.4</span>
 			</div>
 
 			{#if error}

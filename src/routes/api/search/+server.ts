@@ -3,7 +3,7 @@ import { json } from '@sveltejs/kit';
 import { db, computers, notebooks, monitors, printers, users, rooms, departments } from '$lib/db';
 import { like, or, eq } from 'drizzle-orm';
 
-export type SearchResultType = 'computer' | 'notebook' | 'monitor' | 'printer' | 'user' | 'room' | 'department' | 'action';
+export type SearchResultType = 'computer' | 'notebook' | 'monitor' | 'printer' | 'user' | 'room' | 'department' | 'action' | 'category';
 
 export interface SearchResult {
 	id: number | string;
@@ -22,7 +22,21 @@ const actionCommands: Omit<SearchResult, 'id'>[] = [
 	{ type: 'action', name: 'Add Printer', subtitle: 'Create new printer', href: '/printers/new' },
 	{ type: 'action', name: 'Add User', subtitle: 'Create new user', href: '/users/new' },
 	{ type: 'action', name: 'Add Room', subtitle: 'Create new room', href: '/rooms/new' },
-	{ type: 'action', name: 'Add Department', subtitle: 'Create new department', href: '/departments/new' }
+	{ type: 'action', name: 'Add Department', subtitle: 'Create new department', href: '/departments/new' },
+	{ type: 'action', name: 'Add Work Entry', subtitle: 'Log work hours', href: '/work-time/new' }
+];
+
+// Category navigation commands
+const categoryCommands: Omit<SearchResult, 'id'>[] = [
+	{ type: 'category', name: 'Computers', subtitle: 'Browse all PCs', href: '/computers' },
+	{ type: 'category', name: 'Notebooks', subtitle: 'Browse all notebooks', href: '/notebooks' },
+	{ type: 'category', name: 'Monitors', subtitle: 'Browse all monitors', href: '/monitors' },
+	{ type: 'category', name: 'Printers', subtitle: 'Browse all printers', href: '/printers' },
+	{ type: 'category', name: 'Users', subtitle: 'Browse all users', href: '/users' },
+	{ type: 'category', name: 'Rooms', subtitle: 'Browse all rooms', href: '/rooms' },
+	{ type: 'category', name: 'Departments', subtitle: 'Browse all departments', href: '/departments' },
+	{ type: 'category', name: 'Work Time', subtitle: 'View work hours', href: '/work-time' },
+	{ type: 'category', name: 'History', subtitle: 'View audit log', href: '/history' }
 ];
 
 const LIMIT = 5;
@@ -237,6 +251,17 @@ export const GET: RequestHandler = async ({ url }) => {
 		}))
 	);
 
+	// Search category navigation commands
+	const categoryKeywords = ['go', 'goto', 'navigate', 'browse', 'show', 'list', 'all', 'idz', 'pokaz', 'lista', 'wszystkie'];
+	const matchingCategories = categoryCommands.filter(cmd =>
+		cmd.name.toLowerCase().includes(q) ||
+		cmd.subtitle.toLowerCase().includes(q) ||
+		categoryKeywords.some(kw => q.includes(kw))
+	);
+	if (matchingCategories.length > 0) {
+		results.unshift(...matchingCategories.map((cmd, i) => ({ ...cmd, id: `category-${i}` })));
+	}
+
 	// Search action commands
 	const actionKeywords = ['add', 'new', 'create', 'dodaj', 'nowy', 'nowa', 'nowe'];
 	const matchesAction = actionKeywords.some(kw => q.includes(kw)) ||
@@ -251,10 +276,12 @@ export const GET: RequestHandler = async ({ url }) => {
 		results.unshift(...matchingActions.map((cmd, i) => ({ ...cmd, id: `action-${i}` })));
 	}
 
-	// Sort: actions first, then disposal items go to bottom
+	// Sort: actions first, then categories, then disposal items go to bottom
 	results.sort((a, b) => {
 		if (a.type === 'action' && b.type !== 'action') return -1;
 		if (a.type !== 'action' && b.type === 'action') return 1;
+		if (a.type === 'category' && b.type !== 'category' && b.type !== 'action') return -1;
+		if (a.type !== 'category' && a.type !== 'action' && b.type === 'category') return 1;
 		const aDisposal = a.status === 'disposal' ? 1 : 0;
 		const bDisposal = b.status === 'disposal' ? 1 : 0;
 		return aDisposal - bDisposal;

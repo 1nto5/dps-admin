@@ -1,9 +1,17 @@
-import { drizzle } from 'drizzle-orm/better-sqlite3';
-import Database from 'better-sqlite3';
+import { drizzle } from 'drizzle-orm/bun-sqlite';
+import { migrate } from 'drizzle-orm/bun-sqlite/migrator';
+import { Database } from 'bun:sqlite';
+import { building } from '$app/environment';
 import * as schema from './schema';
 
-const sqlite = new Database('./data/inventory.db');
+const dbPath = './data/inventory.db';
+const sqlite = new Database(dbPath);
 export const db = drizzle(sqlite, { schema });
+
+// Run migrations only at runtime (skip during build)
+if (!building) {
+	migrate(db, { migrationsFolder: './drizzle/migrations' });
+}
 
 // Re-export schema
 export * from './schema';

@@ -33,7 +33,8 @@
 		user: { label: 'USR', color: 'green' },
 		room: { label: 'LOC', color: 'amber' },
 		department: { label: 'ORG', color: 'amber' },
-		action: { label: '+', color: 'green' }
+		action: { label: '+', color: 'green' },
+		category: { label: '→', color: 'cyan' }
 	};
 
 	async function search(q: string) {
@@ -111,7 +112,7 @@
 			bind:this={inputRef}
 			oninput={handleInput}
 			onkeydown={handleKeydown}
-			placeholder="Search computers, users, monitors..."
+			placeholder="do what you want..."
 			spellcheck="false"
 			autocomplete="off"
 		/>

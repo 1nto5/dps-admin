@@ -111,7 +111,7 @@
 			</div>
 			<div class="form-actions">
 				<div class="actions-left">
-					<button type="submit" disabled={loading} class="btn-primary">{loading ? 'Saving...' : 'Save'} <kbd>↵</kbd></button>
+					<button type="submit" disabled={loading} class="btn-primary">{loading ? 'Saving...' : 'Save'} <kbd>⌘↵</kbd></button>
 					<a href={backInfo.href} class="btn-secondary">Cancel <kbd>Esc</kbd></a>
 				</div>
 				<button type="button" onclick={() => showDelete = true} class="btn-danger">Delete <kbd>⌥⌫</kbd></button>

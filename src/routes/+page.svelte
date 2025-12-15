@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import GlobalSearch from '$lib/components/GlobalSearch.svelte';
+	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 </script>
@@ -19,7 +19,7 @@
 ╚═══════════════════════════════════════════════════════════════════╝</pre>
 		<div class="subtitle">
 			<span class="text-dim">IT Management System</span>
-			<span class="text-cyan">v2.0.0</span>
+			<span class="text-cyan">v153.2.3</span>
 		</div>
 	</div>
 

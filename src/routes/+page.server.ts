@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types';
-import { db, departments, rooms, users, computers, notebooks, monitors, printers, assignments } from '$lib/db';
+import { db, departments, rooms, users, computers, notebooks, monitors, printers } from '$lib/db';
 import { count } from 'drizzle-orm';
 
 export const load: PageServerLoad = async () => {
@@ -10,7 +10,6 @@ export const load: PageServerLoad = async () => {
 	const [notebooksCount] = db.select({ count: count() }).from(notebooks).all();
 	const [monitorsCount] = db.select({ count: count() }).from(monitors).all();
 	const [printersCount] = db.select({ count: count() }).from(printers).all();
-	const [assignmentsCount] = db.select({ count: count() }).from(assignments).all();
 
 	return {
 		counts: {
@@ -20,8 +19,7 @@ export const load: PageServerLoad = async () => {
 			computers: computersCount?.count ?? 0,
 			notebooks: notebooksCount?.count ?? 0,
 			monitors: monitorsCount?.count ?? 0,
-			printers: printersCount?.count ?? 0,
-			assignments: assignmentsCount?.count ?? 0
+			printers: printersCount?.count ?? 0
 		}
 	};
 };

@@ -86,7 +86,7 @@
 				<textarea bind:value={form.notes} rows="2" class="form-input"></textarea>
 			</div>
 			<div class="form-actions">
-				<button type="submit" disabled={loading} class="btn-primary">{loading ? 'Creating...' : 'Create'} <kbd>↵</kbd></button>
+				<button type="submit" disabled={loading} class="btn-primary">{loading ? 'Creating...' : 'Create'} <kbd>⌘↵</kbd></button>
 				<a href={backInfo.href} class="btn-secondary">Cancel <kbd>Esc</kbd></a>
 			</div>
 		</form>

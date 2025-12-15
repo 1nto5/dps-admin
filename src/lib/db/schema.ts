@@ -117,18 +117,6 @@ export const printers = sqliteTable('printers', {
 	updatedAt: text('updated_at').default(sql`(datetime('now'))`).notNull()
 });
 
-// Assignments table (links users to equipment)
-export const assignments = sqliteTable('assignments', {
-	id: integer('id').primaryKey({ autoIncrement: true }),
-	userId: integer('user_id')
-		.notNull()
-		.references(() => users.id, { onDelete: 'cascade' }),
-	computerId: integer('computer_id').references(() => computers.id, { onDelete: 'cascade' }),
-	notebookId: integer('notebook_id').references(() => notebooks.id, { onDelete: 'cascade' }),
-	printerId: integer('printer_id').references(() => printers.id, { onDelete: 'cascade' }),
-	createdAt: text('created_at').default(sql`(datetime('now'))`).notNull()
-});
-
 // Audit log table
 export const auditLog = sqliteTable('audit_log', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
@@ -143,6 +131,19 @@ export const auditLog = sqliteTable('audit_log', {
 export const settings = sqliteTable('settings', {
 	key: text('key').primaryKey(),
 	value: text('value').notNull()
+});
+
+// Work time entries table (ewidencja godzin)
+export const workEntries = sqliteTable('work_entries', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	date: text('date').notNull(), // YYYY-MM-DD format
+	billingMonth: text('billing_month').notNull(), // YYYY-MM format (okres rozliczeniowy)
+	startTime: text('start_time').notNull(), // HH:MM format
+	endTime: text('end_time').notNull(), // HH:MM format
+	duration: integer('duration').notNull(), // auto-calculated minutes from start/end
+	scope: text('scope').notNull(), // zakres prac (work scope)
+	createdAt: text('created_at').default(sql`(datetime('now'))`).notNull(),
+	updatedAt: text('updated_at').default(sql`(datetime('now'))`).notNull()
 });
 
 // Type exports
@@ -160,7 +161,7 @@ export type Monitor = typeof monitors.$inferSelect;
 export type NewMonitor = typeof monitors.$inferInsert;
 export type Printer = typeof printers.$inferSelect;
 export type NewPrinter = typeof printers.$inferInsert;
-export type Assignment = typeof assignments.$inferSelect;
-export type NewAssignment = typeof assignments.$inferInsert;
 export type AuditLogEntry = typeof auditLog.$inferSelect;
 export type Setting = typeof settings.$inferSelect;
+export type WorkEntry = typeof workEntries.$inferSelect;
+export type NewWorkEntry = typeof workEntries.$inferInsert;

@@ -1,0 +1,12 @@
+node_modules
+.git
+.gitignore
+.env
+.env.*
+*.md
+data/*.db
+.svelte-kit
+.vscode
+.idea
+*.log
+.DS_Store

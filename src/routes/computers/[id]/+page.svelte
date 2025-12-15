@@ -199,7 +199,7 @@
 			<div class="form-actions-split">
 				<div class="form-actions-left">
 					<button type="submit" disabled={loading} class="btn-primary">
-						{loading ? 'Saving...' : 'Save'} <kbd>↵</kbd>
+						{loading ? 'Saving...' : 'Save'} <kbd>⌘↵</kbd>
 					</button>
 					<a href={backInfo.href} class="btn-secondary">Cancel <kbd>Esc</kbd></a>
 				</div>
