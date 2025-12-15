@@ -117,7 +117,13 @@
 <div class="terminal-page">
 	<div class="page-header-minimal">
 		<span class="header-text">COMPUTERS</span>
-		<a href="/computers/new" class="mobile-add-btn show-mobile">+ Add</a>
+		<div class="mobile-header-right show-mobile">
+			<span class="mobile-counts">
+				<span>total: <span class="count-value">{data.computers.length}</span></span>
+				<span>filtered: <span class="count-value">{filteredComputers.length}</span></span>
+			</span>
+			<a href="/computers/new" class="mobile-add-btn">+ Add</a>
+		</div>
 	</div>
 
 	{#if data.computers.length === 0}

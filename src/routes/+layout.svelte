@@ -191,7 +191,7 @@
 							<!-- Edit sub-section (under active nav item) -->
 							{#if isActive(item.href) && sidebarEdit}
 								<div class="nav-sub-section">
-									<div class="sub-counts">
+									<div class="sub-counts hide-mobile">
 										<span class="meta-label">total:</span>
 										<span class="meta-value">{sidebarEdit.totalCount}</span>
 										<span class="meta-divider">|</span>

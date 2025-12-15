@@ -96,7 +96,13 @@
 <div class="terminal-page">
 	<div class="page-header-minimal">
 		<span class="header-text">USERS</span>
-		<a href="/users/new" class="mobile-add-btn show-mobile">+ Add</a>
+		<div class="mobile-header-right show-mobile">
+			<span class="mobile-counts">
+				<span>total: <span class="count-value">{data.users.length}</span></span>
+				<span>filtered: <span class="count-value">{filteredUsers.length}</span></span>
+			</span>
+			<a href="/users/new" class="mobile-add-btn">+ Add</a>
+		</div>
 	</div>
 
 	{#if data.users.length === 0}

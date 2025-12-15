@@ -668,6 +668,25 @@ thead input {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mobile-counts {
+  font-size: 11px;
+  color: var(--terminal-dim);
+  display: flex;
+  gap: 8px;
+}
+
+.mobile-counts .count-value {
+  color: var(--terminal-text-bright);
+}
+
+.mobile-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .mobile-add-btn {

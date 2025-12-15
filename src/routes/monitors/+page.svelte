@@ -107,7 +107,13 @@
 <div class="terminal-page">
 	<div class="page-header-minimal">
 		<span class="header-text">MONITORS</span>
-		<a href="/monitors/new" class="mobile-add-btn show-mobile">+ Add</a>
+		<div class="mobile-header-right show-mobile">
+			<span class="mobile-counts">
+				<span>total: <span class="count-value">{data.monitors.length}</span></span>
+				<span>filtered: <span class="count-value">{filteredMonitors.length}</span></span>
+			</span>
+			<a href="/monitors/new" class="mobile-add-btn">+ Add</a>
+		</div>
 	</div>
 
 	{#if data.monitors.length === 0}

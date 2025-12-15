@@ -112,7 +112,13 @@
 <div class="terminal-page">
 	<div class="page-header-minimal">
 		<span class="header-text">PRINTERS</span>
-		<a href="/printers/new" class="mobile-add-btn show-mobile">+ Add</a>
+		<div class="mobile-header-right show-mobile">
+			<span class="mobile-counts">
+				<span>total: <span class="count-value">{data.printers.length}</span></span>
+				<span>filtered: <span class="count-value">{filteredPrinters.length}</span></span>
+			</span>
+			<a href="/printers/new" class="mobile-add-btn">+ Add</a>
+		</div>
 	</div>
 
 	{#if data.printers.length === 0}

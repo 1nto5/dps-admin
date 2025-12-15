@@ -82,7 +82,13 @@
 <div class="terminal-page">
 	<div class="page-header-minimal">
 		<span class="header-text">DEPARTMENTS</span>
-		<a href="/departments/new" class="mobile-add-btn show-mobile">+ Add</a>
+		<div class="mobile-header-right show-mobile">
+			<span class="mobile-counts">
+				<span>total: <span class="count-value">{data.departments.length}</span></span>
+				<span>filtered: <span class="count-value">{filteredDepartments.length}</span></span>
+			</span>
+			<a href="/departments/new" class="mobile-add-btn">+ Add</a>
+		</div>
 	</div>
 
 	{#if data.departments.length === 0}

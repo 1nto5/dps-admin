@@ -81,7 +81,13 @@
 <div class="terminal-page">
 	<div class="page-header-minimal">
 		<span class="header-text">ROOMS</span>
-		<a href="/rooms/new" class="mobile-add-btn show-mobile">+ Add</a>
+		<div class="mobile-header-right show-mobile">
+			<span class="mobile-counts">
+				<span>total: <span class="count-value">{data.rooms.length}</span></span>
+				<span>filtered: <span class="count-value">{filteredRooms.length}</span></span>
+			</span>
+			<a href="/rooms/new" class="mobile-add-btn">+ Add</a>
+		</div>
 	</div>
 
 	{#if data.rooms.length === 0}

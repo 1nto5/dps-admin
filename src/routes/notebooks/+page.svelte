@@ -106,7 +106,13 @@
 <div class="terminal-page">
 	<div class="page-header-minimal">
 		<span class="header-text">NOTEBOOKS</span>
-		<a href="/notebooks/new" class="mobile-add-btn show-mobile">+ Add</a>
+		<div class="mobile-header-right show-mobile">
+			<span class="mobile-counts">
+				<span>total: <span class="count-value">{data.notebooks.length}</span></span>
+				<span>filtered: <span class="count-value">{filteredNotebooks.length}</span></span>
+			</span>
+			<a href="/notebooks/new" class="mobile-add-btn">+ Add</a>
+		</div>
 	</div>
 
 	{#if data.notebooks.length === 0}
