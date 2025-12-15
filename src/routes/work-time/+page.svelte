@@ -6,7 +6,7 @@
 	import { setSidebarEdit, clearSidebarEdit } from '$lib/stores/sidebar.svelte';
 	import { getBackInfo } from '$lib/stores/navigation';
 	import Toast from '$lib/components/Toast.svelte';
-	import ConfirmModal from '$lib/components/ConfirmModal.svelte';
+	import SendEmailModal from '$lib/components/SendEmailModal.svelte';
 
 	let { data }: { data: PageData } = $props();
 	const backInfo = getBackInfo('/', 'Search');
@@ -62,13 +62,13 @@
 		}
 	}
 
-	async function handleSend() {
+	async function handleSend(recipient: string) {
 		sending = true;
 		try {
 			const res = await fetch('/api/work-time/send', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ month: selectedMonth })
+				body: JSON.stringify({ month: selectedMonth, recipient })
 			});
 			const result = await res.json();
 			if (res.ok) {
@@ -144,7 +144,7 @@
 </script>
 
 <Toast bind:show={toast.show} message={toast.message} type={toast.type} />
-<ConfirmModal bind:show={showSendConfirm} title="Send Email" message="Send work time summary for {selectedMonth}?" loading={sending} onConfirm={handleSend} />
+<SendEmailModal bind:show={showSendConfirm} title="Send Email" message="Send work time summary for {selectedMonth}?" loading={sending} onConfirm={handleSend} />
 
 <div class="terminal-page">
 	<div class="page-header-minimal">

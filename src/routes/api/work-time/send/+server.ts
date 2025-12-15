@@ -382,13 +382,18 @@ async function generateDocument(year: number, month: number, entries: typeof wor
 export const POST: RequestHandler = async ({ request }) => {
 	const data = await request.json();
 	const monthParam = data.month;
+	const recipient = data.recipient;
 
 	if (!monthParam) {
 		return json({ error: 'Month parameter required' }, { status: 400 });
 	}
 
-	if (!env.EMAIL_HOST || !env.EMAIL_USER || !env.EMAIL_PASS || !env.EMAIL_TO) {
-		return json({ error: 'Email not configured. Set EMAIL_HOST, EMAIL_USER, EMAIL_PASS, EMAIL_TO in .env' }, { status: 500 });
+	if (!recipient) {
+		return json({ error: 'Recipient email required' }, { status: 400 });
+	}
+
+	if (!env.EMAIL_HOST || !env.EMAIL_USER || !env.EMAIL_PASS) {
+		return json({ error: 'Email not configured. Set EMAIL_HOST, EMAIL_USER, EMAIL_PASS in .env' }, { status: 500 });
 	}
 
 	const [year, month] = monthParam.split('-').map(Number);
@@ -425,7 +430,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	try {
 		await transporter.sendMail({
 			from: env.EMAIL_FROM || env.EMAIL_USER,
-			to: env.EMAIL_TO,
+			to: recipient,
 			subject: `Ewidencja godzin - ${POLISH_MONTHS[month - 1]} ${year}`,
 			text: `Dzień dobry,
 
@@ -445,7 +450,7 @@ Ta wiadomość została wygenerowana automatycznie.`,
 			}]
 		});
 
-		return json({ success: true, message: `Email sent to ${env.EMAIL_TO}` });
+		return json({ success: true, message: `Email sent to ${recipient}` });
 	} catch (err) {
 		console.error('Email error:', err);
 		return json({ error: 'Failed to send email' }, { status: 500 });

@@ -395,6 +395,7 @@
 		transition: transform 0.25s ease;
 		border-right: none;
 		border-left: 1px solid var(--terminal-border);
+		padding-bottom: 100px; /* Space for bottom bar icons */
 	}
 
 	.terminal-sidebar.mobile.open {
@@ -666,12 +667,15 @@
 			order: -1;
 			border-top: none;
 			border-bottom: 1px solid var(--terminal-border);
-		}
-
-		.nav-section {
 			display: flex;
 			flex-direction: column;
-			justify-content: flex-end;
+		}
+
+		/* Logout at very top */
+		.logout-btn {
+			order: -1;
+			margin-top: 0;
+			margin-bottom: 8px;
 		}
 	}
 
