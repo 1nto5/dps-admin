@@ -12,9 +12,6 @@
 	const currentYear = new Date().getFullYear();
 	const currentMonthNum = new Date().getMonth() + 1;
 
-	let billingYear = $state(currentYear);
-	let billingMonthNum = $state(currentMonthNum);
-
 	let form = $state({
 		date: today,
 		startTime: '08:00',
@@ -22,18 +19,28 @@
 		scope: ''
 	});
 
-	let billingMonth = $derived(`${billingYear}-${String(billingMonthNum).padStart(2, '0')}`);
+	// Billing month as primary state (YYYY-MM format)
+	let billingMonth = $state(`${currentYear}-${String(currentMonthNum).padStart(2, '0')}`);
 
-	function validateBillingMonth() {
-		if (isNaN(billingMonthNum) || billingMonthNum < 1) billingMonthNum = 1;
-		else if (billingMonthNum > 12) billingMonthNum = 12;
-		else billingMonthNum = Math.floor(billingMonthNum);
+	// Derived values for desktop number inputs
+	let billingYear = $derived(parseInt(billingMonth.split('-')[0]));
+	let billingMonthNum = $derived(parseInt(billingMonth.split('-')[1]));
+
+	// Update handlers for desktop inputs
+	function updateBillingMonth(year: number, month: number) {
+		const y = Math.min(2099, Math.max(2020, year || currentYear));
+		const m = Math.min(12, Math.max(1, month || 1));
+		billingMonth = `${y}-${String(m).padStart(2, '0')}`;
 	}
 
-	function validateBillingYear() {
-		if (isNaN(billingYear) || billingYear < 2020) billingYear = 2020;
-		else if (billingYear > 2099) billingYear = 2099;
-		else billingYear = Math.floor(billingYear);
+	function handleYearChange(e: Event) {
+		const val = parseInt((e.target as HTMLInputElement).value);
+		updateBillingMonth(val, billingMonthNum);
+	}
+
+	function handleMonthNumChange(e: Event) {
+		const val = parseInt((e.target as HTMLInputElement).value);
+		updateBillingMonth(billingYear, val);
 	}
 
 	let error = $state('');
@@ -127,9 +134,12 @@
 				</div>
 				<div class="form-group">
 					<label for="billing-month" class="form-label">billing month</label>
-					<div class="billing-month-row">
-						<input id="billing-month" type="number" bind:value={billingMonthNum} onblur={validateBillingMonth} min="1" max="12" class="form-input month-input" />
-						<input type="number" bind:value={billingYear} onblur={validateBillingYear} min="2020" max="2099" class="form-input year-input" aria-label="Billing year" />
+					<!-- Mobile: native month picker -->
+					<input type="month" bind:value={billingMonth} class="form-input billing-month-mobile" />
+					<!-- Desktop: number inputs -->
+					<div class="billing-month-row billing-month-desktop">
+						<input id="billing-month" type="number" value={billingMonthNum} onchange={handleMonthNumChange} min="1" max="12" class="form-input month-input" />
+						<input type="number" value={billingYear} onchange={handleYearChange} min="2020" max="2099" class="form-input year-input" aria-label="Billing year" />
 					</div>
 				</div>
 			</div>
@@ -163,13 +173,7 @@
 		margin-bottom: 20px;
 	}
 
-	@media (max-width: 768px) {
-		.form-grid-5 {
-			grid-template-columns: 1fr 1fr;
-		}
-	}
-
-	@media (max-width: 400px) {
+	@media (max-width: 1023px) {
 		.form-grid-5 {
 			grid-template-columns: 1fr;
 		}
@@ -196,4 +200,13 @@
 
 	.month-input { flex: 1; min-width: 60px; text-align: center; }
 	.year-input { flex: 1; min-width: 70px; text-align: center; }
+
+	/* Mobile: show month picker, hide number inputs */
+	.billing-month-mobile { display: block; }
+	.billing-month-desktop { display: none; }
+
+	@media (min-width: 1024px) {
+		.billing-month-mobile { display: none; }
+		.billing-month-desktop { display: flex; }
+	}
 </style>

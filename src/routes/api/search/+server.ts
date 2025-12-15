@@ -1,7 +1,7 @@
 import type { RequestHandler } from './$types';
 import { json } from '@sveltejs/kit';
 import { db, computers, notebooks, monitors, printers, users, rooms, departments } from '$lib/db';
-import { like, or, eq } from 'drizzle-orm';
+import { like, or, eq, inArray } from 'drizzle-orm';
 
 export type SearchResultType = 'computer' | 'notebook' | 'monitor' | 'printer' | 'user' | 'room' | 'department' | 'action' | 'category';
 
@@ -83,6 +83,27 @@ export const GET: RequestHandler = async ({ url }) => {
 			href: `/computers/${c.id}`
 		}))
 	);
+
+	// Monitors assigned to found computers
+	if (computerResults.length > 0) {
+		const compIds = computerResults.map(c => c.id);
+		const compMonitors = db
+			.select({ id: monitors.id, manufacturer: monitors.manufacturer, model: monitors.model, name: monitors.name, status: monitors.status, computerName: computers.name })
+			.from(monitors)
+			.leftJoin(computers, eq(monitors.computerId, computers.id))
+			.where(inArray(monitors.computerId, compIds))
+			.limit(LIMIT)
+			.all();
+
+		results.push(...compMonitors.map(m => ({
+			id: `comp-mon-${m.id}`,
+			type: 'monitor' as const,
+			name: [m.manufacturer, m.model].filter(Boolean).join(' ') || m.name,
+			subtitle: `→ ${m.computerName}`,
+			status: m.status,
+			href: `/monitors/${m.id}`
+		})));
+	}
 
 	// Notebooks
 	const notebookResults = db
@@ -208,6 +229,47 @@ export const GET: RequestHandler = async ({ url }) => {
 			href: `/users/${u.id}`
 		}))
 	);
+
+	// Items assigned to found users
+	if (userResults.length > 0) {
+		const userIds = userResults.map(u => u.id);
+
+		// Computers assigned to users
+		const userComputers = db
+			.select({ id: computers.id, name: computers.name, status: computers.status, userName: users.name })
+			.from(computers)
+			.leftJoin(users, eq(computers.userId, users.id))
+			.where(inArray(computers.userId, userIds))
+			.limit(LIMIT)
+			.all();
+
+		results.push(...userComputers.map(c => ({
+			id: `user-comp-${c.id}`,
+			type: 'computer' as const,
+			name: c.name,
+			subtitle: `→ ${c.userName}`,
+			status: c.status,
+			href: `/computers/${c.id}`
+		})));
+
+		// Notebooks assigned to users
+		const userNotebooks = db
+			.select({ id: notebooks.id, name: notebooks.name, status: notebooks.status, userName: users.name })
+			.from(notebooks)
+			.leftJoin(users, eq(notebooks.userId, users.id))
+			.where(inArray(notebooks.userId, userIds))
+			.limit(LIMIT)
+			.all();
+
+		results.push(...userNotebooks.map(n => ({
+			id: `user-nb-${n.id}`,
+			type: 'notebook' as const,
+			name: n.name,
+			subtitle: `→ ${n.userName}`,
+			status: n.status,
+			href: `/notebooks/${n.id}`
+		})));
+	}
 
 	// Rooms
 	const roomResults = db

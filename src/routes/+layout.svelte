@@ -523,6 +523,22 @@
 		text-shadow: 0 0 8px rgba(0, 255, 242, 0.4);
 	}
 
+	/* Disable hover/glow effects on touch devices */
+	@media (hover: none) {
+		.nav-item:hover {
+			background: transparent;
+			border-color: transparent;
+		}
+
+		.nav-item.active {
+			box-shadow: none;
+		}
+
+		.nav-item.active .nav-label {
+			text-shadow: none;
+		}
+	}
+
 	.prompt {
 		width: 12px;
 		color: var(--terminal-cyan);

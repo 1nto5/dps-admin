@@ -141,7 +141,8 @@
 	.error-box { padding: 12px 16px; margin-bottom: 16px; border: 1px solid var(--terminal-red); background: rgba(255, 51, 102, 0.1); font-size: 13px; color: var(--terminal-red); }
 	.error-prefix { font-weight: bold; margin-right: 8px; }
 	.form-container { border: 1px solid var(--terminal-border); background: var(--terminal-bg-alt); padding: 24px; }
-	.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+	.form-grid-2 { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 16px; }
+	@media (min-width: 640px) { .form-grid-2 { grid-template-columns: 1fr 1fr; } }
 	.form-group { margin-bottom: 16px; }
 	.form-grid-2 .form-group { margin-bottom: 0; }
 	.form-label { display: block; font-size: 12px; color: var(--terminal-dim); margin-bottom: 6px; text-transform: lowercase; }

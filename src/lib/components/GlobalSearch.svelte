@@ -85,7 +85,10 @@
 		}
 	}
 
-	onMount(() => inputRef?.focus());
+	onMount(() => {
+		// Delayed focus for mobile browser compatibility
+		setTimeout(() => inputRef?.focus(), 100);
+	});
 </script>
 
 <div class="global-search">
@@ -106,6 +109,7 @@
 			<circle cx="11" cy="11" r="8" />
 			<path d="m21 21-4.3-4.3" />
 		</svg>
+		<!-- svelte-ignore a11y_autofocus -->
 		<input
 			type="text"
 			bind:value={query}
@@ -115,6 +119,7 @@
 			placeholder="do what you want..."
 			spellcheck="false"
 			autocomplete="off"
+			autofocus
 		/>
 		{#if loading}
 			<span class="spinner"></span>
@@ -158,11 +163,17 @@
 	}
 
 	.stats-row {
-		display: flex;
+		display: none;
 		justify-content: center;
 		flex-wrap: wrap;
 		gap: 8px;
 		margin-bottom: 24px;
+	}
+
+	@media (min-width: 1024px) {
+		.stats-row {
+			display: flex;
+		}
 	}
 
 	.chip {
