@@ -158,15 +158,13 @@
 		<!-- Mobile Bottom Bar (thumb-zone) -->
 		{#if isMobile}
 			<div class="mobile-bottom-bar">
-				{#if sidebarEdit}
-					<a href={sidebarEdit.addUrl} class="bottom-bar-btn bottom-bar-add">
-						+
-					</a>
-				{/if}
-				<div class="bottom-bar-row">
-					<a href="/" class="bottom-bar-btn bottom-bar-search" aria-label="Search / Home">
-						⌕
-					</a>
+				<a href="/" class="bottom-bar-btn bottom-bar-search" aria-label="Search / Home">
+					⌕
+				</a>
+				<div class="bottom-bar-col">
+					{#if sidebarEdit}
+						<a href={sidebarEdit.addUrl} class="bottom-bar-btn bottom-bar-add">+</a>
+					{/if}
 					<button
 						class="bottom-bar-btn"
 						onclick={() => sidebarOpen = !sidebarOpen}
@@ -306,14 +304,14 @@
 		bottom: 20px;
 		right: 20px;
 		display: flex;
-		flex-direction: column-reverse;
 		align-items: flex-end;
 		gap: 12px;
 		z-index: 60;
 	}
 
-	.bottom-bar-row {
+	.bottom-bar-col {
 		display: flex;
+		flex-direction: column;
 		gap: 12px;
 	}
 
