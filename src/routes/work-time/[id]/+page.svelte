@@ -4,7 +4,7 @@
 	import type { PageData } from './$types';
 	import { registerShortcut, pushContext, popContext } from '$lib/shortcuts';
 	import { getBackInfo } from '$lib/stores/navigation';
-	import DeleteConfirmModal from '$lib/components/DeleteConfirmModal.svelte';
+	import ConfirmModal from '$lib/components/ConfirmModal.svelte';
 
 	let { data }: { data: PageData } = $props();
 
@@ -110,7 +110,7 @@
 	});
 </script>
 
-<DeleteConfirmModal
+<ConfirmModal
 	bind:show={showDelete}
 	title="Delete Entry"
 	message="Are you sure you want to delete this work entry? This action cannot be undone."

@@ -124,7 +124,7 @@
 </script>
 
 <svelte:head>
-	<title>DPS Admin // Terminal</title>
+	<title>DPS admin</title>
 </svelte:head>
 
 <GlobalListener />

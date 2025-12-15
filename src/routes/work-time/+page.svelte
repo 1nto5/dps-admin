@@ -6,6 +6,7 @@
 	import { setSidebarEdit, clearSidebarEdit } from '$lib/stores/sidebar.svelte';
 	import { getBackInfo } from '$lib/stores/navigation';
 	import Toast from '$lib/components/Toast.svelte';
+	import ConfirmModal from '$lib/components/ConfirmModal.svelte';
 
 	let { data }: { data: PageData } = $props();
 	const backInfo = getBackInfo('/', 'Search');
@@ -17,6 +18,7 @@
 	let exporting = $state(false);
 	let sending = $state(false);
 	let toast = $state({ show: false, message: '', type: 'success' as 'success' | 'error' });
+	let showSendConfirm = $state(false);
 
 	function formatDuration(minutes: number): string {
 		const h = Math.floor(minutes / 60);
@@ -72,6 +74,7 @@
 			toast = { show: true, message: 'Connection error', type: 'error' };
 		} finally {
 			sending = false;
+			showSendConfirm = false;
 		}
 	}
 
@@ -117,7 +120,7 @@
 
 		unsubs.push(registerShortcut({ key: 'alt+n', action: () => goto('/work-time/new'), context: 'list', description: 'Add entry' }));
 		unsubs.push(registerShortcut({ key: 'alt+e', action: handleExport, context: 'list', description: 'Export Word' }));
-		unsubs.push(registerShortcut({ key: 'alt+s', action: handleSend, context: 'list', description: 'Send email' }));
+		unsubs.push(registerShortcut({ key: 'alt+s', action: () => showSendConfirm = true, context: 'list', description: 'Send email' }));
 		unsubs.push(registerShortcut({ key: '/', action: () => monthInput?.focus(), context: 'list', description: 'Filter month' }));
 		unsubs.push(registerShortcut({ key: 'escape', action: handleEscape, context: 'list', description: 'Go to search', allowInInput: true }));
 
@@ -135,6 +138,7 @@
 </script>
 
 <Toast bind:show={toast.show} message={toast.message} type={toast.type} />
+<ConfirmModal bind:show={showSendConfirm} title="Send Email" message="Send work time summary for {selectedMonth}?" loading={sending} onconfirm={handleSend} />
 
 <div class="terminal-page">
 	<div class="page-header-minimal">
@@ -161,7 +165,7 @@
 				{exporting ? 'Exporting...' : 'Export Word'}
 				<kbd>⌥E</kbd>
 			</button>
-			<button onclick={handleSend} disabled={sending || data.entries.length === 0} class="action-btn action-secondary">
+			<button onclick={() => showSendConfirm = true} disabled={sending || data.entries.length === 0} class="action-btn action-secondary">
 				{sending ? 'Sending...' : 'Send Email'}
 				<kbd>⌥S</kbd>
 			</button>

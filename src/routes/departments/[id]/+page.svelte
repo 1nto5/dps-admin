@@ -4,7 +4,7 @@
 	import type { PageData } from './$types';
 	import { registerShortcut, pushContext, popContext } from '$lib/shortcuts';
 	import { getBackInfo } from '$lib/stores/navigation';
-	import DeleteConfirmModal from '$lib/components/DeleteConfirmModal.svelte';
+	import ConfirmModal from '$lib/components/ConfirmModal.svelte';
 
 	let { data }: { data: PageData } = $props();
 
@@ -73,7 +73,7 @@
 	</div>
 </div>
 
-<DeleteConfirmModal bind:show={showDelete} title="Delete Department" message="Delete &quot;{data.department.name}&quot;?" {loading} onconfirm={handleDelete} />
+<ConfirmModal bind:show={showDelete} title="Delete Department" message="Delete &quot;{data.department.name}&quot;?" {loading} onconfirm={handleDelete} />
 
 <style>
 	.terminal-page { max-width: 32rem; }

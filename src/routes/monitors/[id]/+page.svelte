@@ -5,7 +5,7 @@
 	import { statusValues } from '$lib/db/schema';
 	import { registerShortcut, pushContext, popContext } from '$lib/shortcuts';
 	import { getBackInfo } from '$lib/stores/navigation';
-	import DeleteConfirmModal from '$lib/components/DeleteConfirmModal.svelte';
+	import ConfirmModal from '$lib/components/ConfirmModal.svelte';
 	import MonthInput from '$lib/components/MonthInput.svelte';
 	let { data }: { data: PageData } = $props();
 
@@ -120,7 +120,7 @@
 	</div>
 </div>
 
-<DeleteConfirmModal
+<ConfirmModal
 	bind:show={showDelete}
 	title="Delete Monitor"
 	message="Are you sure you want to delete this monitor? This action cannot be undone."
