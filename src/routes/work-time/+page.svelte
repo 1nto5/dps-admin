@@ -163,8 +163,13 @@
 	<div class="controls">
 		<div class="month-selector">
 			<label for="month-input" class="control-label">Month:</label>
-			<input id="month-input" bind:this={monthInput} type="number" bind:value={selectedMonthNum} onchange={handleMonthChange} onblur={validateMonth} min="1" max="12" class="month-input filter-month" />
-			<input type="number" bind:value={selectedYear} onchange={handleMonthChange} onblur={validateYear} min="2020" max="2099" class="month-input filter-year" aria-label="Year" />
+			<!-- Mobile: native month picker -->
+			<input type="month" value={selectedMonth} onchange={(e) => goto(`/work-time?month=${e.currentTarget.value}`)} class="month-input filter-month-mobile" />
+			<!-- Desktop: number inputs -->
+			<div class="filter-month-desktop">
+				<input id="month-input" bind:this={monthInput} type="number" bind:value={selectedMonthNum} onchange={handleMonthChange} onblur={validateMonth} min="1" max="12" class="month-input filter-month" />
+				<input type="number" bind:value={selectedYear} onchange={handleMonthChange} onblur={validateYear} min="2020" max="2099" class="month-input filter-year" aria-label="Year" />
+			</div>
 		</div>
 		<div class="total-display">
 			<span class="control-label">Total:</span>
@@ -296,6 +301,15 @@
 
 	.filter-month { width: 70px; text-align: center; }
 	.filter-year { width: 90px; text-align: center; }
+
+	/* Mobile: show month picker, hide number inputs */
+	.filter-month-mobile { display: block; }
+	.filter-month-desktop { display: none; }
+
+	@media (min-width: 1024px) {
+		.filter-month-mobile { display: none; }
+		.filter-month-desktop { display: flex; gap: 8px; }
+	}
 
 	.total-value {
 		color: var(--terminal-cyan);

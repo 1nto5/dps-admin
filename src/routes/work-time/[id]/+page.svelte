@@ -147,11 +147,11 @@
 				</div>
 				<div class="form-group">
 					<label for="wt-start" class="form-label">start time</label>
-					<input id="wt-start" type="time" bind:value={form.startTime} class="form-input" required />
+					<input id="wt-start" type="time" bind:value={form.startTime} step="900" class="form-input" required />
 				</div>
 				<div class="form-group">
 					<label for="wt-end" class="form-label">end time</label>
-					<input id="wt-end" type="time" bind:value={form.endTime} class="form-input" required />
+					<input id="wt-end" type="time" bind:value={form.endTime} step="900" class="form-input" required />
 				</div>
 				<div class="form-group">
 					<span class="form-label">duration</span>
@@ -218,8 +218,17 @@
 	.form-grid-5 input[type="date"],
 	.form-grid-5 input[type="time"],
 	.form-grid-5 input[type="month"] {
+		width: 100%;
 		max-width: 100%;
 		box-sizing: border-box;
+	}
+
+	/* Force all form inputs to respect container width on mobile */
+	@media (max-width: 1023px) {
+		.form-grid-5 .form-input {
+			width: 100% !important;
+			max-width: 100% !important;
+		}
 	}
 
 	.duration-display {
