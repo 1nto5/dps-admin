@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import { statusValues } from '$lib/db/schema';
@@ -9,6 +10,12 @@
 	import MonthInput from '$lib/components/MonthInput.svelte';
 	import { desktopAutofocus } from '$lib/actions/autofocus';
 	let { data }: { data: PageData } = $props();
+
+	// Check URL params for copy data
+	const urlParams = $page.url.searchParams;
+	const isCopy = urlParams.has('manufacturer') || urlParams.has('model') || urlParams.has('status');
+	const copyStatus = urlParams.get('status') as 'in_use' | 'disposal' | 'preparing' | 'to_collect' | null;
+	const copyComputerId = urlParams.get('computerId');
 
 	let formEl: HTMLFormElement;
 	const backInfo = getBackInfo('/monitors', 'Monitors');
@@ -20,7 +27,16 @@
 		unsubs.push(registerShortcut({ key: 'escape', action: () => goto(backInfo.href), context: 'form', description: 'Cancel', allowInInput: true }));
 		return () => { popContext('form'); unsubs.forEach(u => u()); };
 	});
-	let form = $state({ status: 'preparing' as const, inventoryNumber: '', manufacturer: '', model: '', serialNumber: '', notes: '', purchaseDate: '', computerId: null as number | null });
+	let form = $state({
+		status: copyStatus || 'preparing' as const,
+		inventoryNumber: urlParams.get('inventoryNumber') || '',
+		manufacturer: urlParams.get('manufacturer') || '',
+		model: urlParams.get('model') || '',
+		serialNumber: '',
+		notes: urlParams.get('notes') || '',
+		purchaseDate: urlParams.get('purchaseDate') || '',
+		computerId: copyComputerId ? parseInt(copyComputerId) : null as number | null
+	});
 	let error = $state('');
 	let loading = $state(false);
 
@@ -40,7 +56,7 @@
 	<div class="page-header">
 		<div class="header-title">
 			<span class="header-decoration">───</span>
-			<span class="header-text">NEW MONITOR</span>
+			<span class="header-text">{isCopy ? 'COPY MONITOR' : 'NEW MONITOR'}</span>
 			<span class="header-decoration">──────────────────────────────────────────</span>
 		</div>
 	</div>

@@ -46,6 +46,17 @@
 		return `${d}.${m}.${y}`;
 	}
 
+	function getCopyUrl(entry: typeof data.entries[0]): string {
+		const params = new URLSearchParams({
+			date: entry.date,
+			startTime: entry.startTime,
+			endTime: entry.endTime,
+			scope: entry.scope,
+			billingMonth: entry.billingMonth
+		});
+		return `/work-time/new?${params.toString()}`;
+	}
+
 	async function handleExport() {
 		exporting = true;
 		try {
@@ -208,16 +219,22 @@
 		<!-- Mobile Cards -->
 		<div class="mobile-cards">
 			{#each data.entries as entry, i (entry.id)}
-				<a href="/work-time/{entry.id}" class="card">
-					<div class="card-header">
-						<span class="card-name">{formatDate(entry.date)}</span>
-						<span class="card-hours">{formatDuration(entry.duration)}</span>
+				<div class="card">
+					<a href="/work-time/{entry.id}" class="card-content">
+						<div class="card-header">
+							<span class="card-name">{formatDate(entry.date)}</span>
+							<span class="card-hours">{formatDuration(entry.duration)}</span>
+						</div>
+						<div class="card-times">
+							{entry.startTime} - {entry.endTime}
+						</div>
+						<div class="card-scope">{entry.scope}</div>
+					</a>
+					<div class="card-actions">
+						<a href={getCopyUrl(entry)} class="card-action-btn">Copy</a>
+						<a href="/work-time/{entry.id}" class="card-action-btn">Edit</a>
 					</div>
-					<div class="card-times">
-						{entry.startTime} - {entry.endTime}
-					</div>
-					<div class="card-scope">{entry.scope}</div>
-				</a>
+				</div>
 			{/each}
 		</div>
 
@@ -244,6 +261,7 @@
 								<td class="col-dim">{formatDuration(entry.duration)}</td>
 								<td class="col-scope">{entry.scope}</td>
 								<td class="col-actions">
+									<a href={getCopyUrl(entry)} class="copy-link">Copy</a>
 									<a href="/work-time/{entry.id}" class="edit-link">Edit</a>
 								</td>
 							</tr>
@@ -425,8 +443,9 @@
 		overflow-wrap: break-word;
 		white-space: normal;
 	}
-	.col-actions { text-align: right; width: 80px; }
+	.col-actions { text-align: right; width: 120px; }
 
+	.copy-link,
 	.edit-link {
 		color: var(--terminal-cyan);
 		font-size: 12px;
@@ -435,6 +454,9 @@
 		transition: all 0.15s ease;
 	}
 
+	.copy-link { margin-right: 6px; }
+
+	.copy-link:hover,
 	.edit-link:hover {
 		border-color: var(--terminal-cyan);
 		background: rgba(0, 255, 242, 0.1);
@@ -473,13 +495,18 @@
 	/* Mobile cards */
 	.card {
 		display: block;
-		padding: 16px;
 		background: var(--terminal-bg-alt);
 		border: 1px solid var(--terminal-border);
 		transition: all 0.15s ease;
 	}
 
 	.card:hover { border-color: var(--terminal-cyan); }
+
+	.card-content {
+		display: block;
+		padding: 16px;
+		padding-bottom: 12px;
+	}
 
 	.card-header {
 		display: flex;
@@ -508,6 +535,28 @@
 	.card-scope {
 		font-size: 12px;
 		color: var(--terminal-muted);
+	}
+
+	.card-actions {
+		display: flex;
+		gap: 8px;
+		padding: 12px 16px;
+		border-top: 1px solid var(--terminal-border);
+	}
+
+	.card-action-btn {
+		flex: 1;
+		text-align: center;
+		padding: 8px;
+		font-size: 12px;
+		color: var(--terminal-cyan);
+		border: 1px solid var(--terminal-border);
+		transition: all 0.15s ease;
+	}
+
+	.card-action-btn:hover {
+		border-color: var(--terminal-cyan);
+		background: rgba(0, 255, 242, 0.1);
 	}
 
 	/* Responsive controls */

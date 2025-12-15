@@ -105,6 +105,22 @@
 			filteredCount: filteredPrinters.length
 		});
 	});
+
+	function getCopyUrl(item: typeof data.printers[0]): string {
+		const params = new URLSearchParams();
+		if (item.status) params.set('status', item.status);
+		if (item.inventoryNumber) params.set('inventoryNumber', item.inventoryNumber);
+		if (item.manufacturer) params.set('manufacturer', item.manufacturer);
+		if (item.model) params.set('model', item.model);
+		if (item.ipAddress) params.set('ipAddress', item.ipAddress);
+		params.set('isNetwork', item.isNetwork ? '1' : '0');
+		if (item.notes) params.set('notes', item.notes);
+		if (item.purchaseDate) params.set('purchaseDate', item.purchaseDate);
+		if (item.roomId) params.set('roomId', String(item.roomId));
+		if (item.computerId) params.set('computerId', String(item.computerId));
+		if (item.notebookId) params.set('notebookId', String(item.notebookId));
+		return `/printers/new?${params.toString()}`;
+	}
 </script>
 
 <div class="terminal-page">
@@ -134,18 +150,24 @@
 		<!-- Mobile Cards -->
 		<div class="mobile-cards">
 			{#each filteredPrinters as item, i (item.id)}
-				<a href="/printers/{item.id}" class="card">
-					<div class="card-header">
-						<span class="card-name">{item.name}</span>
-						<span class="status-badge {statusColors[item.status] || ''}">{item.status}</span>
+				<div class="card">
+					<a href="/printers/{item.id}" class="card-content">
+						<div class="card-header">
+							<span class="card-name">{item.name}</span>
+							<span class="status-badge {statusColors[item.status] || ''}">{item.status}</span>
+						</div>
+						<div class="card-body">
+							{#if item.manufacturer || item.model}<div class="card-row"><span class="card-label">Model:</span> {[item.manufacturer, item.model].filter(Boolean).join(' ')}</div>{/if}
+							{#if item.ipAddress}<div class="card-row"><span class="card-label">IP:</span> <span class="ip-text">{item.ipAddress}</span></div>{/if}
+							{#if item.roomName}<div class="card-row"><span class="card-label">Room:</span> {item.roomName}</div>{/if}
+							<div class="card-row"><span class="card-label">Network:</span> <span class="{item.isNetwork ? 'net-yes' : 'net-no'}">{item.isNetwork ? 'Yes' : 'No'}</span></div>
+						</div>
+					</a>
+					<div class="card-actions">
+						<a href={getCopyUrl(item)} class="card-action-btn">Copy</a>
+						<a href="/printers/{item.id}" class="card-action-btn">Edit</a>
 					</div>
-					<div class="card-body">
-						{#if item.manufacturer || item.model}<div class="card-row"><span class="card-label">Model:</span> {[item.manufacturer, item.model].filter(Boolean).join(' ')}</div>{/if}
-						{#if item.ipAddress}<div class="card-row"><span class="card-label">IP:</span> <span class="ip-text">{item.ipAddress}</span></div>{/if}
-						{#if item.roomName}<div class="card-row"><span class="card-label">Room:</span> {item.roomName}</div>{/if}
-						<div class="card-row"><span class="card-label">Network:</span> <span class="{item.isNetwork ? 'net-yes' : 'net-no'}">{item.isNetwork ? 'Yes' : 'No'}</span></div>
-					</div>
-				</a>
+				</div>
 			{/each}
 		</div>
 
@@ -185,7 +207,10 @@
 								<td class="col-mono">{item.ipAddress || '—'}</td>
 								<td><span class="net-badge {item.isNetwork ? 'net-yes' : 'net-no'}">{item.isNetwork ? 'Y' : 'N'}</span></td>
 								<td class="col-dim">{item.roomName || '—'}</td>
-								<td class="col-actions"><a href="/printers/{item.id}" class="edit-link">Edit</a></td>
+								<td class="col-actions">
+									<a href={getCopyUrl(item)} class="copy-link">Copy</a>
+									<a href="/printers/{item.id}" class="edit-link">Edit</a>
+								</td>
 							</tr>
 						{/each}
 					</tbody>
@@ -220,7 +245,7 @@
 	.col-name { color: var(--terminal-text-bright); font-weight: 500; }
 	.col-dim { color: var(--terminal-dim); }
 	.col-mono { font-family: monospace; font-size: 12px; color: var(--terminal-amber); }
-	.col-actions { text-align: right; width: 80px; }
+	.col-actions { text-align: right; width: 120px; }
 	.status-badge { font-size: 11px; padding: 3px 8px; border: 1px solid; text-transform: uppercase; letter-spacing: 0.5px; }
 	.status-active { color: var(--terminal-green); border-color: var(--terminal-green); background: rgba(0, 255, 136, 0.1); }
 	.status-disposal { color: var(--terminal-red); border-color: var(--terminal-red); background: rgba(255, 51, 102, 0.1); }
@@ -229,8 +254,9 @@
 	.net-badge { font-size: 11px; padding: 2px 6px; font-weight: 500; }
 	.net-yes { color: var(--terminal-green); }
 	.net-no { color: var(--terminal-muted); }
-	.edit-link { color: var(--terminal-cyan); font-size: 12px; padding: 4px 10px; border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
-	.edit-link:hover { border-color: var(--terminal-cyan); background: rgba(0, 255, 242, 0.1); }
+	.copy-link, .edit-link { color: var(--terminal-cyan); font-size: 12px; padding: 4px 10px; border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
+	.copy-link { margin-right: 6px; }
+	.copy-link:hover, .edit-link:hover { border-color: var(--terminal-cyan); background: rgba(0, 255, 242, 0.1); }
 	.table-footer { padding: 12px 16px; border: 1px solid var(--terminal-border); border-top: none; background: var(--terminal-bg-alt); }
 	.footer-hint { font-size: 11px; color: var(--terminal-muted); }
 	.footer-hint kbd { background: var(--terminal-bg); border: 1px solid var(--terminal-border); padding: 2px 6px; font-size: 10px; margin-right: 4px; color: var(--terminal-cyan); }
@@ -245,12 +271,16 @@
 	.search-input { width: 100%; padding: 12px 16px; background: var(--terminal-bg); border: 1px solid var(--terminal-border); color: var(--terminal-text); font-size: 16px; }
 	.search-input:focus { border-color: var(--terminal-cyan); outline: none; }
 
-	.card { display: block; padding: 16px; background: var(--terminal-bg-alt); border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
+	.card { display: block; background: var(--terminal-bg-alt); border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
 	.card:hover { border-color: var(--terminal-cyan); }
+	.card-content { display: block; padding: 16px; padding-bottom: 12px; }
 	.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 	.card-name { font-weight: 500; color: var(--terminal-text-bright); font-size: 14px; }
 	.card-body { display: flex; flex-direction: column; gap: 6px; }
 	.card-row { font-size: 12px; color: var(--terminal-dim); }
 	.card-label { color: var(--terminal-muted); }
 	.ip-text { font-family: monospace; color: var(--terminal-amber); }
+	.card-actions { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--terminal-border); }
+	.card-action-btn { flex: 1; text-align: center; padding: 8px; font-size: 12px; color: var(--terminal-cyan); border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
+	.card-action-btn:hover { border-color: var(--terminal-cyan); background: rgba(0, 255, 242, 0.1); }
 </style>

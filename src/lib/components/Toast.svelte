@@ -103,13 +103,13 @@
 		color: var(--terminal-text);
 	}
 
-	/* Responsive - bottom on mobile */
+	/* Responsive - top on mobile */
 	@media (max-width: 768px) {
 		.toast {
 			left: 16px;
 			right: 16px;
-			bottom: 16px;
-			top: auto;
+			top: 16px;
+			bottom: auto;
 			max-width: none;
 		}
 	}

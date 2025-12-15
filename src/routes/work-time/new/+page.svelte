@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import { registerShortcut, pushContext, popContext } from '$lib/shortcuts';
 	import { getBackInfo } from '$lib/stores/navigation';
@@ -14,16 +15,26 @@
 	const currentYear = new Date().getFullYear();
 	const currentMonthNum = new Date().getMonth() + 1;
 
+	// Check URL params for copy data
+	const urlParams = $page.url.searchParams;
+	const copyDate = urlParams.get('date');
+	const copyStartTime = urlParams.get('startTime');
+	const copyEndTime = urlParams.get('endTime');
+	const copyScope = urlParams.get('scope');
+	const copyBillingMonth = urlParams.get('billingMonth');
+	const isCopy = copyDate || copyStartTime || copyEndTime || copyScope;
+
 	let form = $state({
-		date: today,
-		startTime: '08:00',
-		endTime: '16:00',
-		scope: ''
+		date: copyDate || today,
+		startTime: copyStartTime || '08:00',
+		endTime: copyEndTime || '16:00',
+		scope: copyScope || ''
 	});
 
 	// Billing month as primary state (YYYY-MM format)
-	let billingMonth = $state(`${currentYear}-${String(currentMonthNum).padStart(2, '0')}`);
-	let mobileBillingMonth = $state(billingMonth); // Track mobile picker separately
+	const defaultBillingMonth = copyBillingMonth || `${currentYear}-${String(currentMonthNum).padStart(2, '0')}`;
+	let billingMonth = $state(defaultBillingMonth);
+	let mobileBillingMonth = $state(defaultBillingMonth); // Track mobile picker separately
 
 	// Derived values for desktop number inputs
 	let billingYear = $derived(parseInt(billingMonth.split('-')[0]));
@@ -114,7 +125,7 @@
 	<div class="page-header">
 		<div class="header-title">
 			<span class="header-decoration">───</span>
-			<span class="header-text">NEW ENTRY</span>
+			<span class="header-text">{isCopy ? 'COPY ENTRY' : 'NEW ENTRY'}</span>
 			<span class="header-decoration">───────────────────────────────────────────</span>
 		</div>
 	</div>

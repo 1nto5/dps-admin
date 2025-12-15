@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import { statusValues } from '$lib/db/schema';
@@ -10,6 +11,10 @@
 	import { desktopAutofocus } from '$lib/actions/autofocus';
 
 	let { data }: { data: PageData } = $props();
+
+	// Check URL params for copy data
+	const urlParams = $page.url.searchParams;
+	const isCopy = urlParams.has('status') || urlParams.has('manufacturer') || urlParams.has('model');
 
 	let nameNumber = $state('');
 	let customName = $state(false);
@@ -23,21 +28,26 @@
 		unsubs.push(registerShortcut({ key: 'escape', action: () => goto(backInfo.href), context: 'form', description: 'Cancel', allowInInput: true }));
 		return () => { popContext('form'); unsubs.forEach(u => u()); };
 	});
+
+	const copyStatus = urlParams.get('status') as 'in_use' | 'disposal' | 'preparing' | 'to_collect' | null;
+	const copyRoomId = urlParams.get('roomId');
+	const copyUserId = urlParams.get('userId');
+
 	let form = $state({
-		status: 'preparing' as 'in_use' | 'disposal' | 'preparing' | 'to_collect',
-		inventoryNumber: '',
-		manufacturer: '',
-		model: '',
+		status: copyStatus || 'preparing' as 'in_use' | 'disposal' | 'preparing' | 'to_collect',
+		inventoryNumber: urlParams.get('inventoryNumber') || '',
+		manufacturer: urlParams.get('manufacturer') || '',
+		model: urlParams.get('model') || '',
 		serialNumber: '',
-		cpu: '',
-		ram: '',
-		storage: '',
-		windows: '',
-		office: '',
-		notes: '',
-		purchaseDate: '',
-		roomId: null as number | null,
-		userId: null as number | null
+		cpu: urlParams.get('cpu') || '',
+		ram: urlParams.get('ram') || '',
+		storage: urlParams.get('storage') || '',
+		windows: urlParams.get('windows') || '',
+		office: urlParams.get('office') || '',
+		notes: urlParams.get('notes') || '',
+		purchaseDate: urlParams.get('purchaseDate') || '',
+		roomId: copyRoomId ? parseInt(copyRoomId) : null as number | null,
+		userId: copyUserId ? parseInt(copyUserId) : null as number | null
 	});
 	let error = $state('');
 	let loading = $state(false);
@@ -76,7 +86,7 @@
 	<div class="page-header">
 		<div class="header-title">
 			<span class="header-decoration">───</span>
-			<span class="header-text">NEW COMPUTER</span>
+			<span class="header-text">{isCopy ? 'COPY COMPUTER' : 'NEW COMPUTER'}</span>
 			<span class="header-decoration">─────────────────────────────────────────</span>
 		</div>
 	</div>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import { registerShortcut, pushContext, popContext } from '$lib/shortcuts';
@@ -8,6 +9,12 @@
 	import { desktopAutofocus } from '$lib/actions/autofocus';
 
 	let { data }: { data: PageData } = $props();
+
+	// Check URL params for copy data
+	const urlParams = $page.url.searchParams;
+	const copyEmail = urlParams.get('email');
+	const copyDeptId = urlParams.get('departmentId');
+	const isCopy = urlParams.has('jobTitle') || urlParams.has('email') || urlParams.has('departmentId');
 
 	let name = $state('');
 	let formEl: HTMLFormElement;
@@ -20,13 +27,15 @@
 		unsubs.push(registerShortcut({ key: 'escape', action: () => goto(backInfo.href), context: 'form', description: 'Cancel', allowInInput: true }));
 		return () => { popContext('form'); unsubs.forEach(u => u()); };
 	});
-	let jobTitle = $state('');
-	let emailUsername = $state('');
-	let departmentId = $state<number | null>(null);
-	let error = $state('');
-	let loading = $state(false);
 
 	const emailDomain = 'dpsszczytno.pl';
+	const copyEmailUsername = copyEmail ? copyEmail.split('@')[0] : '';
+
+	let jobTitle = $state(urlParams.get('jobTitle') || '');
+	let emailUsername = $state(copyEmailUsername);
+	let departmentId = $state<number | null>(copyDeptId ? parseInt(copyDeptId) : null);
+	let error = $state('');
+	let loading = $state(false);
 
 	async function handleSubmit() {
 		if (!name.trim()) { error = 'Name is required'; return; }
@@ -44,7 +53,7 @@
 	<div class="page-header">
 		<div class="header-title">
 			<span class="header-decoration">───</span>
-			<span class="header-text">NEW USER</span>
+			<span class="header-text">{isCopy ? 'COPY USER' : 'NEW USER'}</span>
 			<span class="header-decoration">────────────────────────────────────────────</span>
 		</div>
 	</div>
