@@ -140,9 +140,6 @@ input[type="number"],
 input[type="search"],
 input[type="tel"],
 input[type="url"],
-input[type="date"],
-input[type="time"],
-input[type="month"],
 textarea,
 select {
   font-family: 'JetBrains Mono', monospace;
