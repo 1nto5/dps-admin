@@ -123,11 +123,11 @@
 				</div>
 				<div class="form-group">
 					<label for="start-time" class="form-label">start time</label>
-					<input id="start-time" type="time" bind:value={form.startTime} class="form-input" required />
+					<input id="start-time" type="time" bind:value={form.startTime} step="900" class="form-input" required />
 				</div>
 				<div class="form-group">
 					<label for="end-time" class="form-label">end time</label>
-					<input id="end-time" type="time" bind:value={form.endTime} class="form-input" required />
+					<input id="end-time" type="time" bind:value={form.endTime} step="900" class="form-input" required />
 				</div>
 				<div class="form-group">
 					<span class="form-label">duration</span>
