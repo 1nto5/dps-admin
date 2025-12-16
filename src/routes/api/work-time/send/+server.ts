@@ -404,7 +404,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		.select()
 		.from(workEntries)
 		.where(and(gte(workEntries.date, startDate), lte(workEntries.date, endDate)))
-		.orderBy(asc(workEntries.date))
+		.orderBy(asc(workEntries.date), asc(workEntries.startTime))
 		.all();
 
 	if (entries.length === 0) {
