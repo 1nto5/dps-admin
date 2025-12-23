@@ -177,6 +177,7 @@
 				<table class="terminal-table">
 					<thead>
 						<tr class="header-row">
+							<th class="col-actions">CMD</th>
 							<th>NAME</th>
 							<th>STATUS</th>
 							<th>DEVICE</th>
@@ -184,9 +185,9 @@
 							<th>IP</th>
 							<th>NET</th>
 							<th>ROOM</th>
-							<th class="col-actions">CMD</th>
 						</tr>
 						<tr class="filter-row">
+							<th></th>
 							<th><input type="text" bind:value={filters.name} placeholder="/" onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.status} suggestions={suggestions.status} onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.device} suggestions={suggestions.device} onkeydown={handleFilterKeydown} /></th>
@@ -194,12 +195,15 @@
 							<th><AutocompleteInput bind:value={filters.ip} suggestions={suggestions.ip} onkeydown={handleFilterKeydown} /></th>
 							<th><input type="text" bind:value={filters.network} placeholder="Filter..." onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.room} suggestions={suggestions.room} onkeydown={handleFilterKeydown} /></th>
-							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						{#each filteredPrinters as item, i (item.id)}
 							<tr class="data-row">
+								<td class="col-actions">
+									<a href={getCopyUrl(item)} class="copy-link">Copy</a>
+									<a href="/printers/{item.id}" class="edit-link">Edit</a>
+								</td>
 								<td class="col-name">{item.name}</td>
 								<td><span class="status-badge {statusColors[item.status] || ''}">{item.status}</span></td>
 								<td class="col-dim">{item.computerName || item.notebookName || '—'}</td>
@@ -207,10 +211,6 @@
 								<td class="col-mono">{item.ipAddress || '—'}</td>
 								<td><span class="net-badge {item.isNetwork ? 'net-yes' : 'net-no'}">{item.isNetwork ? 'Y' : 'N'}</span></td>
 								<td class="col-dim">{item.roomName || '—'}</td>
-								<td class="col-actions">
-									<a href={getCopyUrl(item)} class="copy-link">Copy</a>
-									<a href="/printers/{item.id}" class="edit-link">Edit</a>
-								</td>
 							</tr>
 						{/each}
 					</tbody>
@@ -245,7 +245,7 @@
 	.col-name { color: var(--terminal-text-bright); font-weight: 500; }
 	.col-dim { color: var(--terminal-dim); }
 	.col-mono { font-family: monospace; font-size: 12px; color: var(--terminal-amber); }
-	.col-actions { text-align: right; width: 120px; }
+	.col-actions { text-align: left; width: 120px; }
 	.status-badge { font-size: 11px; padding: 3px 8px; border: 1px solid; text-transform: uppercase; letter-spacing: 0.5px; }
 	.status-active { color: var(--terminal-green); border-color: var(--terminal-green); background: rgba(0, 255, 136, 0.1); }
 	.status-disposal { color: var(--terminal-red); border-color: var(--terminal-red); background: rgba(255, 51, 102, 0.1); }

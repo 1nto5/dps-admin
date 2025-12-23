@@ -151,31 +151,31 @@
 				<table class="terminal-table">
 					<thead>
 						<tr class="header-row">
+							<th class="col-actions">CMD</th>
 							<th>NAME</th>
 							<th>JOB</th>
 							<th>EMAIL</th>
 							<th>DEPT</th>
-							<th class="col-actions">CMD</th>
 						</tr>
 						<tr class="filter-row">
+							<th></th>
 							<th><input type="text" bind:value={filters.name} placeholder="/" onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.jobTitle} suggestions={suggestions.jobTitle} onkeydown={handleFilterKeydown} /></th>
 							<th><input type="text" bind:value={filters.email} placeholder="Filter..." onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.department} suggestions={suggestions.department} onkeydown={handleFilterKeydown} /></th>
-							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						{#each filteredUsers as user, i (user.id)}
 							<tr class="data-row">
-								<td class="col-name">{user.name}</td>
-								<td class="col-dim">{user.jobTitle || '—'}</td>
-								<td class="col-email">{user.email || '—'}</td>
-								<td class="col-dim">{user.departmentName || '—'}</td>
 								<td class="col-actions">
 									<a href={getCopyUrl(user)} class="copy-link">Copy</a>
 									<a href="/users/{user.id}" class="edit-link">Edit</a>
 								</td>
+								<td class="col-name">{user.name}</td>
+								<td class="col-dim">{user.jobTitle || '—'}</td>
+								<td class="col-email">{user.email || '—'}</td>
+								<td class="col-dim">{user.departmentName || '—'}</td>
 							</tr>
 						{/each}
 					</tbody>
@@ -210,7 +210,7 @@
 	.col-name { color: var(--terminal-text-bright); font-weight: 500; }
 	.col-dim { color: var(--terminal-dim); }
 	.col-email { color: var(--terminal-cyan); font-size: 12px; }
-	.col-actions { text-align: right; width: 120px; }
+	.col-actions { text-align: left; width: 120px; }
 	.copy-link, .edit-link { color: var(--terminal-cyan); font-size: 12px; padding: 4px 10px; border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
 	.copy-link { margin-right: 6px; }
 	.copy-link:hover, .edit-link:hover { border-color: var(--terminal-cyan); background: rgba(0, 255, 242, 0.1); }

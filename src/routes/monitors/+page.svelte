@@ -166,31 +166,31 @@
 				<table class="terminal-table">
 					<thead>
 						<tr class="header-row">
+							<th class="col-actions">CMD</th>
 							<th>MODEL</th>
 							<th>STATUS</th>
 							<th>INV#</th>
 							<th>COMPUTER</th>
-							<th class="col-actions">CMD</th>
 						</tr>
 						<tr class="filter-row">
+							<th></th>
 							<th><AutocompleteInput bind:value={filters.model} suggestions={suggestions.model} placeholder="/" onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.status} suggestions={suggestions.status} onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.inventoryNumber} suggestions={suggestions.inventoryNumber} onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.computer} suggestions={suggestions.computer} onkeydown={handleFilterKeydown} /></th>
-							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						{#each filteredMonitors as item, i (item.id)}
 							<tr class="data-row">
-								<td class="col-name">{[item.manufacturer, item.model].filter(Boolean).join(' ') || '—'}</td>
-								<td><span class="status-badge {statusColors[item.status] || ''}">{item.status}</span></td>
-								<td class="col-dim">{item.inventoryNumber || '—'}</td>
-								<td class="col-dim">{item.computerName || '—'}</td>
 								<td class="col-actions">
 									<a href={getCopyUrl(item)} class="copy-link">Copy</a>
 									<a href="/monitors/{item.id}" class="edit-link">Edit</a>
 								</td>
+								<td class="col-name">{[item.manufacturer, item.model].filter(Boolean).join(' ') || '—'}</td>
+								<td><span class="status-badge {statusColors[item.status] || ''}">{item.status}</span></td>
+								<td class="col-dim">{item.inventoryNumber || '—'}</td>
+								<td class="col-dim">{item.computerName || '—'}</td>
 							</tr>
 						{/each}
 					</tbody>
@@ -221,7 +221,7 @@
 	.data-row td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid var(--terminal-border); }
 	.col-name { color: var(--terminal-text-bright); font-weight: 500; }
 	.col-dim { color: var(--terminal-dim); }
-	.col-actions { text-align: right; width: 120px; }
+	.col-actions { text-align: left; width: 120px; }
 	.status-badge { font-size: 11px; padding: 3px 8px; border: 1px solid; text-transform: uppercase; letter-spacing: 0.5px; }
 	.status-active { color: var(--terminal-green); border-color: var(--terminal-green); background: rgba(0, 255, 136, 0.1); }
 	.status-disposal { color: var(--terminal-red); border-color: var(--terminal-red); background: rgba(255, 51, 102, 0.1); }

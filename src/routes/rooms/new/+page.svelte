@@ -25,7 +25,7 @@
 		error = ''; loading = true;
 		try {
 			const res = await fetch('/api/rooms', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name.trim() }) });
-			if (res.ok) await toastAndGoto('Room created', backInfo.href);
+			if (res.ok) await toastAndGoto('Room created', backInfo.href, 'success', 'data:rooms');
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Connection error'; } finally { loading = false; }
 	}

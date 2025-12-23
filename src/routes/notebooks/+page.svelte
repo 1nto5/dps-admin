@@ -172,6 +172,7 @@
 				<table class="terminal-table">
 					<thead>
 						<tr class="header-row">
+							<th class="col-actions">CMD</th>
 							<th>NAME</th>
 							<th>STATUS</th>
 							<th>USER</th>
@@ -179,9 +180,9 @@
 							<th>CPU</th>
 							<th>RAM</th>
 							<th>ROOM</th>
-							<th class="col-actions">CMD</th>
 						</tr>
 						<tr class="filter-row">
+							<th></th>
 							<th><input type="text" bind:value={filters.name} placeholder="/" /></th>
 							<th><AutocompleteInput bind:value={filters.status} suggestions={suggestions.status} /></th>
 							<th><AutocompleteInput bind:value={filters.user} suggestions={suggestions.user} /></th>
@@ -189,12 +190,15 @@
 							<th><AutocompleteInput bind:value={filters.cpu} suggestions={suggestions.cpu} /></th>
 							<th><AutocompleteInput bind:value={filters.ram} suggestions={suggestions.ram} /></th>
 							<th><AutocompleteInput bind:value={filters.room} suggestions={suggestions.room} /></th>
-							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						{#each filteredNotebooks as nb, i (nb.id)}
 							<tr class="data-row">
+								<td class="col-actions">
+									<a href={getCopyUrl(nb)} class="copy-link">Copy</a>
+									<a href="/notebooks/{nb.id}" class="edit-link">Edit</a>
+								</td>
 								<td class="col-name">{nb.name}</td>
 								<td><span class="status-badge {statusColors[nb.status] || ''}">{nb.status}</span></td>
 								<td class="col-dim">{nb.userName || '—'}</td>
@@ -202,10 +206,6 @@
 								<td class="col-dim">{nb.cpu || '—'}</td>
 								<td class="col-dim">{nb.ram || '—'}</td>
 								<td class="col-dim">{nb.roomName || '—'}</td>
-								<td class="col-actions">
-									<a href={getCopyUrl(nb)} class="copy-link">Copy</a>
-									<a href="/notebooks/{nb.id}" class="edit-link">Edit</a>
-								</td>
 							</tr>
 						{/each}
 					</tbody>
@@ -239,7 +239,7 @@
 	.data-row td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid var(--terminal-border); }
 	.col-name { color: var(--terminal-text-bright); font-weight: 500; }
 	.col-dim { color: var(--terminal-dim); }
-	.col-actions { text-align: right; width: 120px; }
+	.col-actions { text-align: left; width: 120px; }
 	.status-badge { font-size: 11px; padding: 3px 8px; border: 1px solid; text-transform: uppercase; letter-spacing: 0.5px; }
 	.status-active { color: var(--terminal-green); border-color: var(--terminal-green); background: rgba(0, 255, 136, 0.1); }
 	.status-disposal { color: var(--terminal-red); border-color: var(--terminal-red); background: rgba(255, 51, 102, 0.1); }

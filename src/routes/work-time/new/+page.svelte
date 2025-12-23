@@ -103,7 +103,7 @@
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ ...form, billingMonth })
 			});
-			if (res.ok) await toastAndGoto('Entry created', backInfo.href);
+			if (res.ok) await toastAndGoto('Entry created', backInfo.href, 'success', 'data:work-time');
 			else error = (await res.json()).error || 'Failed';
 		} catch {
 			error = 'Connection error';

@@ -116,19 +116,19 @@
 				<table class="terminal-table">
 					<thead>
 						<tr class="header-row">
-							<th>NAME</th>
 							<th class="col-actions">CMD</th>
+							<th>NAME</th>
 						</tr>
 						<tr class="filter-row">
-							<th><input type="text" bind:value={filters.name} placeholder="/" onkeydown={handleFilterKeydown} /></th>
 							<th></th>
+							<th><input type="text" bind:value={filters.name} placeholder="/" onkeydown={handleFilterKeydown} /></th>
 						</tr>
 					</thead>
 					<tbody>
 						{#each filteredDepartments as department, i (department.id)}
 							<tr class="data-row">
-								<td class="col-name">{department.name}</td>
 								<td class="col-actions"><a href="/departments/{department.id}" class="edit-link">Edit</a></td>
+								<td class="col-name">{department.name}</td>
 							</tr>
 						{/each}
 					</tbody>
@@ -161,7 +161,7 @@
 	.data-row:hover { background: var(--terminal-bg-alt); }
 	.data-row td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid var(--terminal-border); }
 	.col-name { color: var(--terminal-text-bright); font-weight: 500; }
-	.col-actions { text-align: right; width: 80px; }
+	.col-actions { text-align: left; width: 80px; }
 	.edit-link { color: var(--terminal-cyan); font-size: 12px; padding: 4px 10px; border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
 	.edit-link:hover { border-color: var(--terminal-cyan); background: rgba(0, 255, 242, 0.1); }
 	.table-footer { padding: 12px 16px; border: 1px solid var(--terminal-border); border-top: none; background: var(--terminal-bg-alt); }

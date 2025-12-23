@@ -72,7 +72,7 @@
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(payload)
 			});
-			if (res.ok) await toastAndGoto('Computer created', backInfo.href);
+			if (res.ok) await toastAndGoto('Computer created', backInfo.href, 'success', 'data:computers');
 			else error = (await res.json()).error || 'Failed';
 		} catch {
 			error = 'Connection error';

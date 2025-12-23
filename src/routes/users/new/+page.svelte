@@ -43,7 +43,7 @@
 		const email = emailUsername.trim() ? `${emailUsername.trim()}@${emailDomain}` : null;
 		try {
 			const res = await fetch('/api/users', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name.trim(), jobTitle: jobTitle.trim() || null, email, departmentId }) });
-			if (res.ok) await toastAndGoto('User created', backInfo.href);
+			if (res.ok) await toastAndGoto('User created', backInfo.href, 'success', 'data:users');
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Connection error'; } finally { loading = false; }
 	}

@@ -59,7 +59,7 @@
 		const payload = { ...form, name: customName ? nameNumber.trim() : `${prefix}-DPS-${nameNumber.trim()}`, isNetwork: form.isNetwork ? 1 : 0 };
 		try {
 			const res = await fetch('/api/printers', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-			if (res.ok) await toastAndGoto('Printer created', backInfo.href);
+			if (res.ok) await toastAndGoto('Printer created', backInfo.href, 'success', 'data:printers');
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Error'; } finally { loading = false; }
 	}

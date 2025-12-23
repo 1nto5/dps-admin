@@ -2,7 +2,8 @@ import type { PageServerLoad } from './$types';
 import { db, departments, rooms, users, computers, notebooks, monitors, printers } from '$lib/db';
 import { count } from 'drizzle-orm';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ depends }) => {
+	depends('data:computers', 'data:notebooks', 'data:monitors', 'data:printers', 'data:departments', 'data:rooms', 'data:users');
 	const [departmentsCount] = db.select({ count: count() }).from(departments).all();
 	const [roomsCount] = db.select({ count: count() }).from(rooms).all();
 	const [usersCount] = db.select({ count: count() }).from(users).all();

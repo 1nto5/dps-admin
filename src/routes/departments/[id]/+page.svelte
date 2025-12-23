@@ -31,7 +31,7 @@
 		error = ''; loading = true;
 		try {
 			const res = await fetch(`/api/departments/${data.department.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name.trim() }) });
-			if (res.ok) await toastAndGoto('Department saved', backInfo.href);
+			if (res.ok) await toastAndGoto('Department saved', backInfo.href, 'success', 'data:departments');
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Connection error'; } finally { loading = false; }
 	}
@@ -40,7 +40,7 @@
 		loading = true;
 		try {
 			const res = await fetch(`/api/departments/${data.department.id}`, { method: 'DELETE' });
-			if (res.ok) await toastAndGoto('Department deleted', backInfo.href);
+			if (res.ok) await toastAndGoto('Department deleted', backInfo.href, 'success', 'data:departments');
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Connection error'; } finally { loading = false; showDelete = false; }
 	}

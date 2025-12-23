@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import { goto } from '$app/navigation';
+import { goto, invalidate } from '$app/navigation';
 
 export type ToastType = 'info' | 'success' | 'error' | 'warning';
 
@@ -23,7 +23,15 @@ export function clearToast() {
 	toast.set(null);
 }
 
-export async function toastAndGoto(message: string, href: string, type: ToastType = 'success') {
+export async function toastAndGoto(
+	message: string,
+	href: string,
+	type: ToastType = 'success',
+	invalidateKey?: string
+) {
 	queueToast(message, type);
+	if (invalidateKey) {
+		await invalidate(invalidateKey);
+	}
 	await goto(href);
 }

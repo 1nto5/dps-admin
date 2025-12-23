@@ -57,7 +57,7 @@
 		const payload = { ...form, name: customName ? nameNumber.trim() : `NB-DPS-${nameNumber.trim()}` };
 		try {
 			const res = await fetch('/api/notebooks', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-			if (res.ok) await toastAndGoto('Notebook created', backInfo.href);
+			if (res.ok) await toastAndGoto('Notebook created', backInfo.href, 'success', 'data:notebooks');
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Connection error'; } finally { loading = false; }
 	}

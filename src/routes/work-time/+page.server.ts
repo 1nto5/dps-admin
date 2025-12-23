@@ -3,7 +3,8 @@ import { db, workEntries, settings } from '$lib/db';
 import { desc, eq } from 'drizzle-orm';
 import { env } from '$env/dynamic/private';
 
-export const load: PageServerLoad = async ({ url }) => {
+export const load: PageServerLoad = async ({ url, depends }) => {
+	depends('data:work-time');
 	const monthParam = url.searchParams.get('month');
 	const now = new Date();
 	const [year, month] = monthParam?.split('-').map(Number) || [now.getFullYear(), now.getMonth() + 1];

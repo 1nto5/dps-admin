@@ -55,7 +55,7 @@
 		delete (payload as any).nameNumber;
 		try {
 			const res = await fetch(`/api/notebooks/${data.notebook.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-			if (res.ok) await toastAndGoto('Notebook saved', backInfo.href);
+			if (res.ok) await toastAndGoto('Notebook saved', backInfo.href, 'success', 'data:notebooks');
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Error'; } finally { loading = false; }
 	}
@@ -64,7 +64,7 @@
 		loading = true;
 		try {
 			const res = await fetch(`/api/notebooks/${data.notebook.id}`, { method: 'DELETE' });
-			if (res.ok) await toastAndGoto('Notebook deleted', backInfo.href);
+			if (res.ok) await toastAndGoto('Notebook deleted', backInfo.href, 'success', 'data:notebooks');
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Error'; } finally { loading = false; showDelete = false; }
 	}

@@ -44,7 +44,7 @@
 		const payload = { ...form, name };
 		try {
 			const res = await fetch(`/api/monitors/${data.monitor.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-			if (res.ok) await toastAndGoto('Monitor saved', backInfo.href); else error = (await res.json()).error || 'Failed';
+			if (res.ok) await toastAndGoto('Monitor saved', backInfo.href, 'success', 'data:monitors'); else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Error'; } finally { loading = false; }
 	}
 
@@ -52,7 +52,7 @@
 		loading = true;
 		try {
 			const res = await fetch(`/api/monitors/${data.monitor.id}`, { method: 'DELETE' });
-			if (res.ok) await toastAndGoto('Monitor deleted', backInfo.href); else error = 'Failed';
+			if (res.ok) await toastAndGoto('Monitor deleted', backInfo.href, 'success', 'data:monitors'); else error = 'Failed';
 		} catch { error = 'Error'; } finally { loading = false; showDelete = false; }
 	}
 </script>

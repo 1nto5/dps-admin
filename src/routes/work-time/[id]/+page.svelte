@@ -93,7 +93,7 @@
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ ...form, billingMonth })
 			});
-			if (res.ok) await toastAndGoto('Entry saved', backInfo.href);
+			if (res.ok) await toastAndGoto('Entry saved', backInfo.href, 'success', 'data:work-time');
 			else error = (await res.json()).error || 'Failed';
 		} catch {
 			error = 'Connection error';
@@ -106,7 +106,7 @@
 		deleting = true;
 		try {
 			const res = await fetch(`/api/work-time/${data.entry.id}`, { method: 'DELETE' });
-			if (res.ok) await toastAndGoto('Entry deleted', backInfo.href);
+			if (res.ok) await toastAndGoto('Entry deleted', backInfo.href, 'success', 'data:work-time');
 			else error = (await res.json()).error || 'Failed to delete';
 		} catch {
 			error = 'Connection error';

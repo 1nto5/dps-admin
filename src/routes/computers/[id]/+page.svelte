@@ -64,7 +64,7 @@
 				method: 'PUT', headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(payload)
 			});
-			if (res.ok) await toastAndGoto('Computer saved', backInfo.href);
+			if (res.ok) await toastAndGoto('Computer saved', backInfo.href, 'success', 'data:computers');
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Error'; } finally { loading = false; }
 	}
@@ -73,7 +73,7 @@
 		loading = true;
 		try {
 			const res = await fetch(`/api/computers/${data.computer.id}`, { method: 'DELETE' });
-			if (res.ok) await toastAndGoto('Computer deleted', backInfo.href);
+			if (res.ok) await toastAndGoto('Computer deleted', backInfo.href, 'success', 'data:computers');
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Error'; } finally { loading = false; showDelete = false; }
 	}

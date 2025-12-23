@@ -244,26 +244,26 @@
 				<table class="terminal-table">
 					<thead>
 						<tr class="header-row">
+							<th class="col-actions">CMD</th>
 							<th>DATA</th>
 							<th>OD</th>
 							<th>DO</th>
 							<th>GODZINY</th>
 							<th>ZAKRES PRAC</th>
-							<th class="col-actions">CMD</th>
 						</tr>
 					</thead>
 					<tbody>
 						{#each data.entries as entry, i (entry.id)}
 							<tr class="data-row">
+								<td class="col-actions">
+									<a href={getCopyUrl(entry)} class="copy-link">Copy</a>
+									<a href="/work-time/{entry.id}" class="edit-link">Edit</a>
+								</td>
 								<td class="col-name">{formatDate(entry.date)}</td>
 								<td>{entry.startTime}</td>
 								<td>{entry.endTime}</td>
 								<td class="col-dim">{formatDuration(entry.duration)}</td>
 								<td class="col-scope">{entry.scope}</td>
-								<td class="col-actions">
-									<a href={getCopyUrl(entry)} class="copy-link">Copy</a>
-									<a href="/work-time/{entry.id}" class="edit-link">Edit</a>
-								</td>
 							</tr>
 						{/each}
 					</tbody>
@@ -443,7 +443,7 @@
 		overflow-wrap: break-word;
 		white-space: normal;
 	}
-	.col-actions { text-align: right; width: 120px; }
+	.col-actions { text-align: left; width: 120px; }
 
 	.copy-link,
 	.edit-link {

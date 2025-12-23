@@ -2,7 +2,8 @@ import type { PageServerLoad } from './$types';
 import { db, monitors, computers } from '$lib/db';
 import { asc, eq } from 'drizzle-orm';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ depends }) => {
+	depends('data:monitors');
 	const all = db.select({
 		id: monitors.id, name: monitors.name, status: monitors.status,
 		inventoryNumber: monitors.inventoryNumber, manufacturer: monitors.manufacturer,

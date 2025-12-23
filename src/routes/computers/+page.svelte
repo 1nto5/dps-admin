@@ -183,6 +183,7 @@
 				<table class="terminal-table">
 					<thead>
 						<tr class="header-row">
+							<th class="col-actions">CMD</th>
 							<th>NAME</th>
 							<th>STATUS</th>
 							<th>USER</th>
@@ -190,9 +191,9 @@
 							<th>CPU</th>
 							<th>RAM</th>
 							<th>ROOM</th>
-							<th class="col-actions">CMD</th>
 						</tr>
 						<tr class="filter-row">
+							<th></th>
 							<th><input type="text" bind:value={filters.name} placeholder="/" onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.status} suggestions={suggestions.status} onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.user} suggestions={suggestions.user} onkeydown={handleFilterKeydown} /></th>
@@ -200,12 +201,15 @@
 							<th><AutocompleteInput bind:value={filters.cpu} suggestions={suggestions.cpu} onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.ram} suggestions={suggestions.ram} onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.room} suggestions={suggestions.room} onkeydown={handleFilterKeydown} /></th>
-							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						{#each filteredComputers as comp, i (comp.id)}
 							<tr class="data-row" >
+								<td class="col-actions">
+									<a href={getCopyUrl(comp)} class="copy-link">Copy</a>
+									<a href="/computers/{comp.id}" class="edit-link">Edit</a>
+								</td>
 								<td class="col-name">{comp.name}</td>
 								<td>
 									<span class="status-badge {statusColors[comp.status] || ''}">{comp.status}</span>
@@ -215,10 +219,6 @@
 								<td class="col-dim">{comp.cpu || '—'}</td>
 								<td class="col-dim">{comp.ram || '—'}</td>
 								<td class="col-dim">{comp.roomName || '—'}</td>
-								<td class="col-actions">
-									<a href={getCopyUrl(comp)} class="copy-link">Copy</a>
-									<a href="/computers/{comp.id}" class="edit-link">Edit</a>
-								</td>
 							</tr>
 						{/each}
 					</tbody>
@@ -345,7 +345,7 @@
 	}
 
 	.col-actions {
-		text-align: right;
+		text-align: left;
 		width: 120px;
 	}
 

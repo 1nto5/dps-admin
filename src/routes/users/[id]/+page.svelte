@@ -38,7 +38,7 @@
 		const email = emailUsername.trim() ? `${emailUsername.trim()}@${emailDomain}` : null;
 		try {
 			const res = await fetch(`/api/users/${data.user.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name.trim(), jobTitle: jobTitle.trim() || null, email, departmentId }) });
-			if (res.ok) await toastAndGoto('User saved', backInfo.href);
+			if (res.ok) await toastAndGoto('User saved', backInfo.href, 'success', 'data:users');
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Connection error'; } finally { loading = false; }
 	}
@@ -47,7 +47,7 @@
 		loading = true;
 		try {
 			const res = await fetch(`/api/users/${data.user.id}`, { method: 'DELETE' });
-			if (res.ok) await toastAndGoto('User deleted', backInfo.href);
+			if (res.ok) await toastAndGoto('User deleted', backInfo.href, 'success', 'data:users');
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Connection error'; } finally { loading = false; showDelete = false; }
 	}

@@ -25,7 +25,7 @@
 		error = ''; loading = true;
 		try {
 			const res = await fetch('/api/departments', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name.trim() }) });
-			if (res.ok) await toastAndGoto('Department created', backInfo.href);
+			if (res.ok) await toastAndGoto('Department created', backInfo.href, 'success', 'data:departments');
 			else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Connection error'; } finally { loading = false; }
 	}

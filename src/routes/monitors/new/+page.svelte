@@ -47,7 +47,7 @@
 		const payload = { ...form, name };
 		try {
 			const res = await fetch('/api/monitors', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-			if (res.ok) await toastAndGoto('Monitor created', backInfo.href); else error = (await res.json()).error || 'Failed';
+			if (res.ok) await toastAndGoto('Monitor created', backInfo.href, 'success', 'data:monitors'); else error = (await res.json()).error || 'Failed';
 		} catch { error = 'Error'; } finally { loading = false; }
 	}
 </script>
