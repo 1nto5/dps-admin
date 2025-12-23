@@ -244,26 +244,25 @@
 				<table class="terminal-table">
 					<thead>
 						<tr class="header-row">
-							<th class="col-actions">CMD</th>
 							<th>DATA</th>
 							<th>OD</th>
 							<th>DO</th>
 							<th>GODZINY</th>
 							<th>ZAKRES PRAC</th>
+							<th class="col-actions"></th>
 						</tr>
 					</thead>
 					<tbody>
 						{#each data.entries as entry, i (entry.id)}
-							<tr class="data-row">
-								<td class="col-actions">
-									<a href={getCopyUrl(entry)} class="copy-link">Copy</a>
-									<a href="/work-time/{entry.id}" class="edit-link">Edit</a>
-								</td>
+							<tr class="data-row clickable" onclick={() => goto(`/work-time/${entry.id}`)}>
 								<td class="col-name">{formatDate(entry.date)}</td>
 								<td>{entry.startTime}</td>
 								<td>{entry.endTime}</td>
 								<td class="col-dim">{formatDuration(entry.duration)}</td>
 								<td class="col-scope">{entry.scope}</td>
+								<td class="col-actions">
+									<a href={getCopyUrl(entry)} class="copy-link" onclick={(e) => e.stopPropagation()}>Copy</a>
+								</td>
 							</tr>
 						{/each}
 					</tbody>
@@ -427,6 +426,7 @@
 
 	.data-row { transition: background 0.1s ease; }
 	.data-row:hover { background: var(--terminal-bg-alt); }
+	.data-row.clickable { cursor: pointer; }
 
 	.data-row td {
 		padding: 12px 16px;
@@ -443,10 +443,9 @@
 		overflow-wrap: break-word;
 		white-space: normal;
 	}
-	.col-actions { text-align: left; width: 120px; }
+	.col-actions { text-align: right; width: 60px; }
 
-	.copy-link,
-	.edit-link {
+	.copy-link {
 		color: var(--terminal-cyan);
 		font-size: 12px;
 		padding: 4px 10px;
@@ -454,10 +453,7 @@
 		transition: all 0.15s ease;
 	}
 
-	.copy-link { margin-right: 6px; }
-
-	.copy-link:hover,
-	.edit-link:hover {
+	.copy-link:hover {
 		border-color: var(--terminal-cyan);
 		background: rgba(0, 255, 242, 0.1);
 	}

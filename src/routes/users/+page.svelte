@@ -151,31 +151,30 @@
 				<table class="terminal-table">
 					<thead>
 						<tr class="header-row">
-							<th class="col-actions">CMD</th>
 							<th>NAME</th>
 							<th>JOB</th>
 							<th>EMAIL</th>
 							<th>DEPT</th>
+							<th class="col-actions"></th>
 						</tr>
 						<tr class="filter-row">
-							<th></th>
 							<th><input type="text" bind:value={filters.name} placeholder="/" onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.jobTitle} suggestions={suggestions.jobTitle} onkeydown={handleFilterKeydown} /></th>
 							<th><input type="text" bind:value={filters.email} placeholder="Filter..." onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.department} suggestions={suggestions.department} onkeydown={handleFilterKeydown} /></th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						{#each filteredUsers as user, i (user.id)}
-							<tr class="data-row">
-								<td class="col-actions">
-									<a href={getCopyUrl(user)} class="copy-link">Copy</a>
-									<a href="/users/{user.id}" class="edit-link">Edit</a>
-								</td>
+							<tr class="data-row clickable" onclick={() => goto(`/users/${user.id}`)}>
 								<td class="col-name">{user.name}</td>
 								<td class="col-dim">{user.jobTitle || '—'}</td>
 								<td class="col-email">{user.email || '—'}</td>
 								<td class="col-dim">{user.departmentName || '—'}</td>
+								<td class="col-actions">
+									<a href={getCopyUrl(user)} class="copy-link" onclick={(e) => e.stopPropagation()}>Copy</a>
+								</td>
 							</tr>
 						{/each}
 					</tbody>
@@ -206,14 +205,14 @@
 	.filter-row input::placeholder { color: var(--terminal-muted); }
 	.data-row { transition: background 0.1s ease; }
 	.data-row:hover { background: var(--terminal-bg-alt); }
+	.data-row.clickable { cursor: pointer; }
 	.data-row td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid var(--terminal-border); }
 	.col-name { color: var(--terminal-text-bright); font-weight: 500; }
 	.col-dim { color: var(--terminal-dim); }
 	.col-email { color: var(--terminal-cyan); font-size: 12px; }
-	.col-actions { text-align: left; width: 120px; }
-	.copy-link, .edit-link { color: var(--terminal-cyan); font-size: 12px; padding: 4px 10px; border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
-	.copy-link { margin-right: 6px; }
-	.copy-link:hover, .edit-link:hover { border-color: var(--terminal-cyan); background: rgba(0, 255, 242, 0.1); }
+	.col-actions { text-align: right; width: 60px; }
+	.copy-link { color: var(--terminal-cyan); font-size: 12px; padding: 4px 10px; border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
+	.copy-link:hover { border-color: var(--terminal-cyan); background: rgba(0, 255, 242, 0.1); }
 	.table-footer { padding: 12px 16px; border: 1px solid var(--terminal-border); border-top: none; background: var(--terminal-bg-alt); }
 	.footer-hint { font-size: 11px; color: var(--terminal-muted); }
 	.footer-hint kbd { background: var(--terminal-bg); border: 1px solid var(--terminal-border); padding: 2px 6px; font-size: 10px; margin-right: 4px; color: var(--terminal-cyan); }

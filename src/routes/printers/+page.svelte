@@ -177,7 +177,6 @@
 				<table class="terminal-table">
 					<thead>
 						<tr class="header-row">
-							<th class="col-actions">CMD</th>
 							<th>NAME</th>
 							<th>STATUS</th>
 							<th>DEVICE</th>
@@ -185,9 +184,9 @@
 							<th>IP</th>
 							<th>NET</th>
 							<th>ROOM</th>
+							<th class="col-actions"></th>
 						</tr>
 						<tr class="filter-row">
-							<th></th>
 							<th><input type="text" bind:value={filters.name} placeholder="/" onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.status} suggestions={suggestions.status} onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.device} suggestions={suggestions.device} onkeydown={handleFilterKeydown} /></th>
@@ -195,15 +194,12 @@
 							<th><AutocompleteInput bind:value={filters.ip} suggestions={suggestions.ip} onkeydown={handleFilterKeydown} /></th>
 							<th><input type="text" bind:value={filters.network} placeholder="Filter..." onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.room} suggestions={suggestions.room} onkeydown={handleFilterKeydown} /></th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						{#each filteredPrinters as item, i (item.id)}
-							<tr class="data-row">
-								<td class="col-actions">
-									<a href={getCopyUrl(item)} class="copy-link">Copy</a>
-									<a href="/printers/{item.id}" class="edit-link">Edit</a>
-								</td>
+							<tr class="data-row clickable" onclick={() => goto(`/printers/${item.id}`)}>
 								<td class="col-name">{item.name}</td>
 								<td><span class="status-badge {statusColors[item.status] || ''}">{item.status}</span></td>
 								<td class="col-dim">{item.computerName || item.notebookName || '—'}</td>
@@ -211,6 +207,9 @@
 								<td class="col-mono">{item.ipAddress || '—'}</td>
 								<td><span class="net-badge {item.isNetwork ? 'net-yes' : 'net-no'}">{item.isNetwork ? 'Y' : 'N'}</span></td>
 								<td class="col-dim">{item.roomName || '—'}</td>
+								<td class="col-actions">
+									<a href={getCopyUrl(item)} class="copy-link" onclick={(e) => e.stopPropagation()}>Copy</a>
+								</td>
 							</tr>
 						{/each}
 					</tbody>
@@ -241,11 +240,12 @@
 	.filter-row input::placeholder { color: var(--terminal-muted); }
 	.data-row { transition: background 0.1s ease; }
 	.data-row:hover { background: var(--terminal-bg-alt); }
+	.data-row.clickable { cursor: pointer; }
 	.data-row td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid var(--terminal-border); }
 	.col-name { color: var(--terminal-text-bright); font-weight: 500; }
 	.col-dim { color: var(--terminal-dim); }
 	.col-mono { font-family: monospace; font-size: 12px; color: var(--terminal-amber); }
-	.col-actions { text-align: left; width: 120px; }
+	.col-actions { text-align: right; width: 60px; }
 	.status-badge { font-size: 11px; padding: 3px 8px; border: 1px solid; text-transform: uppercase; letter-spacing: 0.5px; }
 	.status-active { color: var(--terminal-green); border-color: var(--terminal-green); background: rgba(0, 255, 136, 0.1); }
 	.status-disposal { color: var(--terminal-red); border-color: var(--terminal-red); background: rgba(255, 51, 102, 0.1); }
@@ -254,9 +254,8 @@
 	.net-badge { font-size: 11px; padding: 2px 6px; font-weight: 500; }
 	.net-yes { color: var(--terminal-green); }
 	.net-no { color: var(--terminal-muted); }
-	.copy-link, .edit-link { color: var(--terminal-cyan); font-size: 12px; padding: 4px 10px; border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
-	.copy-link { margin-right: 6px; }
-	.copy-link:hover, .edit-link:hover { border-color: var(--terminal-cyan); background: rgba(0, 255, 242, 0.1); }
+	.copy-link { color: var(--terminal-cyan); font-size: 12px; padding: 4px 10px; border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
+	.copy-link:hover { border-color: var(--terminal-cyan); background: rgba(0, 255, 242, 0.1); }
 	.table-footer { padding: 12px 16px; border: 1px solid var(--terminal-border); border-top: none; background: var(--terminal-bg-alt); }
 	.footer-hint { font-size: 11px; color: var(--terminal-muted); }
 	.footer-hint kbd { background: var(--terminal-bg); border: 1px solid var(--terminal-border); padding: 2px 6px; font-size: 10px; margin-right: 4px; color: var(--terminal-cyan); }

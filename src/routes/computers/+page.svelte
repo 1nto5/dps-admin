@@ -183,7 +183,6 @@
 				<table class="terminal-table">
 					<thead>
 						<tr class="header-row">
-							<th class="col-actions">CMD</th>
 							<th>NAME</th>
 							<th>STATUS</th>
 							<th>USER</th>
@@ -191,9 +190,9 @@
 							<th>CPU</th>
 							<th>RAM</th>
 							<th>ROOM</th>
+							<th class="col-actions"></th>
 						</tr>
 						<tr class="filter-row">
-							<th></th>
 							<th><input type="text" bind:value={filters.name} placeholder="/" onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.status} suggestions={suggestions.status} onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.user} suggestions={suggestions.user} onkeydown={handleFilterKeydown} /></th>
@@ -201,15 +200,12 @@
 							<th><AutocompleteInput bind:value={filters.cpu} suggestions={suggestions.cpu} onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.ram} suggestions={suggestions.ram} onkeydown={handleFilterKeydown} /></th>
 							<th><AutocompleteInput bind:value={filters.room} suggestions={suggestions.room} onkeydown={handleFilterKeydown} /></th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						{#each filteredComputers as comp, i (comp.id)}
-							<tr class="data-row" >
-								<td class="col-actions">
-									<a href={getCopyUrl(comp)} class="copy-link">Copy</a>
-									<a href="/computers/{comp.id}" class="edit-link">Edit</a>
-								</td>
+							<tr class="data-row clickable" onclick={() => goto(`/computers/${comp.id}`)}>
 								<td class="col-name">{comp.name}</td>
 								<td>
 									<span class="status-badge {statusColors[comp.status] || ''}">{comp.status}</span>
@@ -219,6 +215,9 @@
 								<td class="col-dim">{comp.cpu || '—'}</td>
 								<td class="col-dim">{comp.ram || '—'}</td>
 								<td class="col-dim">{comp.roomName || '—'}</td>
+								<td class="col-actions">
+									<a href={getCopyUrl(comp)} class="copy-link" onclick={(e) => e.stopPropagation()}>Copy</a>
+								</td>
 							</tr>
 						{/each}
 					</tbody>
@@ -329,6 +328,10 @@
 		background: var(--terminal-bg-alt);
 	}
 
+	.data-row.clickable {
+		cursor: pointer;
+	}
+
 	.data-row td {
 		padding: 12px 16px;
 		font-size: 13px;
@@ -345,8 +348,8 @@
 	}
 
 	.col-actions {
-		text-align: left;
-		width: 120px;
+		text-align: right;
+		width: 60px;
 	}
 
 	/* Status badges */
@@ -382,9 +385,8 @@
 		background: rgba(0, 102, 255, 0.1);
 	}
 
-	/* Edit/Copy links */
-	.copy-link,
-	.edit-link {
+	/* Copy link */
+	.copy-link {
 		color: var(--terminal-cyan);
 		font-size: 12px;
 		padding: 4px 10px;
@@ -392,10 +394,7 @@
 		transition: all 0.15s ease;
 	}
 
-	.copy-link { margin-right: 6px; }
-
-	.copy-link:hover,
-	.edit-link:hover {
+	.copy-link:hover {
 		border-color: var(--terminal-cyan);
 		background: rgba(0, 255, 242, 0.1);
 	}

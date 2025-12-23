@@ -172,7 +172,6 @@
 				<table class="terminal-table">
 					<thead>
 						<tr class="header-row">
-							<th class="col-actions">CMD</th>
 							<th>NAME</th>
 							<th>STATUS</th>
 							<th>USER</th>
@@ -180,9 +179,9 @@
 							<th>CPU</th>
 							<th>RAM</th>
 							<th>ROOM</th>
+							<th class="col-actions"></th>
 						</tr>
 						<tr class="filter-row">
-							<th></th>
 							<th><input type="text" bind:value={filters.name} placeholder="/" /></th>
 							<th><AutocompleteInput bind:value={filters.status} suggestions={suggestions.status} /></th>
 							<th><AutocompleteInput bind:value={filters.user} suggestions={suggestions.user} /></th>
@@ -190,15 +189,12 @@
 							<th><AutocompleteInput bind:value={filters.cpu} suggestions={suggestions.cpu} /></th>
 							<th><AutocompleteInput bind:value={filters.ram} suggestions={suggestions.ram} /></th>
 							<th><AutocompleteInput bind:value={filters.room} suggestions={suggestions.room} /></th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						{#each filteredNotebooks as nb, i (nb.id)}
-							<tr class="data-row">
-								<td class="col-actions">
-									<a href={getCopyUrl(nb)} class="copy-link">Copy</a>
-									<a href="/notebooks/{nb.id}" class="edit-link">Edit</a>
-								</td>
+							<tr class="data-row clickable" onclick={() => goto(`/notebooks/${nb.id}`)}>
 								<td class="col-name">{nb.name}</td>
 								<td><span class="status-badge {statusColors[nb.status] || ''}">{nb.status}</span></td>
 								<td class="col-dim">{nb.userName || '—'}</td>
@@ -206,6 +202,9 @@
 								<td class="col-dim">{nb.cpu || '—'}</td>
 								<td class="col-dim">{nb.ram || '—'}</td>
 								<td class="col-dim">{nb.roomName || '—'}</td>
+								<td class="col-actions">
+									<a href={getCopyUrl(nb)} class="copy-link" onclick={(e) => e.stopPropagation()}>Copy</a>
+								</td>
 							</tr>
 						{/each}
 					</tbody>
@@ -236,18 +235,18 @@
 	.filter-row input::placeholder { color: var(--terminal-muted); }
 	.data-row { transition: background 0.1s ease; }
 	.data-row:hover { background: var(--terminal-bg-alt); }
+	.data-row.clickable { cursor: pointer; }
 	.data-row td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid var(--terminal-border); }
 	.col-name { color: var(--terminal-text-bright); font-weight: 500; }
 	.col-dim { color: var(--terminal-dim); }
-	.col-actions { text-align: left; width: 120px; }
+	.col-actions { text-align: right; width: 60px; }
 	.status-badge { font-size: 11px; padding: 3px 8px; border: 1px solid; text-transform: uppercase; letter-spacing: 0.5px; }
 	.status-active { color: var(--terminal-green); border-color: var(--terminal-green); background: rgba(0, 255, 136, 0.1); }
 	.status-disposal { color: var(--terminal-red); border-color: var(--terminal-red); background: rgba(255, 51, 102, 0.1); }
 	.status-preparing { color: var(--terminal-amber); border-color: var(--terminal-amber); background: rgba(255, 184, 0, 0.1); }
 	.status-collect { color: var(--terminal-blue); border-color: var(--terminal-blue); background: rgba(0, 102, 255, 0.1); }
-	.copy-link, .edit-link { color: var(--terminal-cyan); font-size: 12px; padding: 4px 10px; border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
-	.copy-link { margin-right: 6px; }
-	.copy-link:hover, .edit-link:hover { border-color: var(--terminal-cyan); background: rgba(0, 255, 242, 0.1); }
+	.copy-link { color: var(--terminal-cyan); font-size: 12px; padding: 4px 10px; border: 1px solid var(--terminal-border); transition: all 0.15s ease; }
+	.copy-link:hover { border-color: var(--terminal-cyan); background: rgba(0, 255, 242, 0.1); }
 	.table-footer { padding: 12px 16px; border: 1px solid var(--terminal-border); border-top: none; background: var(--terminal-bg-alt); }
 	.footer-hint { font-size: 11px; color: var(--terminal-muted); }
 	.footer-hint kbd { background: var(--terminal-bg); border: 1px solid var(--terminal-border); padding: 2px 6px; font-size: 10px; margin-right: 4px; color: var(--terminal-cyan); }
