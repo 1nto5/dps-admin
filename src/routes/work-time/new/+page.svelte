@@ -15,6 +15,12 @@
 	const currentYear = new Date().getFullYear();
 	const currentMonthNum = new Date().getMonth() + 1;
 
+	// Default times: current hour (floored) to +1 hour
+	const now = new Date();
+	const currentHour = now.getHours();
+	const defaultStartTime = `${String(currentHour).padStart(2, '0')}:00`;
+	const defaultEndTime = `${String(Math.min(23, currentHour + 1)).padStart(2, '0')}:00`;
+
 	// Check URL params for copy data
 	const urlParams = $page.url.searchParams;
 	const copyDate = urlParams.get('date');
@@ -26,8 +32,8 @@
 
 	let form = $state({
 		date: copyDate || today,
-		startTime: copyStartTime || '08:00',
-		endTime: copyEndTime || '16:00',
+		startTime: copyStartTime || defaultStartTime,
+		endTime: copyEndTime || defaultEndTime,
 		scope: copyScope || ''
 	});
 
@@ -154,11 +160,11 @@
 			<div class="form-grid-3">
 				<div class="form-group">
 					<label for="start-time" class="form-label">start time</label>
-					<input id="start-time" type="time" bind:value={form.startTime} step="900" class="form-input" required />
+					<input id="start-time" type="text" bind:value={form.startTime} pattern="[0-2][0-9]:[0-5][0-9]" placeholder="HH:MM" class="form-input time-input" required />
 				</div>
 				<div class="form-group">
 					<label for="end-time" class="form-label">end time</label>
-					<input id="end-time" type="time" bind:value={form.endTime} step="900" class="form-input" required />
+					<input id="end-time" type="text" bind:value={form.endTime} pattern="[0-2][0-9]:[0-5][0-9]" placeholder="HH:MM" class="form-input time-input" required />
 				</div>
 				<div class="form-group">
 					<span class="form-label">duration</span>
@@ -209,6 +215,7 @@
 
 	.month-input { flex: 1; min-width: 60px; text-align: center; }
 	.year-input { flex: 1; min-width: 70px; text-align: center; }
+	.time-input { text-align: center; font-variant-numeric: tabular-nums; }
 
 	/* Mobile: show month picker, hide number inputs */
 	.billing-month-mobile { display: block; }
