@@ -7,6 +7,7 @@
 	import { toastAndGoto } from '$lib/stores/toast';
 	import ConfirmModal from '$lib/components/ConfirmModal.svelte';
 	import { desktopAutofocus } from '$lib/actions/autofocus';
+	import TimePicker from '$lib/components/TimePicker.svelte';
 
 	let { data }: { data: PageData } = $props();
 
@@ -167,11 +168,11 @@
 			<div class="form-grid-3">
 				<div class="form-group">
 					<label for="wt-start" class="form-label">start time</label>
-					<input id="wt-start" type="time" bind:value={form.startTime} step="900" class="form-input time-input" required />
+					<TimePicker id="wt-start" bind:value={form.startTime} required />
 				</div>
 				<div class="form-group">
 					<label for="wt-end" class="form-label">end time</label>
-					<input id="wt-end" type="time" bind:value={form.endTime} step="900" class="form-input time-input" required />
+					<TimePicker id="wt-end" bind:value={form.endTime} required />
 				</div>
 				<div class="form-group">
 					<span class="form-label">duration</span>
@@ -227,7 +228,6 @@
 
 	.month-input { flex: 1; min-width: 60px; text-align: center; }
 	.year-input { flex: 1; min-width: 70px; text-align: center; }
-	.time-input { text-align: left; font-variant-numeric: tabular-nums; }
 
 	/* Mobile: show month picker, hide number inputs */
 	.billing-month-mobile { display: block; }
