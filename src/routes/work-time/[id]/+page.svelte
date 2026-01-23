@@ -167,11 +167,11 @@
 			<div class="form-grid-3">
 				<div class="form-group">
 					<label for="wt-start" class="form-label">start time</label>
-					<input id="wt-start" type="text" bind:value={form.startTime} pattern="[0-2][0-9]:[0-5][0-9]" placeholder="HH:MM" class="form-input time-input" required />
+					<input id="wt-start" type="time" bind:value={form.startTime} step="900" class="form-input time-input" required />
 				</div>
 				<div class="form-group">
 					<label for="wt-end" class="form-label">end time</label>
-					<input id="wt-end" type="text" bind:value={form.endTime} pattern="[0-2][0-9]:[0-5][0-9]" placeholder="HH:MM" class="form-input time-input" required />
+					<input id="wt-end" type="time" bind:value={form.endTime} step="900" class="form-input time-input" required />
 				</div>
 				<div class="form-group">
 					<span class="form-label">duration</span>
@@ -227,7 +227,7 @@
 
 	.month-input { flex: 1; min-width: 60px; text-align: center; }
 	.year-input { flex: 1; min-width: 70px; text-align: center; }
-	.time-input { text-align: center; font-variant-numeric: tabular-nums; }
+	.time-input { text-align: left; font-variant-numeric: tabular-nums; }
 
 	/* Mobile: show month picker, hide number inputs */
 	.billing-month-mobile { display: block; }
