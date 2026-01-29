@@ -122,7 +122,7 @@
 		const unsubs: (() => void)[] = [];
 		unsubs.push(registerShortcut({ key: 'meta+enter', action: () => formEl?.requestSubmit(), context: 'form', description: 'Save', allowInInput: true }));
 		unsubs.push(registerShortcut({ key: 'escape', action: () => goto(backInfo.href), context: 'form', description: 'Cancel', allowInInput: true }));
-		unsubs.push(registerShortcut({ key: 'alt+backspace', action: () => showDelete = true, context: 'form', description: 'Delete', allowInInput: true }));
+		unsubs.push(registerShortcut({ key: 'alt+d', action: () => showDelete = true, context: 'form', description: 'Delete', allowInInput: true }));
 		return () => { popContext('form'); unsubs.forEach(u => u()); };
 	});
 </script>
@@ -193,7 +193,7 @@
 					<a href={backInfo.href} class="btn-secondary">Cancel <kbd>Esc</kbd></a>
 				</div>
 				<button type="button" onclick={() => showDelete = true} class="btn-danger">
-					Delete <kbd>⌥⌫</kbd>
+					Delete <kbd>⌥D</kbd>
 				</button>
 			</div>
 		</form>
