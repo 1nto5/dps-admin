@@ -49,7 +49,7 @@ export const GET: RequestHandler = async ({ url }) => {
 		.select()
 		.from(workEntries)
 		.where(eq(workEntries.billingMonth, billingMonth))
-		.orderBy(asc(workEntries.date))
+		.orderBy(asc(workEntries.date), asc(workEntries.startTime))
 		.all();
 
 	const contractDateSetting = db.select().from(settings).where(eq(settings.key, 'contract_date')).get();

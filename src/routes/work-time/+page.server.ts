@@ -15,7 +15,7 @@ export const load: PageServerLoad = async ({ url, depends }) => {
 		.select()
 		.from(workEntries)
 		.where(eq(workEntries.billingMonth, billingMonth))
-		.orderBy(desc(workEntries.date))
+		.orderBy(desc(workEntries.date), desc(workEntries.startTime))
 		.all();
 
 	const totalMinutes = entries.reduce((sum, e) => sum + e.duration, 0);
