@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { db, workEntries, settings } from '$lib/db';
-import { and, gte, lte, asc, eq } from 'drizzle-orm';
+import { asc, eq } from 'drizzle-orm';
 import {
 	Document, Packer, Paragraph, Table, TableRow, TableCell,
 	TextRun, WidthType, AlignmentType, BorderStyle,
@@ -397,13 +397,12 @@ export const POST: RequestHandler = async ({ request }) => {
 	}
 
 	const [year, month] = monthParam.split('-').map(Number);
-	const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
-	const endDate = `${year}-${String(month).padStart(2, '0')}-31`;
+	const billingMonth = `${year}-${String(month).padStart(2, '0')}`;
 
 	const entries = db
 		.select()
 		.from(workEntries)
-		.where(and(gte(workEntries.date, startDate), lte(workEntries.date, endDate)))
+		.where(eq(workEntries.billingMonth, billingMonth))
 		.orderBy(asc(workEntries.date), asc(workEntries.startTime))
 		.all();
 
