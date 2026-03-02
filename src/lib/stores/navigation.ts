@@ -14,6 +14,7 @@ export function getPreviousPath(): string | null {
 // Map paths to human-readable labels
 const pathLabels: Record<string, string> = {
 	'/': 'Search',
+	'/work-time': 'Work Time',
 	'/computers': 'Computers',
 	'/notebooks': 'Notebooks',
 	'/monitors': 'Monitors',
@@ -26,8 +27,11 @@ const pathLabels: Record<string, string> = {
 
 export function getBackInfo(fallbackPath: string, fallbackLabel: string): { href: string; label: string } {
 	const prev = getPreviousPath();
-	if (prev && pathLabels[prev]) {
-		return { href: prev, label: pathLabels[prev] };
+	if (prev) {
+		const pathname = prev.split('?')[0];
+		if (pathLabels[pathname]) {
+			return { href: prev, label: pathLabels[pathname] };
+		}
 	}
 	return { href: fallbackPath, label: fallbackLabel };
 }
