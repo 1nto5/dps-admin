@@ -144,7 +144,7 @@
 		pushContext('list');
 		const unsubs: (() => void)[] = [];
 
-		unsubs.push(registerShortcut({ key: 'alt+n', action: () => goto('/work-time/new'), context: 'list', description: 'Add entry' }));
+		unsubs.push(registerShortcut({ key: 'alt+n', action: () => goto(`/work-time/new?billingMonth=${selectedMonth}`), context: 'list', description: 'Add entry' }));
 		unsubs.push(registerShortcut({ key: 'alt+e', action: handleExport, context: 'list', description: 'Export Word' }));
 		unsubs.push(registerShortcut({ key: 'alt+s', action: () => showSendConfirm = true, context: 'list', description: 'Send email' }));
 		unsubs.push(registerShortcut({ key: '/', action: () => monthInput?.focus(), context: 'list', description: 'Filter month' }));
@@ -155,7 +155,7 @@
 
 	$effect(() => {
 		setSidebarEdit({
-			addUrl: '/work-time/new',
+			addUrl: `/work-time/new?billingMonth=${selectedMonth}`,
 			addLabel: 'Add Entry',
 			totalCount: data.entries.length,
 			filteredCount: data.entries.length
@@ -173,7 +173,7 @@
 			<span class="mobile-counts">
 				<span>entries: <span class="count-value">{data.entries.length}</span></span>
 			</span>
-			<a href="/work-time/new" class="mobile-add-btn">+ Add</a>
+			<a href="/work-time/new?billingMonth={selectedMonth}" class="mobile-add-btn">+ Add</a>
 		</div>
 	</div>
 

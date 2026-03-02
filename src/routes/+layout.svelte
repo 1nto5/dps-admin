@@ -14,7 +14,7 @@
 	// Track navigation for smart "back" behavior - save current path BEFORE navigating away
 	beforeNavigate(({ from }) => {
 		if (from?.url.pathname) {
-			setPreviousPath(from.url.pathname);
+			setPreviousPath(from.url.pathname + from.url.search);
 		}
 	});
 
