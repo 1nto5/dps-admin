@@ -50,6 +50,7 @@ export const PUT: RequestHandler = async ({ params, request }) => {
 		notes: data.notes?.trim() || null,
 		purchaseDate: data.purchaseDate || null,
 		roomId: data.roomId || null,
+		userId: data.userId || null,
 		updatedAt: new Date().toISOString()
 	}).where(eq(computers.id, id)).returning().get();
 

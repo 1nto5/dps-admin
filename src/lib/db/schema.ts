@@ -2,7 +2,7 @@ import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 import { sql } from 'drizzle-orm';
 
 // Status enum values
-export const statusValues = ['in_use', 'disposal', 'preparing', 'to_collect'] as const;
+export const statusValues = ['disposal', 'in_use', 'preparing', 'to_collect'] as const;
 export type Status = (typeof statusValues)[number];
 
 // Computer type enum values

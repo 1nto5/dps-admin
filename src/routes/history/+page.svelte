@@ -10,14 +10,6 @@
 		return () => popContext('list');
 	});
 
-	function formatChanges(changes: string) {
-		try {
-			return JSON.stringify(JSON.parse(changes), null, 2);
-		} catch {
-			return changes;
-		}
-	}
-
 	const actionColors: Record<string, string> = {
 		create: 'action-create',
 		update: 'action-update',
@@ -28,6 +20,109 @@
 		const d = new Date(dateStr);
 		return d.toISOString().replace('T', ' ').slice(0, 19);
 	}
+
+	const fieldLabels: Record<string, string> = {
+		name: 'name',
+		status: 'status',
+		type: 'type',
+		inventoryNumber: 'inventory number',
+		manufacturer: 'manufacturer',
+		model: 'model',
+		serialNumber: 'serial number',
+		cpu: 'cpu',
+		ram: 'ram',
+		storage: 'storage',
+		windows: 'windows',
+		office: 'office',
+		notes: 'notes',
+		purchaseDate: 'purchase date',
+		ipAddress: 'IP',
+		isNetwork: 'network',
+		roomId: 'room',
+		userId: 'user',
+		computerId: 'computer',
+		notebookId: 'notebook',
+		departmentId: 'department',
+		jobTitle: 'job title',
+		email: 'email',
+		date: 'date',
+		billingMonth: 'billing month',
+		startTime: 'start time',
+		endTime: 'end time',
+		duration: 'duration (min)',
+		scope: 'scope'
+	};
+
+	const hiddenFields = new Set(['id', 'createdAt', 'updatedAt', 'created_at', 'updated_at']);
+
+	const fkLookups: Record<string, string> = {
+		userId: 'users',
+		roomId: 'rooms',
+		departmentId: 'departments',
+		computerId: 'computers',
+		notebookId: 'notebooks'
+	};
+
+	function resolveValue(field: string, value: unknown): string {
+		if (value === null || value === undefined) return '-';
+		if (field === 'isNetwork') return value ? 'yes' : 'no';
+		const lookupKey = fkLookups[field];
+		if (lookupKey && typeof value === 'number') {
+			const map = (data.lookups as Record<string, Record<number, string>>)[lookupKey];
+			return map?.[value] ?? `#${value}`;
+		}
+		return String(value);
+	}
+
+	type ChangeRow = { field: string; label: string; oldVal?: string; newVal?: string };
+
+	function parseChanges(action: string, changesJson: string): ChangeRow[] {
+		try {
+			const parsed = JSON.parse(changesJson);
+
+			if (action === 'update' && parsed.before && parsed.after) {
+				const rows: ChangeRow[] = [];
+				const allKeys = new Set([...Object.keys(parsed.before), ...Object.keys(parsed.after)]);
+				for (const key of allKeys) {
+					if (hiddenFields.has(key)) continue;
+					const oldRaw = parsed.before[key];
+					const newRaw = parsed.after[key];
+					if (JSON.stringify(oldRaw) === JSON.stringify(newRaw)) continue;
+					rows.push({
+						field: key,
+						label: fieldLabels[key] || key,
+						oldVal: resolveValue(key, oldRaw),
+						newVal: resolveValue(key, newRaw)
+					});
+				}
+				return rows;
+			}
+
+			// create or delete - flat object
+			const obj = parsed.before || parsed.after || parsed;
+			const rows: ChangeRow[] = [];
+			for (const key of Object.keys(obj)) {
+				if (hiddenFields.has(key)) continue;
+				const val = resolveValue(key, obj[key]);
+				if (val === '-') continue;
+				rows.push({ field: key, label: fieldLabels[key] || key, newVal: val });
+			}
+			return rows;
+		} catch {
+			return [{ field: 'raw', label: 'dane', newVal: changesJson }];
+		}
+	}
+
+	const entityLabels: Record<string, string> = {
+		computer: 'computer',
+		notebook: 'notebook',
+		monitor: 'monitor',
+		printer: 'printer',
+		user: 'user',
+		room: 'room',
+		department: 'department',
+		work_entry: 'work entry'
+	};
 </script>
 
 <div class="terminal-page">
@@ -52,11 +147,12 @@
 		</div>
 	{:else}
 		<div class="log-container">
-			{#each data.logs as log, i (log.id)}
+			{#each data.logs as log (log.id)}
+				{@const rows = parseChanges(log.action, log.changes)}
 				<div class="log-entry">
 					<div class="log-header">
 						<div class="log-info">
-							<span class="log-entity">{log.entityType}</span>
+							<span class="log-entity">{entityLabels[log.entityType] || log.entityType}</span>
 							{#if log.entityId}
 								<span class="log-id">#{log.entityId}</span>
 							{/if}
@@ -64,7 +160,36 @@
 						</div>
 						<span class="log-time">{formatTime(log.performedAt)}</span>
 					</div>
-					<pre class="log-changes">{formatChanges(log.changes)}</pre>
+					<div class="log-changes-table">
+						{#if rows.length === 0}
+							<div class="no-changes">no changes</div>
+						{:else if log.action === 'update'}
+							<table>
+								<thead><tr><th>field</th><th>before</th><th>after</th></tr></thead>
+								<tbody>
+									{#each rows as row}
+										<tr>
+											<td class="field-name">{row.label}</td>
+											<td class="val-old">{row.oldVal}</td>
+											<td class="val-new">{row.newVal}</td>
+										</tr>
+									{/each}
+								</tbody>
+							</table>
+						{:else}
+							<table>
+								<thead><tr><th>field</th><th>value</th></tr></thead>
+								<tbody>
+									{#each rows as row}
+										<tr>
+											<td class="field-name">{row.label}</td>
+											<td>{row.newVal}</td>
+										</tr>
+									{/each}
+								</tbody>
+							</table>
+						{/if}
+					</div>
 				</div>
 			{/each}
 		</div>
@@ -125,14 +250,57 @@
 		font-family: monospace;
 	}
 
-	.log-changes {
-		padding: 12px 16px;
-		margin: 0;
-		font-size: 11px;
-		color: var(--terminal-dim);
+	.log-changes-table {
+		padding: 0;
 		overflow-x: auto;
-		max-height: 200px;
 		background: var(--terminal-bg);
+	}
+
+	.log-changes-table table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 12px;
+	}
+
+	.log-changes-table th {
+		text-align: left;
+		padding: 6px 16px;
+		color: var(--terminal-dim);
+		font-weight: 500;
+		font-size: 10px;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		border-bottom: 1px solid var(--terminal-border);
+	}
+
+	.log-changes-table td {
+		padding: 5px 16px;
+		border-bottom: 1px solid var(--terminal-border);
+		color: var(--terminal-text);
+	}
+
+	.log-changes-table tr:last-child td {
+		border-bottom: none;
+	}
+
+	.field-name {
+		color: var(--terminal-cyan);
+		white-space: nowrap;
+		width: 1%;
+	}
+
+	.val-old {
+		color: var(--terminal-red);
+	}
+
+	.val-new {
+		color: var(--terminal-green);
+	}
+
+	.no-changes {
+		padding: 12px 16px;
+		color: var(--terminal-muted);
+		font-size: 12px;
 	}
 
 	/* Mobile responsive */
@@ -147,9 +315,10 @@
 			font-size: 10px;
 		}
 
-		.log-changes {
-			font-size: 10px;
-			padding: 10px 12px;
+		.log-changes-table th,
+		.log-changes-table td {
+			padding: 4px 10px;
+			font-size: 11px;
 		}
 
 		.header-meta {

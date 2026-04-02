@@ -43,7 +43,8 @@ export const POST: RequestHandler = async ({ request }) => {
 			office: data.office?.trim() || null,
 			notes: data.notes?.trim() || null,
 			purchaseDate: data.purchaseDate || null,
-			roomId: data.roomId || null
+			roomId: data.roomId || null,
+			userId: data.userId || null
 		})
 		.returning()
 		.get();
